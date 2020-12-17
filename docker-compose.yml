@@ -1,0 +1,41 @@
+version: '3'
+services:
+  web:
+    build: site
+    container_name: apache-libly
+    ports :
+     - "80:80"
+    volumes:
+     - ./www:/var/www/html/
+     - ./server/000-default.conf:/etc/apache2/sites-available/000-default.conf
+     - ./server/apache2.conf:/etc/apache2/apache2.conf
+     - ./server/php.ini:/usr/local/etc/php/php.ini
+    depends_on:
+     - database
+
+  database:
+    image: mysql:5.7
+    container_name: mysql-libly
+    ports :
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: liblydocker
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+    volumes:
+      - ./db_data:/var/lib/mysql
+    restart: always
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin-libly
+    depends_on:
+      - database
+    ports:
+      - 8888:80
+    environment:
+        - PMA_ARBITRARY=1
+
+      
+      
