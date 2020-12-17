@@ -1,0 +1,24 @@
+
+/:
+  controller: Main
+  action: default
+
+/admin:
+  controller: Security
+  action: default
+
+
+/se-connecter:
+  controller: Security
+  action: login
+
+/login:
+  controller: Security
+  action: login  
+
+
+/se-deconnecter:
+  controller: Security
+  action: logout
+
+
