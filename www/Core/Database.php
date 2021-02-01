@@ -22,7 +22,7 @@ class Database
 		}
 
 		$getCalledClassExploded = explode("\\", get_called_class()); //App\Models\User
-		$this->table = DBPREFIX . end($getCalledClassExploded);
+		$this->table = mb_strtolower(DBPREFIX . end($getCalledClassExploded));
 	}
 
 
@@ -57,7 +57,7 @@ class Database
 		// $id == null -> INSERT SINON UPDATE
 		if (is_null($this->getId())) {
 			//INSERT
-			$query = $this->pdo->prepare("INSERT INTO " . strtolower($this->table) . " (" .
+			$query = $this->pdo->prepare("INSERT INTO " . $this->table . " (" .
 				implode(",", array_keys($columns))
 				. ") 
 				VALUES ( :" .
@@ -68,7 +68,7 @@ class Database
 			foreach (array_keys($columns) as $key) {
 				$updates[] = "$key = :$key";
 			}
-			$query = $this->pdo->prepare("UPDATE " . strtolower($this->table) . "SET " . implode(', ', $updates) . " WHERE id = " . $this->getId());
+			$query = $this->pdo->prepare("UPDATE " . $this->table . "SET " . implode(', ', $updates) . " WHERE id = " . $this->getId());
 		}
 
 		$query->execute($columns);
