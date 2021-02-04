@@ -1,0 +1,49 @@
+L'idée c'est un code modulaire et réutilisable pour toute sorte de formulaire, à configurer
+
+
+REGISTER - fait par le prof
+
+url : security/register
+ => security::registerAction() :
+
+* new User() -> crée entité vide qui étend Database (parent possède pdo et nom_table)
+* new View() -> destructeur qui appelle le template (front par défaut),
+   qui lui-même appelle register.view.php
+* User->formRegister -> donne [config] et [inputs des champs détaillés] => $form
+* FormValidator::check() $form et $_POST en argument
+   -> vérifie si minLenght non vide, numérique et surtout si $_POST['data'] < minLength
+   -> renvoie les $errors depuis inputs['error'] de chaque champ pour lequel la donnée ne convient pas
+
+* IF pas d'$errors alors set des donnees de $_POST dans l'entité User and save() into database
+   ELSE renvoie la vue du register avec les $errors du formValidator
+* renvoi de vue : destruct de View()
+* errors set grâce à assign(), affiché dans register.view.php
+
+Le prof a fait register puis login d'un coup
+Nous devons distinguer les deux
+
+
+LOGIN - à faire, distinct au register mais tout à fait similaire
+
+url : security/login
+ => security::loginAction() :
+ 
+* new User()
+* new View() destucteur qui appelle le template (front par défaut), qui lui-même appelle login.view.php
+* User->formLogin donne la config et les inputs des champs détaillés => $form
+* FormValidator::check() $form et $_POST en argument
+   -> renvoie les erreurs depuis inputs['error'] de chaque champ pour lequel la donnée ne convient pas
+   -> minLenght non vide, numérique et surtout si $_POST['data'] < minLength
+
+* set des donnees de $_POST dans l'entité User and save() into database ELSE renvoie la vue des register et ses erreurs
+* renvoi de vue : destruct de View()
+
+
+COMMIT
+
+branch feature/registerForm
+ Core/Database : this->table => mb_strtolower moved in database construct
+ Controllers/Security :
+  loginAction() in progress
+  registerAction() modified
+ Views/login.view : same as register.view.php
