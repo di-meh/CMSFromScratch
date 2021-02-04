@@ -12,7 +12,8 @@
 
 <?php App\Core\FormBuilder::render($form)?>
 
-
+<!-- mettre un lien vers la page de connexion
+ -->
 <h2>Se connecter</h2>
 
 <?php App\Core\FormBuilder::render($formLogin)?>

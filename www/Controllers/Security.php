@@ -21,7 +21,35 @@ class Security
 
 	public function loginAction()
 	{
-		echo "Controller security action login";
+
+		$user = new User();
+		$view = new View("login");
+
+		$formLogin = $user->formLogin();
+
+		if (!empty($_POST)) {
+
+			$errors = FormValidator::check($formLogin, $_POST);
+
+			if (empty($errors)) {
+
+				if($user->verify($_POST['email'], $_POST['pwd'])){ # check database
+
+					echo "successfully connected !";
+					# set tokens, setId() from database
+
+				}else{
+					echo "WRONG EMAIL AND / OR PWD";
+					# set errors in right place => assign("errors",$errors);
+				}
+
+			} else {
+				$view->assign("errors", $errors);
+			}
+		}
+
+		$view->assign("formLogin", $formLogin);
+
 	}
 
 
@@ -63,7 +91,7 @@ class Security
 		$view = new View("register");
 
 		$form = $user->formRegister();
-		$formLogin = $user->formLogin();
+		//$formLogin = $user->formLogin();
 
 		if (!empty($_POST)) {
 
@@ -74,7 +102,8 @@ class Security
 				$user->setFirstname($_POST["firstname"]);
 				$user->setLastname($_POST["lastname"]);
 				$user->setEmail($_POST["email"]);
-				$user->setPwd($_POST["pwd"]);
+				$hasPwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
+				$user->setPwd($hashPwd]);
 				$user->setCountry($_POST["country"]);
 				$user->setId(2);
 				$user->save();
@@ -84,7 +113,7 @@ class Security
 		}
 
 		$view->assign("form", $form);
-		$view->assign("formLogin", $formLogin);
+		//$view->assign("formLogin", $formLogin);
 	}
 
 
