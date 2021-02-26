@@ -19,8 +19,6 @@ class FormValidator
 					$errors[] = $configInput["error"];
 				}
 
-
-
 			}
 
 

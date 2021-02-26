@@ -72,7 +72,7 @@ class Security
 
 
 		$user = new User();
-		Singleton::setPDO(); # set une unique fois !
+
 		$view = new View("register");
 
 		$form = $user->formRegister();
@@ -85,13 +85,20 @@ class Security
 			if (empty($errors)) {
 
 				$user->setFirstname($_POST["firstname"]);
-				#$user->setLastname($_POST["lastname"]);
+				$user->setLastname($_POST["lastname"]);
 				$user->setEmail($_POST["email"]);
-				#$user->setPwd($_POST["pwd"]); # verify with confirm pwd !
-				$user->setCountry($_POST["country"]);
 
-				#$user->setId();
-				$user->save();
+				if($user->getEmail() == "errorMail"){
+
+					$view->assign("error","Ce mail est déjà utilisé.");
+					
+				}else{
+
+					$user->setPwd($_POST["pwd"]); # verify with confirm pwd !
+					$user->setCountry($_POST["country"]);
+
+					$user->save();
+				}
 
 			} else {
 				$view->assign("errors", $errors);

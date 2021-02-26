@@ -5,7 +5,7 @@ namespace App\Core;
 class Singleton{
 
 	# private static $instance = null;
-	private static $pdo = null; # jamais manipule hors objet, pas de get
+	protected static $pdo = null; # jamais manipule hors objet, pas de get
 	# static pour ne pas dependre de l'objet je pense
 
 	private function __construct(){
@@ -38,6 +38,10 @@ class Singleton{
 		#return self::$pdo; # si getPDO
 	}
 
+	public function save2(){
+		echo "oui bien sur";
+	}
+
 	public function save(){
 
 		$columns = array_diff_key(
@@ -56,6 +60,7 @@ class Singleton{
 				. " );";
 
 		} else {
+			echo "BAH ALORS";
 			//UPDATE
 			// foreach (array_keys($columns) as $key) {
 			// 	$updates[] = "$key = :$key";

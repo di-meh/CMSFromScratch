@@ -22,6 +22,19 @@ class User extends Singleton{
 
     public function __construct(){
 
+        Singleton::setPDO(); # set une unique fois !
+
+    }
+
+    public function checkMail($email){
+        # check unicite en bdd
+        $query = "SELECT * FROM ".$this->getTable()." WHERE email='".$email."'";
+
+        $res = parent::$pdo->query($query);
+        $count = $res->fetchcolumn();
+        if($count != 0){
+            return "Ce mail est déjà utilisé !";
+        }
     }
 
     public function getTable(){
@@ -100,11 +113,24 @@ class User extends Singleton{
     /**
      * @param mixed $email
      */
-    public function setEmail($email)
-    { # verifier unicite du mail
-        
+    public function setEmail($email){
 
-        $this->email = $email; # fetch if already in base ?
+        # check unicite en bdd
+        $query = "SELECT * FROM ".$this->getTable()." WHERE email='".$email."'";
+
+        $res = parent::$pdo->query($query);
+        $count = $res->fetchcolumn();
+
+        if($count != 0){
+
+            $this->email = "errorMail";
+            
+        }else{
+
+            $this->email = $email;
+
+        }
+
     }
 
     /**
@@ -211,17 +237,17 @@ class User extends Singleton{
                     "error" => "Votre prénom doit faire entre 2 et 55 caractères",
                     "required" => true
                 ],
-                // "lastname" => [
-                //     "type" => "text",
-                //     "label" => "Votre nom",
-                //     "minLength" => 2,
-                //     "maxLength" => 255,
-                //     "id" => "lastname",
-                //     "class" => "form_input",
-                //     "placeholder" => "Exemple: SKRZYPCZYK",
-                //     "error" => "Votre nom doit faire entre 2 et 255 caractères",
-                //     "required" => true
-                // ],
+                "lastname" => [
+                    "type" => "text",
+                    "label" => "Votre nom",
+                    "minLength" => 2,
+                    "maxLength" => 255,
+                    "id" => "lastname",
+                    "class" => "form_input",
+                    "placeholder" => "Exemple: SKRZYPCZYK",
+                    "error" => "Votre nom doit faire entre 2 et 255 caractères",
+                    "required" => true
+                ],
                 "email" => [
                     "type" => "email",
                     "label" => "Votre email",
@@ -233,16 +259,16 @@ class User extends Singleton{
                     "error" => "Votre email doit faire entre 8 et 320 caractères",
                     "required" => true
                 ],
-                // "pwd" => [
-                //     "type" => "password",
-                //     "label" => "Votre mot de passe",
-                //     "minLength" => 8,
-                //     "id" => "pwd",
-                //     "class" => "form_input",
-                //     "placeholder" => "",
-                //     "error" => "Votre mot de passe doit faire au minimum 8 caractères",
-                //     "required" => true
-                // ],
+                "pwd" => [
+                    "type" => "password",
+                    "label" => "Votre mot de passe",
+                    "minLength" => 8,
+                    "id" => "pwd",
+                    "class" => "form_input",
+                    "placeholder" => "",
+                    "error" => "Votre mot de passe doit faire au minimum 8 caractères",
+                    "required" => true
+                ],
                 // "pwdConfirm" => [
                 //     "type" => "password",
                 //     "label" => "Confirmation",
