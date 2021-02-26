@@ -7,6 +7,8 @@ use App\Core\View;
 use App\Core\FormValidator;
 use App\Core\ConstantMaker as c;
 
+use App\Core\Singleton;
+
 use App\Models\User;
 
 class Security
@@ -22,6 +24,16 @@ class Security
 	public function loginAction()
 	{
 		echo "Controller security action login";
+		try {
+			$pdo = new \PDO(DBDRIVER . ":dbname=" . DBNAME . ";host=" . DBHOST . ";port=" . DBPORT, DBUSER, DBPWD);
+
+			if (ENV == "dev") {
+				$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+				$pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+			}
+		} catch (\Exception $e) {
+			die("Erreur SQL " . $e->getMessage());
+		}
 	}
 
 
@@ -60,10 +72,11 @@ class Security
 
 
 		$user = new User();
+		Singleton::setPDO(); # set une unique fois !
 		$view = new View("register");
 
 		$form = $user->formRegister();
-		$formLogin = $user->formLogin();
+		//$formLogin = $user->formLogin();
 
 		if (!empty($_POST)) {
 
@@ -72,19 +85,21 @@ class Security
 			if (empty($errors)) {
 
 				$user->setFirstname($_POST["firstname"]);
-				$user->setLastname($_POST["lastname"]);
+				#$user->setLastname($_POST["lastname"]);
 				$user->setEmail($_POST["email"]);
-				$user->setPwd($_POST["pwd"]);
+				#$user->setPwd($_POST["pwd"]); # verify with confirm pwd !
 				$user->setCountry($_POST["country"]);
-				$user->setId(2);
+
+				#$user->setId();
 				$user->save();
+
 			} else {
 				$view->assign("errors", $errors);
 			}
 		}
 
 		$view->assign("form", $form);
-		$view->assign("formLogin", $formLogin);
+		//$view->assign("formLogin", $formLogin);
 	}
 
 

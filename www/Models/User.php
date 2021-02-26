@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use App\Core\Database;
+use App\Core\Singleton;
 use PDO;
 
-class User extends Database
-{
+class User extends Singleton{
 
     private $id = null;
     protected $firstname;
@@ -18,9 +18,14 @@ class User extends Database
     protected $status = 0;
     protected $isDeleted = 0;
 
-    public function __construct()
-    {
-        parent::__construct();
+    private $table = DBPREFIX . "user"; # nom de la table en base, static ?
+
+    public function __construct(){
+
+    }
+
+    public function getTable(){
+        return $this->table;
     }
 
     /**
@@ -96,8 +101,10 @@ class User extends Database
      * @param mixed $email
      */
     public function setEmail($email)
-    {
-        $this->email = $email;
+    { # verifier unicite du mail
+        
+
+        $this->email = $email; # fetch if already in base ?
     }
 
     /**
@@ -204,17 +211,17 @@ class User extends Database
                     "error" => "Votre prénom doit faire entre 2 et 55 caractères",
                     "required" => true
                 ],
-                "lastname" => [
-                    "type" => "text",
-                    "label" => "Votre nom",
-                    "minLength" => 2,
-                    "maxLength" => 255,
-                    "id" => "lastname",
-                    "class" => "form_input",
-                    "placeholder" => "Exemple: SKRZYPCZYK",
-                    "error" => "Votre nom doit faire entre 2 et 255 caractères",
-                    "required" => true
-                ],
+                // "lastname" => [
+                //     "type" => "text",
+                //     "label" => "Votre nom",
+                //     "minLength" => 2,
+                //     "maxLength" => 255,
+                //     "id" => "lastname",
+                //     "class" => "form_input",
+                //     "placeholder" => "Exemple: SKRZYPCZYK",
+                //     "error" => "Votre nom doit faire entre 2 et 255 caractères",
+                //     "required" => true
+                // ],
                 "email" => [
                     "type" => "email",
                     "label" => "Votre email",
@@ -226,26 +233,26 @@ class User extends Database
                     "error" => "Votre email doit faire entre 8 et 320 caractères",
                     "required" => true
                 ],
-                "pwd" => [
-                    "type" => "password",
-                    "label" => "Votre mot de passe",
-                    "minLength" => 8,
-                    "id" => "pwd",
-                    "class" => "form_input",
-                    "placeholder" => "",
-                    "error" => "Votre mot de passe doit faire au minimum 8 caractères",
-                    "required" => true
-                ],
-                "pwdConfirm" => [
-                    "type" => "password",
-                    "label" => "Confirmation",
-                    "confirm" => "pwd",
-                    "id" => "pwdConfirm",
-                    "class" => "form_input",
-                    "placeholder" => "",
-                    "error" => "Votre mot de mot de passe de confirmation ne correspond pas",
-                    "required" => true
-                ],
+                // "pwd" => [
+                //     "type" => "password",
+                //     "label" => "Votre mot de passe",
+                //     "minLength" => 8,
+                //     "id" => "pwd",
+                //     "class" => "form_input",
+                //     "placeholder" => "",
+                //     "error" => "Votre mot de passe doit faire au minimum 8 caractères",
+                //     "required" => true
+                // ],
+                // "pwdConfirm" => [
+                //     "type" => "password",
+                //     "label" => "Confirmation",
+                //     "confirm" => "pwd",
+                //     "id" => "pwdConfirm",
+                //     "class" => "form_input",
+                //     "placeholder" => "",
+                //     "error" => "Votre mot de mot de passe de confirmation ne correspond pas",
+                //     "required" => true
+                // ],
                 "country" => [
                     "type" => "select",
                     "label" => "Votre pays",

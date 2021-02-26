@@ -63,14 +63,15 @@ class Database
 				VALUES ( :" .
 				implode(",:", array_keys($columns))
 				. " );");
+			$query->execute($columns);
+
 		} else {
 			//UPDATE
-			foreach (array_keys($columns) as $key) {
-				$updates[] = "$key = :$key";
-			}
-			$query = $this->pdo->prepare("UPDATE " . strtolower($this->table) . "SET " . implode(', ', $updates) . " WHERE id = " . $this->getId());
+			// foreach (array_keys($columns) as $key) {
+			// 	$updates[] = "$key = :$key";
+			// }
+			// $query = $this->pdo->prepare("UPDATE " . strtolower($this->table) . "SET " . implode(', ', $updates) . " WHERE id = " . $this->getId());
 		}
 
-		$query->execute($columns);
 	}
 }

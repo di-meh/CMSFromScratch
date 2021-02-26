@@ -5,7 +5,6 @@ namespace App\Core;
 class FormValidator
 {
 
-
 	public static function check($form, $data){
 		$errors = [];
 
