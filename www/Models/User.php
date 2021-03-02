@@ -26,17 +26,6 @@ class User extends Singleton{
 
     }
 
-    public function checkMail($email){
-        # check unicite en bdd
-        $query = "SELECT * FROM ".$this->getTable()." WHERE email='".$email."'";
-
-        $res = parent::$pdo->query($query);
-        $count = $res->fetchcolumn();
-        if($count != 0){
-            return "Ce mail est déjà utilisé !";
-        }
-    }
-
     public function getTable(){
         return $this->table;
     }
@@ -115,21 +104,7 @@ class User extends Singleton{
      */
     public function setEmail($email){
 
-        # check unicite en bdd
-        $query = "SELECT * FROM ".$this->getTable()." WHERE email='".$email."'";
-
-        $res = parent::$pdo->query($query);
-        $count = $res->fetchcolumn();
-
-        if($count != 0){
-
-            $this->email = "errorMail";
-            
-        }else{
-
-            $this->email = $email;
-
-        }
+        $this->email = $email;
 
     }
 

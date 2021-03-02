@@ -11,6 +11,10 @@
   controller: Security
   action: register
 
+/register:
+  controller: Security
+  action: register
+
 /se-connecter:
   controller: Security
   action: login

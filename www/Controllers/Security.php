@@ -23,37 +23,53 @@ class Security
 
 	public function loginAction()
 	{
-		echo "Controller security action login";
-		try {
-			$pdo = new \PDO(DBDRIVER . ":dbname=" . DBNAME . ";host=" . DBHOST . ";port=" . DBPORT, DBUSER, DBPWD);
 
-			if (ENV == "dev") {
-				$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-				$pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+		$user = new User();
+
+		$view = new View("login");
+
+		$form = $user->formLogin();
+
+		if(!empty($_POST['email'])){
+
+			$mailExists = Singleton::verifyMail($_POST['email'], $user->getTable()); # verify unicity in database
+			#echo $mailExists;
+
+
+			if($mailExists == 1){
+
+				$pwd = Singleton::verifyPwd($_POST['email'], $user->getTable());
+				# cherche le mdp correspond a ce mail en base
+				if(password_verify($_POST['pwd'], $pwd)){
+
+					echo "MAIS OUI TU ES CONNECTE MON FILS.";
+					$user->setEmail($_POST['email']);
+					# $id = Singleton::findID($email);
+					# $user->setId($id); # peuple l'entité
+					# $user->setPwd($_POST['pwd']); # useless to me
+
+
+					# gère le token aussi
+
+				}else{
+					$view->assign("errors", ["Mot de passe erroné."]);
+				}
+
+			}else{
+				$view->assign("errors", ["Le mail n'existe pas."]);
 			}
-		} catch (\Exception $e) {
-			die("Erreur SQL " . $e->getMessage());
+
 		}
+
+		$view->assign("form", $form);
+		
 	}
 
 
 	public function registerAction()
 	{
 
-
-
-		//Vérification des valeurs en POST
-
-
 		/*
-		$user = new User();
-		$user->setFirstname("Yves");
-		$user->setLastname("SKRZYPCZYK");
-		$user->setEmail("y.skrzypczyk@gmail.com");
-		$user->setPwd("Test1234");
-		$user->setCountry("fr");
-
-		$user->save();
 
 
 		$log = new Log();
@@ -76,7 +92,6 @@ class Security
 		$view = new View("register");
 
 		$form = $user->formRegister();
-		//$formLogin = $user->formLogin();
 
 		if (!empty($_POST)) {
 
@@ -84,10 +99,10 @@ class Security
 
 			if (empty($errors)) {
 
-				$user->setEmail($_POST["email"]); # verify unicity in database
+				$mailExists = Singleton::verifyMail($_POST['email'], $user->getTable()); # verify unicity in database
 
 
-				if($user->getEmail() != "errorMail"){
+				if($mailExists == 0){
 
 					if($_POST['pwd'] == $_POST['pwdConfirm']){
 
@@ -95,7 +110,8 @@ class Security
 						
 						$user->setFirstname($_POST["firstname"]);
 						$user->setLastname($_POST["lastname"]);
-						$user->setPwd($pwd);
+						$user->setEmail($_POST["email"]);
+						$user->setPwd($pwd); # why ?
 						$user->setCountry($_POST["country"]);
 
 						$user->save();

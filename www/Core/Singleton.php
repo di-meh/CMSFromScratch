@@ -38,8 +38,35 @@ class Singleton{
 		#return self::$pdo; # si getPDO
 	}
 
-	public function save2(){
-		echo "oui bien sur";
+	public function verifyPwd($email, $table){
+		$query = "SELECT pwd FROM ".$table." WHERE email='".$email."'";
+
+        $res = self::$pdo->query($query);
+        return $res->fetchcolumn();
+
+	}
+
+	public function verifyMail($email, $table){
+
+		$query = "SELECT COUNT(*) FROM ".$table." WHERE email='".$email."'";
+
+        $res = self::$pdo->query($query);
+        $count = $res->fetchcolumn();
+
+        switch ($count) {
+        	case 0:
+            	return 0; # le mail n'existe pas : go pour inscription, ko pour la connexion
+        		break;
+        	case 1:
+            	return 1; # le mail existe en un exemplaire : go pour la connexion
+        		break;
+        	
+        	default:
+        		echo "ERREUR VERIFY MAIL";
+        		return 2; # erreur bizarre        		
+        		break;
+        }
+
 	}
 
 	public function save(){
