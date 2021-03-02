@@ -269,16 +269,16 @@ class User extends Singleton{
                     "error" => "Votre mot de passe doit faire au minimum 8 caractères",
                     "required" => true
                 ],
-                // "pwdConfirm" => [
-                //     "type" => "password",
-                //     "label" => "Confirmation",
-                //     "confirm" => "pwd",
-                //     "id" => "pwdConfirm",
-                //     "class" => "form_input",
-                //     "placeholder" => "",
-                //     "error" => "Votre mot de mot de passe de confirmation ne correspond pas",
-                //     "required" => true
-                // ],
+                "pwdConfirm" => [
+                    "type" => "password",
+                    "label" => "Confirmation",
+                    "confirm" => "pwd",
+                    "id" => "pwdConfirm",
+                    "class" => "form_input",
+                    "placeholder" => "",
+                    "error" => "Votre mot de mot de passe de confirmation ne correspond pas",
+                    "required" => true
+                ],
                 "country" => [
                     "type" => "select",
                     "label" => "Votre pays",

@@ -84,20 +84,31 @@ class Security
 
 			if (empty($errors)) {
 
-				$user->setFirstname($_POST["firstname"]);
-				$user->setLastname($_POST["lastname"]);
-				$user->setEmail($_POST["email"]);
+				$user->setEmail($_POST["email"]); # verify unicity in database
 
-				if($user->getEmail() == "errorMail"){
 
-					$view->assign("error","Ce mail est déjà utilisé.");
-					
+				if($user->getEmail() != "errorMail"){
+
+					if($_POST['pwd'] == $_POST['pwdConfirm']){
+
+						$pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
+						
+						$user->setFirstname($_POST["firstname"]);
+						$user->setLastname($_POST["lastname"]);
+						$user->setPwd($pwd);
+						$user->setCountry($_POST["country"]);
+
+						$user->save();
+
+					}else{
+						$view->assign("errors", ["Vos mots de passe sont différents."]);
+					}
+
+
 				}else{
 
-					$user->setPwd($_POST["pwd"]); # verify with confirm pwd !
-					$user->setCountry($_POST["country"]);
+					$view->assign("errors",["Ce mail est déjà utilisé."]);
 
-					$user->save();
 				}
 
 			} else {
