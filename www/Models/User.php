@@ -236,6 +236,91 @@ class User extends Singleton{
         $this->role = $role;
     }
 
+    public function formEditProfil(){
+
+        return [
+
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "form_editprofil",
+                "class" => "form_builder",
+                "submit" => "Valider"
+            ],
+            "inputs" => [
+                "firstname" => [
+                    "type" => "text",
+                    "label" => "Editez votre prénom",
+                    "minLength" => 2,
+                    "maxLength" => 55,
+                    "id" => "firstname",
+                    "class" => "form_input",
+                    "placeholder" => "Exemple: Yves",
+                    "value" => $this->firstname??"",
+                    "error" => "Votre prénom doit faire entre 2 et 55 caractères",
+                    "required" => true
+                ],
+                "lastname" => [
+                    "type" => "text",
+                    "label" => "Editez votre nom",
+                    "minLength" => 2,
+                    "maxLength" => 255,
+                    "id" => "lastname",
+                    "class" => "form_input",
+                    "placeholder" => "Exemple: SKRZYPCZYK",
+                    "value" => $this->lastname??"",
+                    "error" => "Votre nom doit faire entre 2 et 255 caractères",
+                    "required" => true
+                ],
+                "oldpwd" => [
+                    "type" => "password",
+                    "label" => "Votre mot de passe actuel",
+                    "minLength" => 8,
+                    "id" => "pwd",
+                    "class" => "form_input",
+                    "placeholder" => "",
+                    "error" => "Votre mot de passe doit faire au minimum 8 caractères",
+                    "required" => true
+                ],
+                "pwd" => [
+                    "type" => "password",
+                    "label" => "Votre nouveau mot de passe",
+                    "minLength" => 8,
+                    "id" => "pwd",
+                    "class" => "form_input",
+                    "placeholder" => "",
+                    "error" => "Votre mot de passe doit faire au minimum 8 caractères",
+                    "required" => true
+                ],
+                "pwdConfirm" => [
+                    "type" => "password",
+                    "label" => "Confirmation",
+                    "confirm" => "pwd",
+                    "id" => "pwdConfirm",
+                    "class" => "form_input",
+                    "placeholder" => "",
+                    "error" => "Votre mot de mot de passe de confirmation ne correspond pas",
+                    "required" => true
+                ],
+                "country" => [
+                    "type" => "select",
+                    "label" => "Votre pays",
+                    "options" => [
+                        "fr" => "France",
+                        "ru" => "Russie",
+                        "pl" => "Pologne",
+                    ],
+                    "minLength" => 2,
+                    "maxLength" => 2,
+                    "id" => "country",
+                    "class" => "form_input",
+                    "placeholder" => "Exemple: fr",
+                    "error" => "Votre pays doit faire 2 caractères"
+                ]
+            ]
+        ];
+    }
+
 
     public function formRegister()
     {

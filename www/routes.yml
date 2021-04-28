@@ -23,9 +23,15 @@
   controller: Security
   action: login  
 
+/logout:
+  controller: Security
+  action: logout
 
 /se-deconnecter:
   controller: Security
   action: logout
 
+/editprofil:
+  controller: Security
+  action: editProfil
 

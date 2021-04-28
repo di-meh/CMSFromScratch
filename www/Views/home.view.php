@@ -7,8 +7,9 @@
 
 <section>
 	<?php
+
 		if(isset($_SESSION['id']))
-			echo "<a id='' href='login'>Déconnexion</a>";
+			echo "<a id='' href='logout'>Déconnexion</a>";
 		else
 			echo "<a id='' href='login'>Connexion</a>";
 	?>

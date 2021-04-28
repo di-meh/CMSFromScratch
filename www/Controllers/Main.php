@@ -8,6 +8,8 @@ class Main{
 
 
 	public function defaultAction(){
+
+		session_start();
 		
 		$pseudo = "Super Prof"; //Plus tard on le récupèrera depuis la bdd
 

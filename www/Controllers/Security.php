@@ -22,9 +22,37 @@ class Security
 		echo "Controller security action default";
 	}
 
+	public function editProfilAction(){
+
+		session_start();
+
+		if(!isset($_SESSION['id'])) header("Location:/");
+
+		$user = $_SESSION['user'];
+
+		$view = new View("editProfil");
+
+		$form = $user->formEditProfil();
+
+		if(!empty($_POST)){
+
+
+
+		}
+
+		$view->assign("form", $form);
+
+
+	}
+
 
 	public function loginAction()
 	{
+
+		session_start();
+
+		if(isset($_SESSION['id'])) header("Location:/"); # user deja connected
+
 
 		$user = new User();
 
@@ -48,14 +76,13 @@ class Security
 					# set tous les attributs depuis la base
 					# à partir du mail
 
-					session_start();
-
-					$token = substr(md5(uniqid(true)), 0, 10); # cut to 10 char, no refix, entropy => for more unicity
+					$token = substr(md5(uniqid(true)), 0, 10); # cut length to 10, no refix, entropy => for more unicity
 					$user->setToken($token);
 
 					$_SESSION['id'] = $user->getId();
-					$_SESSION['email'] = $user->getEmail();
-					$_SESSION['pwd'] = $user->getPwd(); # ??
+					# $_SESSION['email'] = $user->getEmail();
+					$_SESSION['user'] = $user; # j'ai le droit ?
+					# $_SESSION['pwd'] = $user->getPwd(); # ??
 					$_SESSION['token'] = $token;
 
 
@@ -65,7 +92,7 @@ class Security
 					# $id = Singleton::findID($email);
 					# $user->setId($id); # peuple l'entité
 					# $user->setPwd($_POST['pwd']); # useless to me
-					header("Location:register"); # temporairement
+					header("Location:/editprofil"); # temporairement
 					# $user->deleteAll(); # pour delete immediatement en base
 
 					# gère le token aussi
@@ -118,7 +145,7 @@ class Security
 
 			if (empty($errors)) {
 
-				$mailExists = Singleton::verifyMail($_POST['email'], $user->getTable());
+				$mailExists = $user->verifyMail($_POST['email'], $user->getTable());
 				# verify unicity in database
 
 
@@ -164,10 +191,9 @@ class Security
 	{
 
 		$security = new Secu();
-		if ($security->isConnected()) {
-			echo "OK";
-		} else {
-			echo "NOK";
-		}
+
+		if ($security->isConnected()) session_destroy();
+		header("Location:/");
+
 	}
 }

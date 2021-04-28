@@ -46,6 +46,7 @@ class FormBuilder
 						id='".($configInput["id"]??"")."'
 						class='".($configInput["class"]??"")."'
 						placeholder='".($configInput["placeholder"]??"")."'
+						value='".($configInput['value']??'')."'
 						".(!empty($configInput["required"])?"required='required'":"")."
 					><br>";
 	}
