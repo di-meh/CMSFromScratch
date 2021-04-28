@@ -9,6 +9,8 @@ use App\Core\ConstantMaker as c;
 
 use App\Core\Singleton;
 
+use App\Core\Redirect;
+
 use App\Models\User;
 
 class Security
@@ -32,22 +34,39 @@ class Security
 
 		if(!empty($_POST['email'])){
 
-			$mailExists = Singleton::verifyMail($_POST['email'], $user->getTable()); # verify unicity in database
+			$mailExists = $user->verifyMail($_POST['email']); # verify unicity in database
 			#echo $mailExists;
 
 
 			if($mailExists == 1){
 
-				$pwd = Singleton::verifyPwd($_POST['email'], $user->getTable());
+				$pwd = $user->verifyPwd($_POST['email']);
 				# cherche le mdp correspond a ce mail en base
 				if(password_verify($_POST['pwd'], $pwd)){
 
-					echo "MAIS OUI TU ES CONNECTE MON FILS.";
+					$user->setAll($_POST['email']);
+					# set tous les attributs depuis la base
+					# à partir du mail
+
+					session_start();
+
+					$token = substr(md5(uniqid(true)), 0, 10); # cut to 10 char, no refix, entropy => for more unicity
+					$user->setToken($token);
+
+					$_SESSION['id'] = $user->getId();
+					$_SESSION['email'] = $user->getEmail();
+					$_SESSION['pwd'] = $user->getPwd(); # ??
+					$_SESSION['token'] = $token;
+
+
+
+					#echo "MAIS OUI TU ES CONNECTE MON FILS.";
 					$user->setEmail($_POST['email']);
 					# $id = Singleton::findID($email);
 					# $user->setId($id); # peuple l'entité
 					# $user->setPwd($_POST['pwd']); # useless to me
-
+					header("Location:register"); # temporairement
+					# $user->deleteAll(); # pour delete immediatement en base
 
 					# gère le token aussi
 
@@ -99,7 +118,8 @@ class Security
 
 			if (empty($errors)) {
 
-				$mailExists = Singleton::verifyMail($_POST['email'], $user->getTable()); # verify unicity in database
+				$mailExists = Singleton::verifyMail($_POST['email'], $user->getTable());
+				# verify unicity in database
 
 
 				if($mailExists == 0){
@@ -111,10 +131,12 @@ class Security
 						$user->setFirstname($_POST["firstname"]);
 						$user->setLastname($_POST["lastname"]);
 						$user->setEmail($_POST["email"]);
-						$user->setPwd($pwd); # why ?
+						$user->setPwd($pwd);
 						$user->setCountry($_POST["country"]);
 
 						$user->save();
+
+						header("Location:login");
 
 					}else{
 						$view->assign("errors", ["Vos mots de passe sont différents."]);

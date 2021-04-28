@@ -15,19 +15,80 @@ class User extends Singleton{
     protected $pwd;
     protected $country = "fr";
     protected $role = 0;
-    protected $status = 0;
     protected $isDeleted = 0;
+    protected $status = 0;
+    protected $token = '';
 
     private $table = DBPREFIX . "user"; # nom de la table en base, static ?
 
     public function __construct(){
 
-        Singleton::setPDO(); # set une unique fois !
+        #Singleton::setPDO(); # set une unique fois !
+
+    }
+
+    # set all properties from database from the email
+    public function setAll($email){
+
+        $email = htmlspecialchars($email);
+        $query = "SELECT * FROM ".$this->getTable()." WHERE email='".$email."'";
+        echo $query;
+        $res = $this->getPDO()->query($query);
+        $res = $res->fetch(PDO::FETCH_ASSOC);
+        #var_dump($res);
+        $this->setId($res['id']);
+        $this->setFirstname($res['firstname']);
+        $this->setLastname($res['lastname']);
+        $this->setEmail($email);
+        $this->setPwd($res['pwd']); # un peu dangereux non ?
+        
+    }
+
+    # cherche le mdp correspond a ce mail en base
+    public function verifyPwd($email){
+
+        $email = htmlspecialchars($email);
+        $query = "SELECT pwd FROM ".$this->table." WHERE email='".$email."'";
+
+        $res = $this->getPDO()->query($query);
+        return $res->fetchcolumn();
+
+    }
+
+    # verifie que le mail existe en base
+    public function verifyMail($email){
+
+        $query = "SELECT COUNT(*) FROM ".$this->table." WHERE email='".$email."'";
+
+        $res = $this->getPDO()->query($query);
+        $count = $res->fetchcolumn();
+
+        switch ($count) {
+            case 0:
+                return 0; # le mail n'existe pas : go pour inscription, ko pour la connexion
+                break;
+            case 1:
+                return 1; # le mail existe en un exemplaire : go pour la connexion
+                break;
+            
+            default:
+                echo "ERREUR VERIFY MAIL";
+                return 2; # erreur bizarre              
+                break;
+        }
 
     }
 
     public function getTable(){
         return $this->table;
+    }
+
+    public function getToken(){
+        return $this->token;
+    }
+
+    public function setToken($token){
+        $this->token = $token;
     }
 
     /**
@@ -44,19 +105,6 @@ class User extends Singleton{
     public function setId($id)
     {
         $this->id = $id;
-        // double action de peupler l'objet avec ce qu'il y a en bdd
-        // https://www.php.net/manual/fr/pdostatement.fetch.php
-        $query = $this->pdo->prepare("SELECT * FROM " . strtolower($this->table) . " WHERE id = " . $this->id);
-        $query->execute();
-        $result = $query->fetch((PDO::FETCH_ASSOC));
-
-        if (!is_null($result) && $result) {
-            foreach ($result as $key => $value) {
-                if (!in_array($key, array("createdAt", "updatedAt", "id"))) {
-                    $this->{$key} = $value;
-                }
-            }
-        }
     }
 
     /**

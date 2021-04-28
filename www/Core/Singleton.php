@@ -9,19 +9,10 @@ class Singleton{
 	# static pour ne pas dependre de l'objet je pense
 
 	private function __construct(){
-		// try {
-		// 	$this->pdo = new \PDO(DBDRIVER . ":dbname=" . DBNAME . ";host=" . DBHOST . ";port=" . DBPORT, DBUSER, DBPWD);
 
-		// 	if (ENV == "dev") {
-		// 		$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-		// 		$this->pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
-		// 	}
-		// } catch (\Exception $e) {
-		// 	die("Erreur SQL " . $e->getMessage());
-		// }
 	}
 
-	public static function setPDO(){
+	public function getPDO(){
 		if(is_null(self::$pdo)){
 			#self::$instance = new Singleton();
 			try {
@@ -35,38 +26,14 @@ class Singleton{
 				die("Erreur SQL " . $e->getMessage());
 			}
 		}
-		#return self::$pdo; # si getPDO
+		return self::$pdo;
 	}
 
-	public function verifyPwd($email, $table){
-		$query = "SELECT pwd FROM ".$table." WHERE email='".$email."'";
 
-        $res = self::$pdo->query($query);
-        return $res->fetchcolumn();
-
-	}
-
-	public function verifyMail($email, $table){
-
-		$query = "SELECT COUNT(*) FROM ".$table." WHERE email='".$email."'";
-
-        $res = self::$pdo->query($query);
-        $count = $res->fetchcolumn();
-
-        switch ($count) {
-        	case 0:
-            	return 0; # le mail n'existe pas : go pour inscription, ko pour la connexion
-        		break;
-        	case 1:
-            	return 1; # le mail existe en un exemplaire : go pour la connexion
-        		break;
-        	
-        	default:
-        		echo "ERREUR VERIFY MAIL";
-        		return 2; # erreur bizarre        		
-        		break;
-        }
-
+	# DELETE ALL DATA IN CHILD TABLE !
+	public function deleteAll(){
+		$query = "DELETE FROM ".$this->getTable();
+		$result = self::$pdo->exec($query);
 	}
 
 	public function save(){

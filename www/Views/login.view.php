@@ -10,3 +10,9 @@
 
 
 <?php App\Core\FormBuilder::render($form)?>
+
+<section>
+	<br/>
+	<a id="" href="register">Inscription</a>
+	
+</section>
