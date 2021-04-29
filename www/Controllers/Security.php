@@ -46,7 +46,7 @@ class Security
 						$_SESSION['user'] = $user; # update de session
 						$user->save();
 						#header("Refresh:0");
-						$form = $user->formEditProfil();
+						$form = $user->formEditProfil(); # reaffichage du formulaire mis a jour
 						$infos[] = "Votre prénom a été mis à jour !";
 						$view->assign("infos", $infos);
 					}
@@ -60,6 +60,17 @@ class Security
 						$form = $user->formEditProfil();
 						$infos[] = "Votre nom a été mis à jour !";
 						$view->assign("infos", $infos);
+					}
+
+					if($_POST['country'] != $user->getCountry()){
+
+						$user->setCountry($_POST['country']); # options donc no need specialchars
+						$_SESSION['user'] = $user;
+						$user->save();
+						$form = $user->formEditProfil();
+						$infos[] = "Votre pays a été mis à jour !";
+						$view->assign("infos", $infos);
+
 					}
 
 

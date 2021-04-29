@@ -40,6 +40,11 @@ class User extends Singleton{
         $this->setFirstname($res['firstname']);
         $this->setLastname($res['lastname']);
         $this->setEmail($email);
+        $this->setCountry($res['country']);
+        $this->setRole($res['role']);
+        $this->setStatus($res['status']);
+        $this->setToken($res['token']??'');
+
         $this->setPwd($res['pwd']); # un peu dangereux non ? même si hashé
         
     }
