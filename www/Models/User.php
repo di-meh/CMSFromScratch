@@ -272,6 +272,19 @@ class User extends Singleton{
                     "error" => "Votre nom doit faire entre 2 et 255 caractères",
                     "required" => true
                 ],
+                "email" => [
+                    "type" => "email",
+                    "label" => "Votre email (inchangeable)",
+                    "minLength" => 8,
+                    "maxLength" => 320,
+                    "id" => "email",
+                    "class" => "form_input",
+                    "placeholder" => "Exemple: nom@gmail.com",
+                    "value" => $this->getEmail()??'',
+                    "error" => "Votre email doit faire entre 8 et 320 caractères",
+                    "required" => true,
+                    "disabled" => 'disabled'
+                ],
                 "oldpwd" => [
                     "type" => "password",
                     "label" => "Votre mot de passe actuel",
