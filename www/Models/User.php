@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Core\Database;
 use App\Core\Singleton;
 use PDO;
 
