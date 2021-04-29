@@ -38,20 +38,58 @@ class Security
 
 		if(!empty($_POST)){
 
-			if($_POST['firstname'] != $user->getFirstname()){
+			if(!empty($_POST['oldpwd'])){ # il faut le mot de passe pour valider tout changement
 
-				$user->setFirstname(htmlspecialchars($_POST['firstname']));
+				if(password_verify($_POST['oldpwd'], $user->getPwd())){
 
-			}
+					if($_POST['firstname'] != $user->getFirstname()){ # changer le prenom
 
-			if($_POST['lastname'] != $user->getLastname()){
+						$user->setFirstname(htmlspecialchars($_POST['firstname']));
 
-				$user->setLastname(htmlspecialchars($_POST['lastname']));
+					}
 
+					if($_POST['lastname'] != $user->getLastname()){ # changer le nom
+
+						$user->setLastname(htmlspecialchars($_POST['lastname']));
+
+					}
+
+				}else{
+					$view->assign("errors", ["Le mot de passe actuel est erroné"]);
+				}
+
+				if(!empty($_POST['pwd'])){
+
+					if(!empty($_POST['pwdConfirm'])){
+
+
+						if($_POST['pwd'] === $_POST['pwdConfirm']){
+
+							$pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
+
+							$user->setPwd($pwd);
+							$_SESSION['user'] = $user; # update de session
+							$view->assign("errors", ["Vos données ont été mises à jour !"]); # not an error but well
+
+						}else{
+							$view->assign("errors", ["La confirmation du mot de passe ne correspond pas."]);
+						}
+
+						$user->setPwd();
+
+
+					}else{
+						$view->assign("errors", ['Veuillez confirmer votre nouveau mot de passe.']);
+					}
+
+				}
+
+			}else{
+				$view->assign("errors", ['Veuillez indiquer votre mot de passe actuel.']);
 			}
 
 			$user->save();
-			header("Location:editprofil");			
+			#header("Location:editprofil");			
 
 
 		}
