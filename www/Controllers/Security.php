@@ -130,7 +130,6 @@ class Security
 
 		if(isset($_SESSION['id'])) header("Location:/"); # user deja connected
 
-
 		$user = new User();
 
 		$view = new View("login");
@@ -140,8 +139,6 @@ class Security
 		if(!empty($_POST['email'])){
 
 			$mailExists = $user->verifyMail($_POST['email']); # verify unicity in database
-			#echo $mailExists;
-
 
 			if($mailExists == 1){
 
@@ -175,7 +172,12 @@ class Security
 					# gère le token aussi
 
 				}else{
+
+					$form['inputs']['email']['value'] = $_POST['email']; # re remplissage du champ
 					$view->assign("errors", ["Mot de passe erroné."]);
+					#header("Location:/login");
+
+
 				}
 
 			}else{
@@ -220,6 +222,13 @@ class Security
 
 			$errors = FormValidator::check($form, $_POST);
 
+			$form['inputs']['email']['value'] = $_POST['email'];
+
+			$form['inputs']['firstname']['value'] = $_POST['firstname'];
+
+			$form['inputs']['lastname']['value'] = $_POST['lastname'];
+
+
 			if (empty($errors)) {
 
 				$mailExists = $user->verifyMail($_POST['email'], $user->getTable());
@@ -243,17 +252,25 @@ class Security
 						header("Location:login");
 
 					}else{
+
+
+
+
 						$view->assign("errors", ["Vos mots de passe sont différents."]);
 					}
 
 
 				}else{
 
+
+
+
 					$view->assign("errors",["Ce mail est déjà utilisé."]);
 
 				}
 
 			} else {
+
 				$view->assign("errors", $errors);
 			}
 		}

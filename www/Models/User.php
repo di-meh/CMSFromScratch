@@ -18,7 +18,7 @@ class User extends Singleton{
     protected $status = 0;
     protected $token = '';
 
-    private $table = DBPREFIX . "user"; # nom de la table en base, static ?
+    private $table = DBPREFIX . "user";
 
     public function __construct(){
 
@@ -359,6 +359,7 @@ class User extends Singleton{
                     "id" => "firstname",
                     "class" => "form_input",
                     "placeholder" => "Exemple: Yves",
+                    "value" => '',
                     "error" => "Votre prénom doit faire entre 2 et 55 caractères",
                     "required" => true
                 ],
@@ -370,6 +371,7 @@ class User extends Singleton{
                     "id" => "lastname",
                     "class" => "form_input",
                     "placeholder" => "Exemple: SKRZYPCZYK",
+                    "value" => '',                    
                     "error" => "Votre nom doit faire entre 2 et 255 caractères",
                     "required" => true
                 ],
@@ -381,6 +383,7 @@ class User extends Singleton{
                     "id" => "email",
                     "class" => "form_input",
                     "placeholder" => "Exemple: nom@gmail.com",
+                    "value" => '',                    
                     "error" => "Votre email doit faire entre 8 et 320 caractères",
                     "required" => true
                 ],
@@ -445,6 +448,7 @@ class User extends Singleton{
                     "id" => "email",
                     "class" => "form_input",
                     "placeholder" => "Exemple: nom@gmail.com",
+                    "value" => '',                    
                     "error" => "Votre email doit faire entre 8 et 320 caractères",
                     "required" => true
                 ],
