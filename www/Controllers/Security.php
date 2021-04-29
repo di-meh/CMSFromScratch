@@ -34,8 +34,6 @@ class Security
 
 		$form = $user->formEditProfil(); # recupere les config et inputs de ce formulaire
 
-		# formValidator !
-
 		if(!empty($_POST)){
 
 			if(!empty($_POST['oldpwd'])){ # il faut le mot de passe pour valider tout changement
@@ -45,12 +43,54 @@ class Security
 					if($_POST['firstname'] != $user->getFirstname()){ # changer le prenom
 
 						$user->setFirstname(htmlspecialchars($_POST['firstname']));
-
+						$_SESSION['user'] = $user; # update de session
+						$user->save();
+						#header("Refresh:0");
+						$form = $user->formEditProfil();
+						$infos[] = "Votre prénom a été mis à jour !";
+						$view->assign("infos", $infos);
 					}
 
 					if($_POST['lastname'] != $user->getLastname()){ # changer le nom
 
 						$user->setLastname(htmlspecialchars($_POST['lastname']));
+						$_SESSION['user'] = $user; # update de session
+						$user->save();
+						#header("Refresh:0");
+						$form = $user->formEditProfil();
+						$infos[] = "Votre nom a été mis à jour !";
+						$view->assign("infos", $infos);
+					}
+
+
+					if(!empty($_POST['pwd'])){
+
+						if(!empty($_POST['pwdConfirm'])){
+
+
+							if($_POST['pwd'] === $_POST['pwdConfirm']){
+
+								if(strlen($_POST['pwd']) > 7){
+
+									$pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
+
+									$user->setPwd($pwd);
+									$_SESSION['user'] = $user; # update de session
+									$infos[] = "Votre mot de passe a été mis à jour !";
+									$view->assign("infos", $infos); # not an error but well
+									$user->save();
+
+								}else{
+									$view->assign('errors', ["La taille du nouveau mot de passe doit faire 8 caractères au minimum."]);
+								}
+
+							}else{
+								$view->assign("errors", ["La confirmation du mot de passe ne correspond pas."]);
+							}
+
+						}else{
+							$view->assign("errors", ['Veuillez confirmer votre nouveau mot de passe.']);
+						}
 
 					}
 
@@ -58,39 +98,11 @@ class Security
 					$view->assign("errors", ["Le mot de passe actuel est erroné"]);
 				}
 
-				if(!empty($_POST['pwd'])){
-
-					if(!empty($_POST['pwdConfirm'])){
-
-
-						if($_POST['pwd'] === $_POST['pwdConfirm']){
-
-							$pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
-
-							$user->setPwd($pwd);
-							$_SESSION['user'] = $user; # update de session
-							$view->assign("errors", ["Vos données ont été mises à jour !"]); # not an error but well
-
-						}else{
-							$view->assign("errors", ["La confirmation du mot de passe ne correspond pas."]);
-						}
-
-						$user->setPwd();
-
-
-					}else{
-						$view->assign("errors", ['Veuillez confirmer votre nouveau mot de passe.']);
-					}
-
-				}
-
 			}else{
 				$view->assign("errors", ['Veuillez indiquer votre mot de passe actuel.']);
 			}
 
-			$user->save();
-			#header("Location:editprofil");			
-
+			#header("Location:editprofil");
 
 		}
 

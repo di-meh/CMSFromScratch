@@ -8,6 +8,15 @@
 
 <?php endif;?>
 
+<?php if(isset($infos)):?>
+
+<?php foreach ($infos as $info):?>
+	<li style="color:blue"><?=$info;?></li>
+<?php endforeach;?>
+
+<?php endif;?>
+
+
 
 <?php App\Core\FormBuilder::render($form)?>
 
