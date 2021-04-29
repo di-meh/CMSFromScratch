@@ -280,7 +280,7 @@ class User extends Singleton{
                     "class" => "form_input",
                     "placeholder" => "",
                     "error" => "Votre mot de passe doit faire au minimum 8 caractères",
-                    "required" => true
+                    "required" => false
                 ],
                 "pwd" => [
                     "type" => "password",
@@ -290,7 +290,7 @@ class User extends Singleton{
                     "class" => "form_input",
                     "placeholder" => "",
                     "error" => "Votre mot de passe doit faire au minimum 8 caractères",
-                    "required" => true
+                    "required" => false
                 ],
                 "pwdConfirm" => [
                     "type" => "password",
@@ -300,7 +300,7 @@ class User extends Singleton{
                     "class" => "form_input",
                     "placeholder" => "",
                     "error" => "Votre mot de mot de passe de confirmation ne correspond pas",
-                    "required" => true
+                    "required" => false
                 ],
                 "country" => [
                     "type" => "select",

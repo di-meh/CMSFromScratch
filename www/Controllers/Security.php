@@ -26,21 +26,37 @@ class Security
 
 		session_start();
 
-		if(!isset($_SESSION['id'])) header("Location:/");
+		if(!isset($_SESSION['id'])) header("Location:/"); # si user non connecté => redirection
 
-		$user = $_SESSION['user'];
+		$user = $_SESSION['user']; # recuperer objet depuis session
 
-		$view = new View("editProfil");
+		$view = new View("editProfil"); # appelle View/editProfil.view.php
 
-		$form = $user->formEditProfil();
+		$form = $user->formEditProfil(); # recupere les config et inputs de ce formulaire
+
+		# formValidator !
 
 		if(!empty($_POST)){
 
+			if($_POST['firstname'] != $user->getFirstname()){
+
+				$user->setFirstname(htmlspecialchars($_POST['firstname']));
+
+			}
+
+			if($_POST['lastname'] != $user->getLastname()){
+
+				$user->setLastname(htmlspecialchars($_POST['lastname']));
+
+			}
+
+			$user->save();
+			header("Location:editprofil");			
 
 
 		}
 
-		$view->assign("form", $form);
+		$view->assign("form", $form); # affiche le formulaire
 
 
 	}
@@ -155,9 +171,9 @@ class Security
 
 						$pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
 						
-						$user->setFirstname($_POST["firstname"]);
-						$user->setLastname($_POST["lastname"]);
-						$user->setEmail($_POST["email"]);
+						$user->setFirstname(htmlspecialchars($_POST["firstname"]));
+						$user->setLastname(htmlspecialchars($_POST["lastname"]));
+						$user->setEmail(htmlspecialchars($_POST["email"]));
 						$user->setPwd($pwd);
 						$user->setCountry($_POST["country"]);
 

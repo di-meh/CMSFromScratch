@@ -54,15 +54,18 @@ class Singleton{
 				. " );";
 
 		} else {
-			echo "BAH ALORS";
+
 			//UPDATE
-			// foreach (array_keys($columns) as $key) {
-			// 	$updates[] = "$key = :$key";
-			// }
-			// $query = $this->pdo->prepare("UPDATE " . strtolower($this->table) . "SET " . implode(', ', $updates) . " WHERE id = " . $this->getId());
+			$query = "UPDATE ". strtolower(($this->getTable()))." SET ";
+			foreach ($columns as $key => $value) {
+				$query .= $key . "=:".$key.",";
+			}
+			$query = substr($query, 0, -1); # retire la dernière virgule
+			$query .= " WHERE id=".$this->getId();
+
 		}
 
-		$result = self::$pdo->prepare($query)->execute($columns);
+		$result = $this->getPDO()->prepare($query)->execute($columns);
 
 
 	}

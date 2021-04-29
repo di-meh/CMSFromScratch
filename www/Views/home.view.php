@@ -8,9 +8,12 @@
 <section>
 	<?php
 
-		if(isset($_SESSION['id']))
+		if(isset($_SESSION['id'])){
+
+			echo "<a id'' href='editprofil'>Edition du profil</a><br/>";
 			echo "<a id='' href='logout'>Déconnexion</a>";
-		else
+
+		}else
 			echo "<a id='' href='login'>Connexion</a>";
 	?>
 	<br/><br/>
