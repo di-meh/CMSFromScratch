@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use App\Core\Database;
+use App\Core\Singleton;
 use PDO;
 
-class User extends Database
-{
+class User extends Singleton{
 
     private $id = null;
     protected $firstname;
@@ -15,12 +14,85 @@ class User extends Database
     protected $pwd;
     protected $country = "fr";
     protected $role = 0;
-    protected $status = 0;
     protected $isDeleted = 0;
+    protected $status = 0;
+    protected $token = '';
 
-    public function __construct()
-    {
-        parent::__construct();
+    private $table = DBPREFIX . "user";
+
+    public function __construct(){
+
+        #Singleton::setPDO(); # set une unique fois !
+
+    }
+
+    # set all properties from database from the email
+    public function setAll($email){
+
+        $email = htmlspecialchars($email);
+        $query = "SELECT * FROM ".$this->getTable()." WHERE email='".$email."'";
+        echo $query;
+        $res = $this->getPDO()->query($query);
+        $res = $res->fetch(PDO::FETCH_ASSOC);
+        #var_dump($res);
+        $this->setId($res['id']);
+        $this->setFirstname($res['firstname']);
+        $this->setLastname($res['lastname']);
+        $this->setEmail($email);
+        $this->setCountry($res['country']);
+        $this->setRole($res['role']);
+        $this->setStatus($res['status']);
+        $this->setToken($res['token']??'');
+
+        $this->setPwd($res['pwd']); # un peu dangereux non ? même si hashé
+        
+    }
+
+    # cherche le mdp correspond a ce mail en base
+    public function verifyPwd($email){
+
+        $email = htmlspecialchars($email);
+        $query = "SELECT pwd FROM ".$this->table." WHERE email='".$email."'";
+
+        $res = $this->getPDO()->query($query);
+        return $res->fetchcolumn();
+
+    }
+
+    # verifie que le mail existe en base
+    public function verifyMail($email){
+
+        $query = "SELECT COUNT(*) FROM ".$this->table." WHERE email='".$email."'";
+
+        $res = $this->getPDO()->query($query);
+        $count = $res->fetchcolumn();
+
+        switch ($count) {
+            case 0:
+                return 0; # le mail n'existe pas : go pour inscription, ko pour la connexion
+                break;
+            case 1:
+                return 1; # le mail existe en un exemplaire : go pour la connexion
+                break;
+            
+            default:
+                echo "ERREUR VERIFY MAIL";
+                return 2; # erreur bizarre              
+                break;
+        }
+
+    }
+
+    public function getTable(){
+        return $this->table;
+    }
+
+    public function getToken(){
+        return $this->token;
+    }
+
+    public function setToken($token){
+        $this->token = $token;
     }
 
     /**
@@ -37,19 +109,6 @@ class User extends Database
     public function setId($id)
     {
         $this->id = $id;
-        // double action de peupler l'objet avec ce qu'il y a en bdd
-        // https://www.php.net/manual/fr/pdostatement.fetch.php
-        $query = $this->pdo->prepare("SELECT * FROM " . strtolower($this->table) . " WHERE id = " . $this->id);
-        $query->execute();
-        $result = $query->fetch((PDO::FETCH_ASSOC));
-
-        if (!is_null($result) && $result) {
-            foreach ($result as $key => $value) {
-                if (!in_array($key, array("createdAt", "updatedAt", "id"))) {
-                    $this->{$key} = $value;
-                }
-            }
-        }
     }
 
     /**
@@ -95,9 +154,10 @@ class User extends Database
     /**
      * @param mixed $email
      */
-    public function setEmail($email)
-    {
+    public function setEmail($email){
+
         $this->email = $email;
+
     }
 
     /**
@@ -180,6 +240,104 @@ class User extends Database
         $this->role = $role;
     }
 
+    public function formEditProfil(){
+
+        return [
+
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "form_editprofil",
+                "class" => "form_builder",
+                "submit" => "Valider"
+            ],
+            "inputs" => [
+                "firstname" => [
+                    "type" => "text",
+                    "label" => "Editez votre prénom",
+                    "minLength" => 2,
+                    "maxLength" => 55,
+                    "id" => "firstname",
+                    "class" => "form_input",
+                    "placeholder" => "Exemple: Yves",
+                    "value" => $this->firstname??"",
+                    "error" => "Votre prénom doit faire entre 2 et 55 caractères",
+                    "required" => true
+                ],
+                "lastname" => [
+                    "type" => "text",
+                    "label" => "Editez votre nom",
+                    "minLength" => 2,
+                    "maxLength" => 255,
+                    "id" => "lastname",
+                    "class" => "form_input",
+                    "placeholder" => "Exemple: SKRZYPCZYK",
+                    "value" => $this->lastname??"",
+                    "error" => "Votre nom doit faire entre 2 et 255 caractères",
+                    "required" => true
+                ],
+                "email" => [
+                    "type" => "email",
+                    "label" => "Votre email (inchangeable)",
+                    "minLength" => 8,
+                    "maxLength" => 320,
+                    "id" => "email",
+                    "class" => "form_input",
+                    "placeholder" => "Exemple: nom@gmail.com",
+                    "value" => $this->getEmail()??'',
+                    "error" => "Votre email doit faire entre 8 et 320 caractères",
+                    "required" => true,
+                    "disabled" => 'disabled'
+                ],
+                "oldpwd" => [
+                    "type" => "password",
+                    "label" => "Votre mot de passe actuel",
+                    "minLength" => 8,
+                    "id" => "pwd",
+                    "class" => "form_input",
+                    "placeholder" => "",
+                    "error" => "Votre mot de passe doit faire au minimum 8 caractères",
+                    "required" => false
+                ],
+                "pwd" => [
+                    "type" => "password",
+                    "label" => "Votre nouveau mot de passe",
+                    "minLength" => 8,
+                    "id" => "pwd",
+                    "class" => "form_input",
+                    "placeholder" => "",
+                    "error" => "Votre mot de passe doit faire au minimum 8 caractères",
+                    "required" => false
+                ],
+                "pwdConfirm" => [
+                    "type" => "password",
+                    "label" => "Confirmation",
+                    "confirm" => "pwd",
+                    "id" => "pwdConfirm",
+                    "class" => "form_input",
+                    "placeholder" => "",
+                    "error" => "Votre mot de mot de passe de confirmation ne correspond pas",
+                    "required" => false
+                ],
+                "country" => [
+                    "type" => "select",
+                    "label" => "Votre pays",
+                    "options" => [
+                        "fr" => "France",
+                        "ru" => "Russie",
+                        "pl" => "Pologne",
+                    ],
+                    "minLength" => 2,
+                    "maxLength" => 2,
+                    "id" => "country",
+                    "class" => "form_input",
+                    "placeholder" => "Exemple: fr",
+                    "error" => "Votre pays doit faire 2 caractères"
+                ]
+            ]
+        ];
+    }
+
 
     public function formRegister()
     {
@@ -201,6 +359,7 @@ class User extends Database
                     "id" => "firstname",
                     "class" => "form_input",
                     "placeholder" => "Exemple: Yves",
+                    "value" => '',
                     "error" => "Votre prénom doit faire entre 2 et 55 caractères",
                     "required" => true
                 ],
@@ -212,6 +371,7 @@ class User extends Database
                     "id" => "lastname",
                     "class" => "form_input",
                     "placeholder" => "Exemple: SKRZYPCZYK",
+                    "value" => '',                    
                     "error" => "Votre nom doit faire entre 2 et 255 caractères",
                     "required" => true
                 ],
@@ -223,6 +383,7 @@ class User extends Database
                     "id" => "email",
                     "class" => "form_input",
                     "placeholder" => "Exemple: nom@gmail.com",
+                    "value" => '',                    
                     "error" => "Votre email doit faire entre 8 et 320 caractères",
                     "required" => true
                 ],
@@ -287,6 +448,7 @@ class User extends Database
                     "id" => "email",
                     "class" => "form_input",
                     "placeholder" => "Exemple: nom@gmail.com",
+                    "value" => '',                    
                     "error" => "Votre email doit faire entre 8 et 320 caractères",
                     "required" => true
                 ],

@@ -11,6 +11,10 @@
   controller: Security
   action: register
 
+/register:
+  controller: Security
+  action: register
+
 /se-connecter:
   controller: Security
   action: login
@@ -19,9 +23,15 @@
   controller: Security
   action: login  
 
+/logout:
+  controller: Security
+  action: logout
 
 /se-deconnecter:
   controller: Security
   action: logout
 
+/editprofil:
+  controller: Security
+  action: editProfil
 

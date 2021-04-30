@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.1
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : database
--- Généré le :  mer. 13 jan. 2021 à 19:12
--- Version du serveur :  5.7.28
--- Version de PHP :  7.2.23
+-- Généré le : jeu. 29 avr. 2021 à 15:37
+-- Version du serveur :  5.7.32
+-- Version de PHP : 7.4.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,16 +18,16 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données :  `mvcdocker2`
+-- Base de données : `liblydocker`
 --
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wlms_user`
+-- Structure de la table `lbly_user`
 --
 
-CREATE TABLE `wlms_user` (
+CREATE TABLE `lbly_user` (
   `id` int(11) NOT NULL,
   `firstname` varchar(55) NOT NULL,
   `lastname` varchar(255) NOT NULL,
@@ -39,7 +38,8 @@ CREATE TABLE `wlms_user` (
   `isDeleted` tinyint(1) NOT NULL DEFAULT '0',
   `status` tinyint(4) NOT NULL DEFAULT '0',
   `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+  `updatedAt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `token` text
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -47,9 +47,9 @@ CREATE TABLE `wlms_user` (
 --
 
 --
--- Index pour la table `wlms_user`
+-- Index pour la table `lbly_user`
 --
-ALTER TABLE `wlms_user`
+ALTER TABLE `lbly_user`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -57,10 +57,10 @@ ALTER TABLE `wlms_user`
 --
 
 --
--- AUTO_INCREMENT pour la table `wlms_user`
+-- AUTO_INCREMENT pour la table `lbly_user`
 --
-ALTER TABLE `wlms_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `lbly_user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
