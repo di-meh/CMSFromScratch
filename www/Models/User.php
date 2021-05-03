@@ -5,7 +5,8 @@ namespace App\Models;
 use App\Core\Singleton;
 use PDO;
 
-class User extends Singleton{
+class User extends Singleton
+{
 
     private $id = null;
     protected $firstname;
@@ -20,20 +21,26 @@ class User extends Singleton{
 
     private $table = DBPREFIX . "user";
 
-    public function __construct(){
+    public function __construct()
+    {
 
         #Singleton::setPDO(); # set une unique fois !
 
     }
 
     # set all properties from database from the email
-    public function setAll($email){
+    public function setAll($email)
+    {
 
         $email = htmlspecialchars($email);
-        $query = "SELECT * FROM ".$this->getTable()." WHERE email='".$email."'";
-        echo $query;
-        $res = $this->getPDO()->query($query);
-        $res = $res->fetch(PDO::FETCH_ASSOC);
+        $query = "SELECT * FROM :table WHERE email=':email'";
+        $query = "SELECT pwd FROM :table WHERE email=':email'";
+        $prepare = $this->getPDO()->prepare($query);
+        $prepare->bindParam(':table', $this->table);
+        $prepare->bindParam(':email', $email);
+        $prepare->execute();
+        // echo $query;
+        $res = $prepare->fetch(PDO::FETCH_ASSOC);
         #var_dump($res);
         $this->setId($res['id']);
         $this->setFirstname($res['firstname']);
@@ -42,30 +49,36 @@ class User extends Singleton{
         $this->setCountry($res['country']);
         $this->setRole($res['role']);
         $this->setStatus($res['status']);
-        $this->setToken($res['token']??'');
+        $this->setToken($res['token'] ?? '');
 
         $this->setPwd($res['pwd']); # un peu dangereux non ? même si hashé
-        
+
     }
 
     # cherche le mdp correspond a ce mail en base
-    public function verifyPwd($email){
+    public function verifyPwd($email)
+    {
 
         $email = htmlspecialchars($email);
-        $query = "SELECT pwd FROM ".$this->table." WHERE email='".$email."'";
-
-        $res = $this->getPDO()->query($query);
-        return $res->fetchcolumn();
-
+        $query = "SELECT pwd FROM :table WHERE email=':email'";
+        $prepare = $this->getPDO()->prepare($query);
+        $prepare->bindParam(':table', $this->table);
+        $prepare->bindParam(':email', $email);
+        $prepare->execute();
+        return $prepare->fetchColumn();
     }
 
     # verifie que le mail existe en base
-    public function verifyMail($email){
+    public function verifyMail($email)
+    {
 
-        $query = "SELECT COUNT(*) FROM ".$this->table." WHERE email='".$email."'";
 
-        $res = $this->getPDO()->query($query);
-        $count = $res->fetchcolumn();
+        $query = "SELECT COUNT(*) FROM :table WHERE email=':email'";
+        $prepare = $this->getPDO()->prepare($query);
+        $prepare->bindParam(':table', $this->table);
+        $prepare->bindParam(':email', $email);
+        $prepare->execute();
+        $count = $prepare->fetchColumn();
 
         switch ($count) {
             case 0:
@@ -74,24 +87,26 @@ class User extends Singleton{
             case 1:
                 return 1; # le mail existe en un exemplaire : go pour la connexion
                 break;
-            
+
             default:
                 echo "ERREUR VERIFY MAIL";
                 return 2; # erreur bizarre              
                 break;
         }
-
     }
 
-    public function getTable(){
+    public function getTable()
+    {
         return $this->table;
     }
 
-    public function getToken(){
+    public function getToken()
+    {
         return $this->token;
     }
 
-    public function setToken($token){
+    public function setToken($token)
+    {
         $this->token = $token;
     }
 
@@ -154,10 +169,10 @@ class User extends Singleton{
     /**
      * @param mixed $email
      */
-    public function setEmail($email){
+    public function setEmail($email)
+    {
 
         $this->email = $email;
-
     }
 
     /**
@@ -240,7 +255,8 @@ class User extends Singleton{
         $this->role = $role;
     }
 
-    public function formEditProfil(){
+    public function formEditProfil()
+    {
 
         return [
 
@@ -260,7 +276,7 @@ class User extends Singleton{
                     "id" => "firstname",
                     "class" => "form_input",
                     "placeholder" => "Exemple: Yves",
-                    "value" => $this->firstname??"",
+                    "value" => $this->firstname ?? "",
                     "error" => "Votre prénom doit faire entre 2 et 55 caractères",
                     "required" => true
                 ],
@@ -272,7 +288,7 @@ class User extends Singleton{
                     "id" => "lastname",
                     "class" => "form_input",
                     "placeholder" => "Exemple: SKRZYPCZYK",
-                    "value" => $this->lastname??"",
+                    "value" => $this->lastname ?? "",
                     "error" => "Votre nom doit faire entre 2 et 255 caractères",
                     "required" => true
                 ],
@@ -284,7 +300,7 @@ class User extends Singleton{
                     "id" => "email",
                     "class" => "form_input",
                     "placeholder" => "Exemple: nom@gmail.com",
-                    "value" => $this->getEmail()??'',
+                    "value" => $this->getEmail() ?? '',
                     "error" => "Votre email doit faire entre 8 et 320 caractères",
                     "required" => true,
                     "disabled" => 'disabled'
@@ -371,7 +387,7 @@ class User extends Singleton{
                     "id" => "lastname",
                     "class" => "form_input",
                     "placeholder" => "Exemple: SKRZYPCZYK",
-                    "value" => '',                    
+                    "value" => '',
                     "error" => "Votre nom doit faire entre 2 et 255 caractères",
                     "required" => true
                 ],
@@ -383,7 +399,7 @@ class User extends Singleton{
                     "id" => "email",
                     "class" => "form_input",
                     "placeholder" => "Exemple: nom@gmail.com",
-                    "value" => '',                    
+                    "value" => '',
                     "error" => "Votre email doit faire entre 8 et 320 caractères",
                     "required" => true
                 ],
@@ -448,7 +464,7 @@ class User extends Singleton{
                     "id" => "email",
                     "class" => "form_input",
                     "placeholder" => "Exemple: nom@gmail.com",
-                    "value" => '',                    
+                    "value" => '',
                     "error" => "Votre email doit faire entre 8 et 320 caractères",
                     "required" => true
                 ],
