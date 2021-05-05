@@ -33,15 +33,10 @@ class User extends Singleton
     {
 
         $email = htmlspecialchars($email);
-        $query = "SELECT * FROM :table WHERE email=':email'";
-        $query = "SELECT pwd FROM :table WHERE email=':email'";
+        $query = "SELECT * FROM " . $this->table . " WHERE email = '" . $email . "'";
         $prepare = $this->getPDO()->prepare($query);
-        $prepare->bindParam(':table', $this->table);
-        $prepare->bindParam(':email', $email);
         $prepare->execute();
-        // echo $query;
         $res = $prepare->fetch(PDO::FETCH_ASSOC);
-        #var_dump($res);
         $this->setId($res['id']);
         $this->setFirstname($res['firstname']);
         $this->setLastname($res['lastname']);
@@ -60,10 +55,8 @@ class User extends Singleton
     {
 
         $email = htmlspecialchars($email);
-        $query = "SELECT pwd FROM :table WHERE email=':email'";
+        $query = "SELECT pwd FROM " . $this->table . " WHERE email = '" . $email . "'";
         $prepare = $this->getPDO()->prepare($query);
-        $prepare->bindParam(':table', $this->table);
-        $prepare->bindParam(':email', $email);
         $prepare->execute();
         return $prepare->fetchColumn();
     }
@@ -73,10 +66,8 @@ class User extends Singleton
     {
 
 
-        $query = "SELECT COUNT(*) FROM :table WHERE email=':email'";
+        $query = "SELECT COUNT(*) FROM " . $this->table . " WHERE email = '" . $email . "'";
         $prepare = $this->getPDO()->prepare($query);
-        $prepare->bindParam(':table', $this->table);
-        $prepare->bindParam(':email', $email);
         $prepare->execute();
         $count = $prepare->fetchColumn();
 

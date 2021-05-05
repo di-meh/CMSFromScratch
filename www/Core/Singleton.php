@@ -35,9 +35,8 @@ class Singleton
 	# DELETE ALL DATA IN CHILD TABLE !
 	public function deleteAll()
 	{
-		$query = "DELETE FROM :table";
+		$query = "DELETE FROM " . $this->getTable() . "";
 		$prepare = self::$pdo->prepare($query);
-		$prepare->bindParam(':table', $this->getTable());
 		$prepare->execute();
 	}
 
