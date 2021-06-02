@@ -35,3 +35,6 @@
   controller: Security
   action: editProfil
 
+/addpage:
+  controller: Page
+  action: addPage
