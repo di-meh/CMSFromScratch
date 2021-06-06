@@ -170,6 +170,10 @@ class Book extends Singleton
     }
 
     // Getters & Setters
+    public function getTable()
+    {
+        return $this->table;
+    }
     public function getId()
     {
         return $this->id;

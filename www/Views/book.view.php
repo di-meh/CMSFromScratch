@@ -12,10 +12,11 @@
 
 <?php if (isset($books)) : ?>
 
-    <?php foreach ($books as $book) : ?>
-        <li style="color:blue"><?= $book; ?></li>
-    <?php endforeach; ?>
+    <?php var_dump($books); ?>
 
 <?php endif; ?>
 
-<?php App\Core\FormBuilder::render($form) ?>
+<h3>Formulaire</h3>
+<?php if (isset($form)) : ?>
+    <?php App\Core\FormBuilder::render($form); ?>
+<?php endif; ?>
