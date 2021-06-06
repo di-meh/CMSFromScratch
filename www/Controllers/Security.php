@@ -9,6 +9,8 @@ use App\Core\ConstantMaker as c;
 
 use App\Core\Singleton;
 
+use App\Core\Mailing;
+
 use App\Core\Redirect;
 
 use App\Models\User;
@@ -158,6 +160,7 @@ class Security
 					$_SESSION['user'] = $user; # j'ai le droit ?
 					# $_SESSION['pwd'] = $user->getPwd(); # ??
 					$_SESSION['token'] = $token;
+					$_SESSION['status'] = $user->getStatus();
 
 
 
@@ -166,10 +169,16 @@ class Security
 					# $id = Singleton::findID($email);
 					# $user->setId($id); # peuple l'entité
 					# $user->setPwd($_POST['pwd']); # useless to me
+
+					$mail = Mailing::getMailing();
+					#$mail->setRecipient($_POST['email']);
+					# set template, set subject, set content
+					
+					$mail->sendMail(); # header already modified :'(
+
 					header("Location:/editprofil"); # temporairement
 					# $user->deleteAll(); # pour delete immediatement en base
 
-					# gère le token aussi
 
 				}else{
 
@@ -278,7 +287,6 @@ class Security
 		$view->assign("form", $form);
 		//$view->assign("formLogin", $formLogin);
 	}
-
 
 
 	public function logoutAction()

@@ -14,9 +14,7 @@ class User extends Singleton
     protected $email;
     protected $pwd;
     protected $country = "fr";
-    protected $role = 0;
-    protected $isDeleted = 0;
-    protected $status = 0;
+    protected $status = 0; # role, isConfirmed, isDeleted, isBannished
     protected $token = '';
 
     private $table = DBPREFIX . "user";
@@ -42,7 +40,6 @@ class User extends Singleton
         $this->setLastname($res['lastname']);
         $this->setEmail($email);
         $this->setCountry($res['country']);
-        $this->setRole($res['role']);
         $this->setStatus($res['status']);
         $this->setToken($res['token'] ?? '');
 
@@ -214,36 +211,8 @@ class User extends Singleton
         $this->status = $status;
     }
 
-    /**
-     * @return int
-     */
-    public function getIsDeleted(): int
-    {
-        return $this->isDeleted;
-    }
-
-    /**
-     * @param int $idDeleted
-     */
-    public function setIsDeleted(int $isDeleted)
-    {
-        $this->isDeleted = $isDeleted;
-    }
-
-    /**
-     * @return int
-     */
-    public function getRole(): int
-    {
-        return $this->role;
-    }
-
-    /**
-     * @param int $role
-     */
-    public function setRole(int $role)
-    {
-        $this->role = $role;
+    public function addStatus($status){
+        $this->status = $this->status | $status;
     }
 
     public function formEditProfil()

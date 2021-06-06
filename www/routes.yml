@@ -35,3 +35,7 @@
   controller: Security
   action: editProfil
 
+/superadminview:
+  controller: SuperAdmin
+  action: default
+

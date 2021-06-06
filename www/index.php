@@ -8,6 +8,8 @@ use App\Core\Helpers as h;
 
 //require "Core/Router.php";
 //require "Core/Security.php";
+#require 'vendor/autoload.php';
+
 
 require "Autoload.php";
 

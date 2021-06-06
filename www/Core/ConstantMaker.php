@@ -9,6 +9,9 @@ class ConstantMaker
 	private $data = [];
 
 	public function __construct(){
+
+		$this->defineUserStatus();
+
 		if(!file_exists($this->envPath)){
 			die("Le fichier ".$this->envPath." n'existe pas");
 		}
@@ -23,6 +26,18 @@ class ConstantMaker
 
 
 		$this->defineConstants();
+	}
+
+	# binary mask for user status
+	public function defineUserStatus(){
+
+		# 0 is a non admin non validated user, just a logged client
+		define("USERSUPERADMIN", 1);
+		define("USERADMIN", 2);
+		define("USERVALIDATED", 4);
+		define("USERDELETED", 8);
+		define("USERBANNISHED", 16);
+
 	}
 
 
