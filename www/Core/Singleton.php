@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use PDO;
+
 class Singleton
 {
 
@@ -69,5 +71,14 @@ class Singleton
 		}
 
 		$result = $this->getPDO()->prepare($query)->execute($columns);
+	}
+
+	public function all()
+	{
+		$query = "SELECT * from " . $this->getTable();
+		$stmt = $this->getPDO()->prepare($query);
+		$stmt->execute();
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		return $result;
 	}
 }

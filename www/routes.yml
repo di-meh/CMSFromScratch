@@ -35,3 +35,10 @@
   controller: Security
   action: editProfil
 
+/articles:
+  controller: ArticleController
+  action: default
+
+/articles/add:
+  controller: ArticleController
+  action: addArticle
