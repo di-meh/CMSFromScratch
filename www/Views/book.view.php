@@ -11,8 +11,11 @@
 <h3>Liste de books</h3>
 
 <?php if (isset($books)) : ?>
-
-    <?php var_dump($books); ?>
+    <?php if (empty($books)) : ?>
+        <p>Il n'y a pas de livres dans la bd.</p>
+    <?php else : ?>
+        <?php var_dump($books); ?>
+    <?php endif; ?>
 
 <?php endif; ?>
 

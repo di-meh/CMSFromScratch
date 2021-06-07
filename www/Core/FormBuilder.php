@@ -5,50 +5,51 @@ namespace App\Core;
 class FormBuilder
 {
 
-	public static function render($form){
+	public static function render($form)
+	{
 
 		$html = "<form 
-				method='".($form["config"]["method"]??"GET")."' 
-				id='".($form["config"]["id"]??"")."' 
-				class='".($form["config"]["class"]??"")."' 
-				action='".($form["config"]["action"]??"")."'>";
+				method='" . ($form["config"]["method"] ?? "GET") . "' 
+				id='" . ($form["config"]["id"] ?? "") . "' 
+				class='" . ($form["config"]["class"] ?? "") . "'
+				enctype='" . ($form["config"]["enctype"] ?? "") . "'
+				action='" . ($form["config"]["action"] ?? "") . "'>";
 
 
 		foreach ($form["inputs"] as $name => $configInput) {
-			$html .="<label for='".($configInput["id"]??"")."'>".($configInput["label"]??"")." </label>";
+			$html .= "<label for='" . ($configInput["id"] ?? "") . "'>" . ($configInput["label"] ?? "") . " </label>";
 
 
-			if($configInput["type"] == "select"){
+			if ($configInput["type"] == "select") {
 				$html .= self::renderSelect($name, $configInput);
-			}else{
+			} else {
 				$html .= self::renderInput($name, $configInput);
 			}
-
 		}
 
 
 
-		$html .= "<input type='submit' value=\"".($form["config"]["submit"]??"Valider")."\">";
+		$html .= "<input type='submit' value=\"" . ($form["config"]["submit"] ?? "Valider") . "\">";
 
 		$html .= "</form>";
 
 
 
 		echo $html;
-
 	}
 
 
-	public static function renderInput($name, $configInput){
+	public static function renderInput($name, $configInput)
+	{
 		return "<input 
-						name='".$name."' 
-						type='".($configInput["type"]??"text")."'
-						id='".($configInput["id"]??"")."'
-						class='".($configInput["class"]??"")."'
-						placeholder='".($configInput["placeholder"]??"")."'
-						value='".($configInput['value']??'')."'
-						".(!empty($configInput["required"])?"required='required'":"")."
-						".(isset($configInput["disabled"])?'disabled=disabled':'')."'
+						name='" . $name . "' 
+						type='" . ($configInput["type"] ?? "text") . "'
+						id='" . ($configInput["id"] ?? "") . "'
+						class='" . ($configInput["class"] ?? "") . "'
+						placeholder='" . ($configInput["placeholder"] ?? "") . "'
+						value='" . ($configInput['value'] ?? '') . "'
+						" . (!empty($configInput["required"]) ? "required='required'" : "") . "
+						" . (isset($configInput["disabled"]) ? 'disabled=disabled' : '') . "'
 
 					><br>";
 	}
@@ -56,18 +57,18 @@ class FormBuilder
 
 
 
-	public static function renderSelect($name, $configInput){
-		$html = "<select name='".$name."' id='".($configInput["id"]??"")."'
-						class='".($configInput["class"]??"")."'>";
+	public static function renderSelect($name, $configInput)
+	{
+		$html = "<select name='" . $name . "' id='" . ($configInput["id"] ?? "") . "'
+						class='" . ($configInput["class"] ?? "") . "'>";
 
 
 		foreach ($configInput["options"] as $key => $value) {
-			$html .= "<option value='".$key."'>".$value."</option>";
+			$html .= "<option value='" . $key . "'>" . $value . "</option>";
 		}
 
 		$html .= "</select><br>";
 
 		return $html;
 	}
-
 }
