@@ -15,7 +15,7 @@ class FormBuilder
 
 
 		foreach ($form["inputs"] as $name => $configInput) {
-			$html .="<label for='".($configInput["id"]??"")."'>".($configInput["label"]??"")." </label>";
+			$html .="<br><label for='".($configInput["id"]??"")."'>".($configInput["label"]??"")." </label>";
 
 
 			if($configInput["type"] == "select"){
@@ -74,7 +74,7 @@ class FormBuilder
 	}
 
 	public static function renderTextArea($name, $configInput){
-		return "<textarea id='".($configInput["id"]??"")."' rows='".($configInput["rows"]??"")."'
+		return "<textarea id='".($configInput["id"]??"")."' name='".($name ??"")."' rows='".($configInput["rows"]??"")."'
 						cols='".($configInput["cols"]??"")."'></textarea>";
 		
 	}
