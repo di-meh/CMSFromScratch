@@ -10,8 +10,9 @@
 
 		if(isset($_SESSION['id'])){
 
-			echo "<a id'' href='editprofil'>Edition du profil</a><br/>";
-			echo "<a id='' href='logout'>Déconnexion</a>";
+			echo "<a id '' href='editprofil'>Edition du profil</a><br/>";
+			echo "<a id='' href='logout'>Déconnexion</a> <br>";
+			echo "<a id='' href='page/add'>Ajouter une page</a>";
 
 		}else
 			echo "<a id='' href='login'>Connexion</a>";

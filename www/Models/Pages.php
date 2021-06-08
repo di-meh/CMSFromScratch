@@ -10,6 +10,7 @@ class Pages extends Singleton
 	private $id = null;
     protected $title;
     protected $content;
+    protected $createdBy;
 
     private $table = DBPREFIX . "page";
 
@@ -70,6 +71,21 @@ class Pages extends Singleton
         $this->content = $content;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @param mixed $createdBy
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+    }
 
 	public function formAddPage()
 	{

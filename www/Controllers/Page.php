@@ -21,6 +21,11 @@ class Page
 	}
 
 	public function addPageAction(){
+        session_start();
+        if (!isset($_SESSION['id'])) header("Location:/login"); # si user non connecté => redirection
+
+        $user = $_SESSION['user'];
+
 		$pages = new Pages();
 
 		$view = new View("addPage");
@@ -38,12 +43,13 @@ class Page
 
                 $pages->setTitle($_POST['title']);
                 $pages->setContent($_POST['editor']);
+                $pages->setCreatedBy($user->getID());
                 if (empty($_POST['editor'])){
                     $view->assign("errors", ["Veuillez remplir tous les champs"]);
                 }else{
 
                 $pages->save();
-                    header("Location:login");
+                    header("Location:/");
                 }
 
             }else{
