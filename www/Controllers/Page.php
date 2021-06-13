@@ -15,9 +15,17 @@ class Page
 {
 
 
-	public function defaultAction()
-	{
-		echo "Controller page action default";
+	public function defaultAction(){
+        session_start();
+        if (!isset($_SESSION['id'])) header("Location:/login"); # si user non connecté => redirection
+
+        $user = $_SESSION['user'];
+
+        $pages = new Pages();
+        $view = new View("pages");
+
+        $pages = $pages->getPageList();
+        $view->assign("pages", $pages);
 	}
 
 	public function addPageAction(){

@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use PDO;
+
 class Singleton
 {
 
@@ -70,4 +72,12 @@ class Singleton
 
 		$result = $this->getPDO()->prepare($query)->execute($columns);
 	}
+
+	public function getPageList(){
+	    $query = "SELECT title, createdAt, createdBy FROM " . $this->getTable();
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
+        $res = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $res;
+    }
 }

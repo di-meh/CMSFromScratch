@@ -19,9 +19,13 @@ class Router
 
 				$this->setController($this->routes[$this->uri]["controller"]);
 				$this->setAction($this->routes[$this->uri]["action"]);
+			/*}elseif (/*vérifie slug en bdd this->uri == fonction qui get slug dans bdd, stocker slug en remplacant
+			espace dans le titre de la page par / et tout mettre en minuscule){*/
+
 			}else{
+			    echo($this->uri);
 				die("Chemin inexistant : 404");
-			}
+            }
 
 		}else{
 			die("Le fichier routes.yml ne fonctionne pas !");
