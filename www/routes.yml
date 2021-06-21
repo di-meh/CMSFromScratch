@@ -35,3 +35,6 @@
   controller: Security
   action: editProfil
 
+/category:
+  controller: CategoryController
+  action: addcategory

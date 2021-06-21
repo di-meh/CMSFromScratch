@@ -11,13 +11,14 @@
 		if(isset($_SESSION['id'])){
 
 			echo "<a id'' href='editprofil'>Edition du profil</a><br/>";
-			echo "<a id='' href='logout'>Déconnexion</a>";
-
+			echo "<a id='' href='logout'>Déconnexion</a><br/>";
 		}else
 			echo "<a id='' href='login'>Connexion</a>";
 	?>
 	<br/><br/>
 	<a id="" href="register">Inscription</a>
+
+	<a id="" href="category">Catégories</a>
 
 </section>
 
