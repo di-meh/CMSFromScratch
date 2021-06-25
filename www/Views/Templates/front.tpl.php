@@ -10,12 +10,25 @@
 </head>
 
 <body>
-	<header>
-		<h1>Template du front</h1>
-	</header>
+	<div class="page-wrapper with-navbar " id="app">
+		<!-- mettre with-sidebar si jamais -->
+		<nav class="navbar">
+			<h5 class="navbar-title">Template du front</h5>
+			<div class="navbar-right">
+				<div class="right-link">
+					<?= isset($_SESSION['id']) ? "<a id'' href='editprofil'>Edition du profil</a></div><div class='right-link'><a id='' href='logout'>Déconnexion</a>" : "<a id='' href='login'>Connexion</a>"; ?>
+				</div>
+				<div class="right-link"><a id="" href="register">Inscription</a></div>
+			</div>
+		</nav>
 
-	<!-- intégration de la vue -->
-	<?php include $this->view; ?>
+		<div class="content-wrapper">
+			<!-- intégration de la vue -->
+			<?php include $this->view; ?>
+		</div>
+
+	</div>
+
 
 </body>
 
