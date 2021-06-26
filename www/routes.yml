@@ -1,4 +1,3 @@
-
 /:
   controller: Main
   action: default
@@ -21,7 +20,7 @@
 
 /login:
   controller: Security
-  action: login  
+  action: login
 
 /logout:
   controller: Security
@@ -47,3 +46,6 @@
   controller: CategoryController
   action: addcategory
 
+/books:
+  controller: BookController
+  action: index

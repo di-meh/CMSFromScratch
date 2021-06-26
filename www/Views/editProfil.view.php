@@ -1,30 +1,31 @@
 <h2>Edition du profil</h2>
 
-<?php if(isset($errors)):?>
+<?php if (isset($errors)) : ?>
 
-<?php foreach ($errors as $error):?>
-	<li style="color:red"><?=$error;?></li>
-<?php endforeach;?>
+	<?php foreach ($errors as $error) : ?>
+		<li style="color:red"><?= $error; ?></li>
+	<?php endforeach; ?>
 
-<?php endif;?>
+<?php endif; ?>
 
-<?php if(isset($infos)):?>
+<?php if (isset($infos)) : ?>
 
-<?php foreach ($infos as $info):?>
-	<li style="color:blue"><?=$info;?></li>
-<?php endforeach;?>
+	<?php foreach ($infos as $info) : ?>
+		<li style="color:blue"><?= $info; ?></li>
+	<?php endforeach; ?>
 
-<?php endif;?>
+<?php endif; ?>
 
 
 
-<?php App\Core\FormBuilder::render($form)?>
+<?php App\Core\FormBuilder::render($form) ?>
 
 <section>
-	<br/>
+	<br />
 	<a id="" href="/">Accueil</a>
-	<br/>
+	<br />
 	<a id="" href="logout">Déconnexion</a>
+	<br />
+	<a id="" href="/books">Livres</a>
 
-	
 </section>
