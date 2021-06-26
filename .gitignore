@@ -2,3 +2,4 @@ db_data
 www/.env
 www/.env.dev
 www/.env.prod
+.idea
