@@ -42,3 +42,8 @@
 /page/add:
   controller: PageController
   action: addpage
+
+/category:
+  controller: CategoryController
+  action: addcategory
+
