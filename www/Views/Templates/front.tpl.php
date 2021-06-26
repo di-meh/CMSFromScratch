@@ -13,5 +13,7 @@
 	<!-- intégration de la vue -->
 	<?php include $this->view ;?>
 
+
+
 </body>
 </html>

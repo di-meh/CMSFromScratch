@@ -15,12 +15,15 @@ class FormBuilder
 
 
 		foreach ($form["inputs"] as $name => $configInput) {
-			$html .="<label for='".($configInput["id"]??"")."'>".($configInput["label"]??"")." </label>";
+			$html .="<br><label for='".($configInput["id"]??"")."'>".($configInput["label"]??"")." </label>";
 
 
 			if($configInput["type"] == "select"){
 				$html .= self::renderSelect($name, $configInput);
-			}else{
+			}elseif ($configInput["type"] == "textarea") {
+				$html .= self::renderTextArea($name, $configInput);
+			}
+			else{
 				$html .= self::renderInput($name, $configInput);
 			}
 
@@ -28,7 +31,7 @@ class FormBuilder
 
 
 
-		$html .= "<input type='submit' value=\"".($form["config"]["submit"]??"Valider")."\">";
+		$html .= "</br><input type='submit' value=\"".($form["config"]["submit"]??"Valider")."\">";
 
 		$html .= "</form>";
 
@@ -68,6 +71,12 @@ class FormBuilder
 		$html .= "</select><br>";
 
 		return $html;
+	}
+
+	public static function renderTextArea($name, $configInput){
+		return "<textarea id='".($configInput["id"]??"")."' name='".($name ??"")."' rows='".($configInput["rows"]??"")."'
+						cols='".($configInput["cols"]??"")."'></textarea>";
+		
 	}
 
 }

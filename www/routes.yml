@@ -35,3 +35,10 @@
   controller: Security
   action: editProfil
 
+/page/all:
+  controller: PageController
+  action: default
+
+/page/add:
+  controller: PageController
+  action: addpage
