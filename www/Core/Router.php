@@ -1,7 +1,7 @@
 <?php
 namespace App\Core;
 
-use App\Models\Pages;
+use App\Models\Page;
 
 class Router
 {
@@ -12,8 +12,7 @@ class Router
 	private $action;
 
 	public function __construct($uri){
-	    $page = new Pages();
-	    $pages = $page->getAllSlug();
+	    $page = new Page();
 
 
 		$this->setUri($uri);
@@ -25,8 +24,8 @@ class Router
 
 				$this->setController($this->routes[$this->uri]["controller"]);
 				$this->setAction($this->routes[$this->uri]["action"]);
-			}elseif (!empty($page->isSlugThere($this->uri))){
-                $this->setController("Page");
+			}elseif (!empty($page->getAllBySlug($this->uri))){
+                $this->setController("PageController");
                 $this->setAction("seePage");
 			//}elseif (){
 

@@ -36,9 +36,9 @@
   action: editProfil
 
 /page/all:
-  controller: Page
+  controller: PageController
   action: default
 
 /page/add:
-  controller: Page
+  controller: PageController
   action: addpage

@@ -4,7 +4,7 @@ namespace App\Core;
 
 use PDO;
 use App\Core\Router;
-use App\Models\Pages;
+use App\Models\Page;
 
 class Singleton
 {
@@ -75,27 +75,12 @@ class Singleton
 		$result = $this->getPDO()->prepare($query)->execute($columns);
 	}
 
-	public function getPageList(){
-	    $query = "SELECT title, createdAt, createdBy, slug FROM " . $this->getTable();
-        $req = $this->getPDO()->prepare($query);
-        $req->execute();
-        $res = $req->fetchAll(PDO::FETCH_ASSOC);
-        return $res;
+    public function all(){
+        $query = "SELECT * from " . $this->getTable();
+        $stmt = $this->getPDO()->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
     }
 
-    public function isSlugThere($slug){
-	    $query = "SELECT slug FROM " . $this->getTable() . " WHERE slug = '".$slug."'";
-	    $req = $this->getPDO()->prepare($query);
-	    $req->execute();
-	    $res = $req->fetchAll(PDO::FETCH_ASSOC);
-	    return $res;
-    }
-
-    public function getAllSlug(){
-	    $query = "SELECT slug FROM " . $this->getTable();
-	    $req = $this->getPDO()->prepare($query);
-	    $req->execute();
-	    $res = $req->fetchAll(PDO::FETCH_ASSOC);
-	    return $res;
-    }
 }

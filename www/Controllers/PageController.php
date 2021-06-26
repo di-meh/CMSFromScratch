@@ -9,9 +9,10 @@ use App\Core\Singleton;
 
 use App\Core\Redirect;
 
-use App\Models\Pages;
+use App\Models\Page;
+use App\Core\Router;
 
-class Page
+class PageController
 {
 
 
@@ -21,13 +22,11 @@ class Page
 
         $user = $_SESSION['user'];
 
-        $pages = new Pages();
-        $slug = new Pages();
+        $page = new Page();
         $view = new View("pages");
 
-        $pages = $pages->getPageList();
+        $pages = $page->all();
         $view->assign("pages", $pages);
-        $view->assign("slug", $slug);
 	}
 
 	public function addPageAction(){
@@ -36,11 +35,11 @@ class Page
 
         $user = $_SESSION['user'];
 
-		$pages = new Pages();
+		$page = new Page();
 
 		$view = new View("addPage");
 
-		$form = $pages->formAddPage();
+		$form = $page->formAddPage();
 
 		if(!empty($_POST)){
 
@@ -51,18 +50,18 @@ class Page
 
 		    if (empty($errors)){
 
-                $pages->setTitle($_POST['title']);
-                $pages->setContent($_POST['editor']);
-                $pages->setCreatedBy($user->getID());
+                $page->setTitle($_POST['title']);
+                $page->setContent($_POST['editor']);
+                $page->setCreatedBy($user->getID());
                 if (empty($_POST['editor'])){
                     $view->assign("errors", ["Veuillez remplir tous les champs"]);
                 }else{
-                    $pages->setSlug('/' . $pages->title2slug($_POST['title']));
-                    if (empty($pages->isSlugThere())){
-                        $pages->save();
+                    $page->setSlug('/' . $page->title2slug($_POST['title']));
+                    if (empty($page->getAllBySlug($page->getSlug()))){
+                        $page->save();
                         header("Location:/");
                     }else{
-                        echo $pages->getSlug();
+                        echo $page->getSlug();
                         $view->assign("errors", ["Veuillez changer le titre de votre page"]);
                     }
                 }
@@ -82,9 +81,17 @@ class Page
 
         $user = $_SESSION['user'];
 
-        $pages = new Pages();
+        $page = new Page();
 
         $view = new View("seePage");
+
+        $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
+
+        $uri = $uriExploded[0];
+
+        $page = $page->getAllBySlug($uri);
+        $view->assign("page", $page[0]);
+
     }
 
 }

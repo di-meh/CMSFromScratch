@@ -20,7 +20,7 @@
                             <td><a href="#">Modifier ma page</a></td>
                             <!--<td><//?php echo $page["slug"];?></td>-->
                             </tr>
-                            <?php echo '<hr/>';
+                            <?php
                             }
                         endif; ?>
 
