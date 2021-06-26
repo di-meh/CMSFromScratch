@@ -21,9 +21,9 @@ class BookController
             $book->setAuthor($_POST['author']);
             $book->setPublicationDate($_POST['publication_date']);
             // $book->setImage($_POST['image']);
-            // var_dump($_FILES["image"]);
+            var_dump($_FILES);
             // store image sur le serveur
-            if (isset($_FILES)) {
+            if (isset($_FILES) && !empty($_FILES["image"]["name"])) {
                 $target_dir = "img/";
                 $target_file = $target_dir . basename($_FILES["image"]["name"]);
                 $uploadOk = 1;
