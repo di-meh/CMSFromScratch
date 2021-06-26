@@ -12,6 +12,7 @@
 
 			echo "<a id '' href='editprofil'>Edition du profil</a><br/>";
 			echo "<a id='' href='logout'>Déconnexion</a> <br>";
+			echo "<a id='' href='page/all'>Voir mes pages</a> <br>";
 			echo "<a id='' href='page/add'>Ajouter une page</a>";
 
 		}else

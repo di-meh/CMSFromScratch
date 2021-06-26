@@ -22,10 +22,12 @@ class Page
         $user = $_SESSION['user'];
 
         $pages = new Pages();
+        $slug = new Pages();
         $view = new View("pages");
 
         $pages = $pages->getPageList();
         $view->assign("pages", $pages);
+        $view->assign("slug", $slug);
 	}
 
 	public function addPageAction(){
@@ -55,9 +57,14 @@ class Page
                 if (empty($_POST['editor'])){
                     $view->assign("errors", ["Veuillez remplir tous les champs"]);
                 }else{
-
-                $pages->save();
-                    header("Location:/");
+                    $pages->setSlug('/' . $pages->title2slug($_POST['title']));
+                    if (empty($pages->isSlugThere())){
+                        $pages->save();
+                        header("Location:/");
+                    }else{
+                        echo $pages->getSlug();
+                        $view->assign("errors", ["Veuillez changer le titre de votre page"]);
+                    }
                 }
 
             }else{
@@ -68,5 +75,16 @@ class Page
 	    }
 		$view->assign("form", $form);
 	}
+
+	public function seePageAction(){
+        session_start();
+        if (!isset($_SESSION['id'])) header("Location:/login"); # si user non connecté => redirection
+
+        $user = $_SESSION['user'];
+
+        $pages = new Pages();
+
+        $view = new View("seePage");
+    }
 
 }

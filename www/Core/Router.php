@@ -1,6 +1,8 @@
 <?php
 namespace App\Core;
 
+use App\Models\Pages;
+
 class Router
 {
 	private $routes = [];
@@ -10,6 +12,10 @@ class Router
 	private $action;
 
 	public function __construct($uri){
+	    $page = new Pages();
+	    $pages = $page->getAllSlug();
+
+
 		$this->setUri($uri);
 		if(file_exists($this->routesPath)){
 			//[/] => Array ( [controller] => Global [action] => default )
@@ -19,18 +25,27 @@ class Router
 
 				$this->setController($this->routes[$this->uri]["controller"]);
 				$this->setAction($this->routes[$this->uri]["action"]);
-			/*}elseif (/*vérifie slug en bdd this->uri == fonction qui get slug dans bdd, stocker slug en remplacant
-			espace dans le titre de la page par / et tout mettre en minuscule){*/
+			}elseif (!empty($page->isSlugThere($this->uri))){
+                $this->setController("Page");
+                $this->setAction("seePage");
+			//}elseif (){
 
-			}else{
-			    echo($this->uri);
-				die("Chemin inexistant : 404");
+            }else{
+				die("\nChemin inexistant : 404");
             }
 
 		}else{
 			die("Le fichier routes.yml ne fonctionne pas !");
 		}
 	}
+
+    /**
+     * @return mixed
+     */
+    public function getUri()
+    {
+        return $this->uri;
+    }
 
 	public function setUri($uri){
 		$this->uri = trim(mb_strtolower($uri));

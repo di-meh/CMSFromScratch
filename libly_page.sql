@@ -34,5 +34,6 @@ CREATE TABLE `lbly_page` (
     `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updatedAt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
     `createdBy` int NOT NULL,
+    `slug` varchar(70) NOT NULL,
     FOREIGN KEY (createdBy) REFERENCES lbly_user(id)
 );

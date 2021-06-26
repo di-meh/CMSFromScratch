@@ -11,7 +11,7 @@ class Pages extends Singleton
     protected $title;
     protected $content;
     protected $createdBy;
-
+    protected $slug;
     private $table = DBPREFIX . "page";
 
     public function __construct(){
@@ -85,6 +85,39 @@ class Pages extends Singleton
     public function setCreatedBy($createdBy)
     {
         $this->createdBy = $createdBy;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    }
+
+
+    public function title2slug($title){
+        $title = preg_replace('~[^\pL\d]+~u', '-', $title);
+        //retire symboles spéciaux
+        $title = iconv("UTF-8", "ASCII//TRANSLIT", $title);
+
+        $title = preg_replace('~[^-\w]+~', '', $title);
+
+        $title = trim($title, '-');
+        //suprimme double -
+        $title = preg_replace('~-+~', '-', $title);
+        //minuscule
+        $title = strtolower($title);
+
+        return $title;
     }
 
 	public function formAddPage()

@@ -9,26 +9,31 @@
                     <tr>
                         <th>titre</th>
                         <th>date de création</th>
-                        <th>créateur</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($pages as $page) {
-                            foreach ($page as $key => $value){
-                                echo $key.' : '.$value.'<br/>';
+                        <?php foreach ($pages as $page) { ?>
+                            <tr>
+                            <td><?php echo $page["title"];?></td>
+                            <td><?php echo $page["createdAt"];?></td>
+                            <td><a href="#">Voir ma page</a></td>
+                            <td><a href="#">Modifier ma page</a></td>
+                            <!--<td><//?php echo $page["slug"];?></td>-->
+                            </tr>
+                            <?php echo '<hr/>';
                             }
-                            echo '<hr/>';
-                        }
-                    endif; ?>
+                        endif; ?>
+
                 </tbody>
                 </table>
     <?php endif; ?>
+
 </section>
 <section>
     <br/>
     <a id="" href="/">Accueil</a>
     <br/>
-    <a id="" href="page/all">Ajouter une page</a>
+    <a id="" href="add">Ajouter une page</a>
     <br/>
     <a id="" href="logout">Déconnexion</a>
 </section>

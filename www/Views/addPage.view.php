@@ -11,7 +11,8 @@
 <?php App\Core\FormBuilder::render($form)?>
 <section>
     <br/>
-    <a id="" href="/">Accueil</a>
+    <a id="" href="/">Accueil</a><br>
+    <a id="" href="/page/all">Voir mes pages</a>
 </section>
 <script src="/../ckeditor/ckeditor.js"></script>
 <script>
