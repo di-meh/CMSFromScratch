@@ -39,3 +39,7 @@
   controller: SuperAdmin
   action: default
 
+/uservalidated:
+  controller: Security
+  action: uservalidated
+

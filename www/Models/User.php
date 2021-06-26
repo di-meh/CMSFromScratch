@@ -26,8 +26,12 @@ class User extends Singleton
 
     }
 
-    # set all properties from database from the email
-    public function setAll($email)
+    /*
+    *   set all properties from database from the email
+    *   from id idealement mais flm
+    *   pcq il faut recup id a partir de email puis tout a partir de id
+    */
+    public function setAllFromEmail(string $email)
     {
 
         $email = htmlspecialchars($email);
@@ -39,6 +43,27 @@ class User extends Singleton
         $this->setFirstname($res['firstname']);
         $this->setLastname($res['lastname']);
         $this->setEmail($email);
+        $this->setCountry($res['country']);
+        $this->setStatus($res['status']);
+        $this->setToken($res['token'] ?? '');
+
+        $this->setPwd($res['pwd']); # un peu dangereux non ? même si hashé
+
+    }
+    
+
+    # set all properties from id
+    public function setAllFromId($id)
+    {
+
+        $query = "SELECT * FROM " . $this->table . " WHERE id = '" . $id . "'";
+        $prepare = $this->getPDO()->prepare($query);
+        $prepare->execute();
+        $res = $prepare->fetch(PDO::FETCH_ASSOC);
+        $this->setId($id);
+        $this->setFirstname($res['firstname']);
+        $this->setLastname($res['lastname']);
+        $this->setEmail($res['email']);
         $this->setCountry($res['country']);
         $this->setStatus($res['status']);
         $this->setToken($res['token'] ?? '');
@@ -81,6 +106,23 @@ class User extends Singleton
                 return 2; # erreur bizarre              
                 break;
         }
+    }
+
+    # verify email and firstname given to set user status to uservalidated
+    public function verifyUser($email, $token){
+        $email = htmlspecialchars($email);
+        $token = htmlspecialchars($token);
+
+        $query = "SELECT id,status FROM " . $this->table . " WHERE email = '" . $email . "' AND token = '".$token."'";
+        $prepare = $this->getPDO()->prepare($query);
+        $prepare->execute();
+        $result = $prepare->fetch(PDO::FETCH_ASSOC);
+
+        if(is_null($result['id']) || empty($result['id']))
+            return 0;
+        else
+            return 1;
+
     }
 
     public function getTable()

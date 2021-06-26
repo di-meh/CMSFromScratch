@@ -10,6 +10,7 @@ require 'vendor/autoload.php';
 
 class Mailing{
 
+	# SINGLETON PATTERN
 	private static $mailingInstance = null;
 	private $mail;
 	private $recipient;
@@ -67,7 +68,7 @@ class Mailing{
 		*/
 		try {
 		    //Server settings
-		    $this->mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+		    #$this->mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
 		    $this->mail->isSMTP();                                            //Send using SMTP
 		    $this->mail->Host       = 'smtp.office365.com';                     //Set the SMTP server to send through
 		    $this->mail->SMTPAuth   = true;                                   //Enable SMTP authentication
@@ -77,7 +78,7 @@ class Mailing{
 		    $this->mail->Port       = MAILPORT;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
 
 		    //Recipients
-		    $this->mail->setFrom(MAILUSERNAME, 'GROUP 16');
+		    $this->mail->setFrom(MAILUSERNAME, 'LIBLY');
 		    $this->mail->addAddress('jedidialr@outlook.fr', 'Jed');     //Add a recipient
 		    # $this->mail->addAddress($this->recipient, 'User');     //Add a recipient
 
@@ -92,13 +93,13 @@ class Mailing{
 
 		    //Content
 		    $this->mail->isHTML(true);                                  //Set email format to HTML
-		    $this->mail->Subject = 'Here is the subject';
+		    $this->mail->Subject = $this->subject;#'Here is the subject';
 
 		    # $this->mail->Subject = $this->subject;
 		    # $this->mail->Body = $this->content;
 
-		    $this->mail->Body    = 'This is the HTML message body <b>in bold!</b>';
-		    $this->mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+		    $this->mail->Body    = $this->content; # 'This is the HTML message body <b>in bold!</b>';
+		    #$this->mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
 		    $this->mail->send();
 		    #echo 'Message has been sent';
