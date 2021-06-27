@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\Singleton;
+use PDO;
 use DateTime;
 
 class Article extends Singleton
@@ -12,7 +13,7 @@ class Article extends Singleton
     protected $title;
     protected $author;
     protected $slug;
-    protected $body;
+    protected $content;
     protected $created;
     protected $published;
     protected $modified;
@@ -24,88 +25,6 @@ class Article extends Singleton
         
     }
 
-    # set all properties from database
-    public function setAll($id)
-    {
-
-        $query = "SELECT * FROM " . $this->table . " WHERE id = '" . $id . "'";
-        $prepare = $this->getPDO()->prepare($query);
-        $prepare->execute();
-        $res = $prepare->fetch(PDO::FETCH_ASSOC);
-        $this->setAuthor($res['author']);
-        $this->setTitle($res['title']);
-        $this->setSlug($res['slug']);
-        $this->setBody($res['body']);
-        $this->setPublished($res['published']);
-        $this->setModified($res['modified']);
-        $this->setStatus($res['status']);
-
-    }
-
-    public function formAddArticle()
-    {
-
-        return [
-
-            "config" => [
-                "method" => "POST",
-                "action" => "",
-                "id" => "form_article",
-                "class" => "form_builder",
-                "submit" => "Valider"
-            ],
-            "inputs" => [
-                "author" => [
-                    "type" => "text",
-                    "label" => "Editez l'auteur",
-                    "minLength" => 2,
-                    "maxLength" => 155,
-                    "id" => "author",
-                    "class" => "form_input",
-                    "placeholder" => "Exemple: Moi",
-                    "value" => $this->author ?? "",
-                    "error" => "Votre auteur doit faire entre 2 et 155 caractères",
-                    "required" => true
-                ],
-                "title" => [
-                    "type" => "text",
-                    "label" => "Editez le titre",
-                    "minLength" => 2,
-                    "maxLength" => 155,
-                    "id" => "title",
-                    "class" => "form_input",
-                    "placeholder" => "Exemple: Premier article",
-                    "value" => $this->title ?? "",
-                    "error" => "Votre titre doit faire entre 2 et 155 caractères",
-                    "required" => true
-                ],
-                "slug" => [
-                    "type" => "text",
-                    "label" => "Editez le slug",
-                    "minLength" => 2,
-                    "maxLength" => 155,
-                    "id" => "slug",
-                    "class" => "form_input",
-                    "placeholder" => "Exemple: /article",
-                    "value" => $this->slug ?? "",
-                    "error" => "Votre slug doit faire entre 2 et 155 caractères",
-                    "required" => true
-                ],
-                "body" => [
-                    "type" => "texarea",
-                    "label" => "Editez le body",
-                    "minLength" => 2,
-                    "maxLength" => 155,
-                    "id" => "slug",
-                    "class" => "form_input",
-                    "placeholder" => "Exemple: Ceci est mon article",
-                    "value" => $this->body ?? "",
-                    "error" => "Votre body doit faire entre 2 et 155 caractères",
-                    "required" => true
-                ],
-            ]
-        ];
-    }
     public function getTable()
     {
         return $this->table;
@@ -145,14 +64,13 @@ class Article extends Singleton
     {
         $this->slug = $slug;
     }
-    
-    public function getBody()
+    public function getContent()
     {
-        return $this->body;
+        return $this->content;
     }
-    public function setBody($body)
+    public function setContent($content)
     {
-        $this->body = $body;
+        $this->content = $content;
     }
     
     public function getPublished()
@@ -171,5 +89,78 @@ class Article extends Singleton
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    public function formAddArticle()
+    {
+
+        return [
+
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "form_addarticle",
+                "class" => "form_builder",
+                "submit" => "Ajouter"
+            ],
+            "inputs" => [
+                "title" => [
+                    "type" => "text",
+                    "label" => "Editez le titre",
+                    "minLength" => 2,
+                    "maxLength" => 60,
+                    "id" => "title",
+                    "class" => "form_input",
+                    "placeholder" => "Exemple: Premier article",
+                    "value" => $this->title ?? "",
+                    "error" => "Votre titre doit faire entre 2 et 155 caractères",
+                    "required" => true
+                ],
+                "content" => [
+                    "type" => "textarea",
+                    "label" => "",
+                    "cols" => 80,
+                    "rows" => 10,
+                    "id" => "content",
+                    "name" => "content",
+                    "placeholder" => "",
+                    "value" => $this->content ?? "",
+                    "error" => "probleme enregistrement base de données",
+                    "required" => true
+                ],
+            ]
+        ];
+    }
+
+    public function title2slug($title){
+        $title = preg_replace('~[^\pL\d]+~u', '-', $title);
+
+        $unwanted_array = array(    'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+            'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
+            'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
+            'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
+            'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y' );
+        $title = strtr( $title, $unwanted_array );
+
+        //retire symboles spéciaux
+        $title = iconv("UTF-8", "ASCII//TRANSLIT", $title);
+
+        $title = preg_replace('~[^-\w]+~', '', $title);
+
+        $title = trim($title, '-');
+        //suprimme double -
+        $title = preg_replace('~-+~', '-', $title);
+        //minuscule
+        $title = strtolower($title);
+
+        return $title;
+    }
+    
+    public function getAllBySlug($slug){
+        $query = "SELECT * FROM " . $this->getTable() . " WHERE slug = '".$slug."'";
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
+        $res = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $res;
     }
 }
