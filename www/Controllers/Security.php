@@ -28,6 +28,9 @@ class Security
 
 	public function userValidatedAction(){
 
+		if(is_null($_GET['id']) || is_null($_GET['token']))
+			header("Location: /");
+
 		$id = $_GET['id'];
 		$token = $_GET['token'];
 
@@ -209,8 +212,8 @@ class Security
 						# $user->deleteAll(); # pour delete immediatement en 
 					}else{
 						echo "Vous devez aller <strong style='color:red'>confirmer votre compte</strong> avec le mail que vous avez reçu à cette adresse : <strong style='color:blue'>".$user->getEmail()."</strong><br/>";
-						# TODO
-						echo "Renvoyer le mail de confirmation";
+						$email = $_POST['email'];
+						echo "<a href='http://localhost/userconfirm?email=$email'>Renvoyer le mail de confirmation</a>";
 						# redirect here
 					}
 
@@ -295,12 +298,9 @@ class Security
 						$user->setToken($token);
 
 						$user->save();
-						$user->setAllFromEmail($_POST['email']); # to get user id
-
-						$mail = Mailing::getMailing();
-						$mail->mailConfirm($_POST['email'], $user); # set mail confirmation content
-						$mail->sendMail();
-
+						$email = $user->getEmail();
+						header("Location: userconfirm?email=$email");
+						#$this->sendMailUserConfirm($_POST['email']);
 
 						 # header already modified :'(
 						# header("Location:login");
@@ -331,6 +331,22 @@ class Security
 
 		$view->assign("form", $form);
 		//$view->assign("formLogin", $formLogin);
+	}
+
+	# send mail to confirm user then redirect to login
+	public function userConfirmAction(){
+		$user = new User();
+		if(is_null($_GET['email']) || empty($_GET['email']))
+			header("Location: /");
+
+		$user->setAllFromEmail($_GET['email']); # to get user id
+
+		$mailing = Mailing::getMailing();
+		$mailing->mailConfirm($_GET['email'], $user); # set mail confirmation content
+		$mailing->sendMail();
+
+		header("Location: /login");
+		
 	}
 
 

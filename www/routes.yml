@@ -21,7 +21,7 @@
 
 /login:
   controller: Security
-  action: login  
+  action: login
 
 /logout:
   controller: Security
@@ -43,3 +43,6 @@
   controller: Security
   action: uservalidated
 
+/userconfirm:
+  controller: Security
+  action: userconfirm
