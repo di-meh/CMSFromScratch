@@ -42,7 +42,7 @@ class ArticleController{
 				if (empty($_POST['content'])){
 					$view->assign("errors", ["Veuillez remplir tous les champs"]);
 				}else{
-					$article->setSlug('/' . $article->title2slug($_POST['title']));
+					$article->setSlug('/articles/' . $article->title2slug($_POST['title']));
 					if (empty($article->getAllBySlug($article->getSlug()))){
 						$article->save();
 						header("Location:/articles/add");

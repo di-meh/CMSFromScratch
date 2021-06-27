@@ -1,19 +1,32 @@
 <section>
 	<h2>Liste des articles</h2>
 
-	<?php if (isset($articles)) : ?>
-		<?php if (empty($articles)) : ?>
-			<p>Il n'y a pas d'article dans la bdd.</p>
-		<?php else : ?>
-			<?php foreach ($articles as $article) {
-				foreach ($article as $key => $value) {
-					echo $key.' : '.$value.'<br/>';
-				}
-				echo '<hr/>';
-			}
-		endif; ?>
+	<?php if (isset($articles)) :?>
+        <?php if (empty($articles)) :?>
+            <p>Vous n'avez pas créé de article.</p>
+        <?php else: ?>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Date de création</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <?php foreach ($articles as $article) { ?>
+                            <tr>
+                            <td><?=$article["title"];?></td>
+                            <td><?=$article["created"];?></td>
+                            <td><a href="<?=$article["slug"]?>">Voir</a></td>
+                            <td><a href="#">Modifier</a></td>
+                            </tr>
+                            <?php
+                            }
+                        endif; ?>
 
-	<?php endif; ?>
+                </tbody>
+                </table>
+    <?php endif; ?>
 </section>
 
 <section>
