@@ -208,7 +208,9 @@ class Security
 						header("Location:/editprofil"); # temporairement
 						# $user->deleteAll(); # pour delete immediatement en 
 					}else{
-						echo "Vous devez aller <strong style='color:red'>confirmer votre compte</strong> avec le mail que vous avez reçu à cette adresse : <strong style='color:blue'>".$user->getEmail()."</strong>";
+						echo "Vous devez aller <strong style='color:red'>confirmer votre compte</strong> avec le mail que vous avez reçu à cette adresse : <strong style='color:blue'>".$user->getEmail()."</strong><br/>";
+						# TODO
+						echo "Renvoyer le mail de confirmation";
 						# redirect here
 					}
 
@@ -295,12 +297,9 @@ class Security
 						$user->save();
 
 						$mail = Mailing::getMailing();
-						$mail->setRecipient($_POST['email']);
-						$mail->setSubject('Veuillez confirmer votre compte Libly !');
-						$mail->setContent('Cliquez sur ce lien pour confirmer votre compte : http://localhost/uservalidated?email='.$user->getEmail()."&token=".$user->getToken());
-						# set template, set subject, set content
-					
+						$mail->mailConfirm($_POST['email'], $user); # set mail confirmation content
 						$mail->sendMail();
+
 
 						 # header already modified :'(
 						# header("Location:login");

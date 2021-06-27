@@ -59,6 +59,19 @@ class Mailing{
 		$this->template = $html;
 	}
 
+	public function mailConfirm($recipient, $user){
+		$this->setRecipient($recipient);
+		$this->setSubject('Veuillez confirmer votre compte Libly !');
+		$email = $user->getEmail();
+		$token = $user->getToken();
+		$content = "Validez votre compte en cliquant sur ce lien : <a href='http://localhost/uservalidated?email=$email&token=$token'>Confirmer mon compte !</a>";
+		#$content = "<a href='https://www.google.com'>Go lien</a>";
+		$this->setContent($content);
+								
+		# set template, set subject, set content
+	
+	}
+
 	public function sendMail(){
 		/*
 			if(empty($this->content))
@@ -104,7 +117,7 @@ class Mailing{
 		    $this->mail->send();
 		    #echo 'Message has been sent';
 		} catch (Exception $e) {
-		    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+		    echo "Message could not be sent. Mailer Error: {$this->mail->ErrorInfo}";
 		}	
 	}
 
