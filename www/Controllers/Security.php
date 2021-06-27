@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Core\Helpers;
+
 use App\Core\Security as Secu;
 use App\Core\View;
 use App\Core\FormValidator;
@@ -26,19 +28,17 @@ class Security
 
 	public function userValidatedAction(){
 
-		$email = $_GET['email'];
+		$id = $_GET['id'];
 		$token = $_GET['token'];
 
 		$user = new User();
 		
-		if($user->verifyUser($email,$token) == 1){
+		if($user->verifyUser($id,$token) == 1){ # check user in db with this id and token couple
 
-			$user->setAllFromEmail($email);
+			$user->setAllFromId($id);
 			$user->addStatus(USERVALIDATED);; # status USERVALIDATED = 4
 
-			# put in a function regulularly called
-			$token = substr(md5(uniqid(true)), 0, 10); # cut length to 10, no prefix, entropy => for more unicity
-			$user->setToken($token);
+			$user->setToken(Helpers::createToken());
 
 			$user->save();
 			session_start();
@@ -47,7 +47,7 @@ class Security
 			header("Location:/editprofil"); # temporairement
 
 		}else{
-			echo "ERREUR VERIFICATION EMAIL ET FIRSTNAME !";
+			echo "ERREUR VERIFICATION ID ET FIRSTNAME !";
 		}
 
 	}
@@ -295,6 +295,7 @@ class Security
 						$user->setToken($token);
 
 						$user->save();
+						$user->setAllFromEmail($_POST['email']); # to get user id
 
 						$mail = Mailing::getMailing();
 						$mail->mailConfirm($_POST['email'], $user); # set mail confirmation content

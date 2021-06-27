@@ -109,11 +109,11 @@ class User extends Singleton
     }
 
     # verify email and firstname given to set user status to uservalidated
-    public function verifyUser($email, $token){
-        $email = htmlspecialchars($email);
+    public function verifyUser($id, $token){
+        $id = htmlspecialchars($id);
         $token = htmlspecialchars($token);
 
-        $query = "SELECT id,status FROM " . $this->table . " WHERE email = '" . $email . "' AND token = '".$token."'";
+        $query = "SELECT id FROM " . $this->table . " WHERE id = '" . $id . "' AND token = '".$token."'";
         $prepare = $this->getPDO()->prepare($query);
         $prepare->execute();
         $result = $prepare->fetch(PDO::FETCH_ASSOC);
