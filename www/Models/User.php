@@ -14,9 +14,7 @@ class User extends Singleton
     protected $email;
     protected $pwd;
     protected $country = "fr";
-    protected $role = 0;
-    protected $isDeleted = 0;
-    protected $status = 0;
+    protected $status = 0; # role, isConfirmed, isDeleted, isBannished
     protected $token = '';
 
     private $table = DBPREFIX . "user";
@@ -28,8 +26,12 @@ class User extends Singleton
 
     }
 
-    # set all properties from database from the email
-    public function setAll($email)
+    /*
+    *   set all properties from database from the email
+    *   from id idealement mais flm
+    *   pcq il faut recup id a partir de email puis tout a partir de id
+    */
+    public function setAllFromEmail(string $email)
     {
 
         $email = htmlspecialchars($email);
@@ -42,7 +44,27 @@ class User extends Singleton
         $this->setLastname($res['lastname']);
         $this->setEmail($email);
         $this->setCountry($res['country']);
-        $this->setRole($res['role']);
+        $this->setStatus($res['status']);
+        $this->setToken($res['token'] ?? '');
+
+        $this->setPwd($res['pwd']); # un peu dangereux non ? même si hashé
+
+    }
+    
+
+    # set all properties from id
+    public function setAllFromId($id)
+    {
+
+        $query = "SELECT * FROM " . $this->table . " WHERE id = '" . $id . "'";
+        $prepare = $this->getPDO()->prepare($query);
+        $prepare->execute();
+        $res = $prepare->fetch(PDO::FETCH_ASSOC);
+        $this->setId($id);
+        $this->setFirstname($res['firstname']);
+        $this->setLastname($res['lastname']);
+        $this->setEmail($res['email']);
+        $this->setCountry($res['country']);
         $this->setStatus($res['status']);
         $this->setToken($res['token'] ?? '');
 
@@ -84,6 +106,23 @@ class User extends Singleton
                 return 2; # erreur bizarre              
                 break;
         }
+    }
+
+    # verify email and firstname given to set user status to uservalidated
+    public function verifyUser($id, $token){
+        $id = htmlspecialchars($id);
+        $token = htmlspecialchars($token);
+
+        $query = "SELECT id FROM " . $this->table . " WHERE id = '" . $id . "' AND token = '".$token."'";
+        $prepare = $this->getPDO()->prepare($query);
+        $prepare->execute();
+        $result = $prepare->fetch(PDO::FETCH_ASSOC);
+
+        if(is_null($result['id']) || empty($result['id']))
+            return 0;
+        else
+            return 1;
+
     }
 
     public function getTable()
@@ -214,36 +253,8 @@ class User extends Singleton
         $this->status = $status;
     }
 
-    /**
-     * @return int
-     */
-    public function getIsDeleted(): int
-    {
-        return $this->isDeleted;
-    }
-
-    /**
-     * @param int $idDeleted
-     */
-    public function setIsDeleted(int $isDeleted)
-    {
-        $this->isDeleted = $isDeleted;
-    }
-
-    /**
-     * @return int
-     */
-    public function getRole(): int
-    {
-        return $this->role;
-    }
-
-    /**
-     * @param int $role
-     */
-    public function setRole(int $role)
-    {
-        $this->role = $role;
+    public function addStatus($status){
+        $this->status = $this->status | $status;
     }
 
     public function formEditProfil()

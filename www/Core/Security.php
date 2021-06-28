@@ -15,4 +15,17 @@ class Security
 
 	}
 
+	public function isAdmin(){
+
+	}
+
+	public function isSuperAdmin(){
+
+	}
+
+	public function newTokenUser(){
+		# generate new token user
+		# a chaque page
+	}
+
 }

@@ -2,12 +2,16 @@
 
 namespace App\Controller;
 
+use App\Core\Helpers;
+
 use App\Core\Security as Secu;
 use App\Core\View;
 use App\Core\FormValidator;
 use App\Core\ConstantMaker as c;
 
 use App\Core\Singleton;
+
+use App\Core\Mailing;
 
 use App\Core\Redirect;
 
@@ -22,13 +26,46 @@ class Security
 		echo "Controller security action default";
 	}
 
+	public function userValidatedAction(){
+
+		if(is_null($_GET['id']) || is_null($_GET['token']))
+			header("Location: /");
+
+		$id = $_GET['id'];
+		$token = $_GET['token'];
+
+		$user = new User();
+		
+		if($user->verifyUser($id,$token) == 1){ # check user in db with this id and token couple
+
+			$user->setAllFromId($id);
+			$user->addStatus(USERVALIDATED);; # status USERVALIDATED = 4
+
+			$user->setToken(Helpers::createToken());
+
+			$user->save();
+			session_start();
+			$_SESSION['id'] = $user->getId();
+
+			header("Location:/editprofil"); # temporairement
+
+		}else{
+			echo "ERREUR VERIFICATION ID ET FIRSTNAME !";
+		}
+
+	}
+
 	public function editProfilAction(){
 
 		session_start();
 
 		if(!isset($_SESSION['id'])) header("Location:/"); # si user non connecté => redirection
 
-		$user = $_SESSION['user']; # recuperer objet depuis session
+		$user = new User();
+		$user->setAllFromId($_SESSION['id']); # recuperer objet depuis session
+		#var_dump($user);
+		# CHERCHER LES INFOS USER EN BASE A PARTIR DE SON ID
+		# A PARTIR DE SON EMAIL UNIQUE A CHACUN CEST BON AUSSI JPENSE
 
 		$view = new View("editProfil"); # appelle View/editProfil.view.php
 
@@ -43,7 +80,7 @@ class Security
 					if($_POST['firstname'] != $user->getFirstname()){ # changer le prenom
 
 						$user->setFirstname(htmlspecialchars($_POST['firstname']));
-						$_SESSION['user'] = $user; # update de session
+						# $_SESSION['user'] = $user; # update de session
 						$user->save();
 						#header("Refresh:0");
 						$form = $user->formEditProfil(); # reaffichage du formulaire mis a jour
@@ -54,7 +91,7 @@ class Security
 					if($_POST['lastname'] != $user->getLastname()){ # changer le nom
 
 						$user->setLastname(htmlspecialchars($_POST['lastname']));
-						$_SESSION['user'] = $user; # update de session
+						# $_SESSION['user'] = $user; # update de session
 						$user->save();
 						#header("Refresh:0");
 						$form = $user->formEditProfil();
@@ -65,7 +102,7 @@ class Security
 					if($_POST['country'] != $user->getCountry()){
 
 						$user->setCountry($_POST['country']); # options donc no need specialchars
-						$_SESSION['user'] = $user;
+						# $_SESSION['user'] = $user;
 						$user->save();
 						$form = $user->formEditProfil();
 						$infos[] = "Votre pays a été mis à jour !";
@@ -86,7 +123,7 @@ class Security
 									$pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
 
 									$user->setPwd($pwd);
-									$_SESSION['user'] = $user; # update de session
+									#$_SESSION['user'] = $user; # update de session
 									$infos[] = "Votre mot de passe a été mis à jour !";
 									$view->assign("infos", $infos); # not an error but well
 									$user->save();
@@ -146,30 +183,40 @@ class Security
 				# cherche le mdp correspond a ce mail en base
 				if(password_verify($_POST['pwd'], $pwd)){
 
-					$user->setAll($_POST['email']);
+					$user->setAllFromEmail($_POST['email']);
 					# set tous les attributs depuis la base
 					# à partir du mail
 
-					$token = substr(md5(uniqid(true)), 0, 10); # cut length to 10, no refix, entropy => for more unicity
-					$user->setToken($token);
+					# verify status USERVALIDATED : 4 else no login allowed
+					if($user->getStatus() & 4){
 
-					$_SESSION['id'] = $user->getId();
-					# $_SESSION['email'] = $user->getEmail();
-					$_SESSION['user'] = $user; # j'ai le droit ?
-					# $_SESSION['pwd'] = $user->getPwd(); # ??
-					$_SESSION['token'] = $token;
+						$token = substr(md5(uniqid(true)), 0, 10); # cut length to 10, no prefix, entropy => for more unicity
+						$user->setToken($token);
+
+						$_SESSION['id'] = $user->getId();
+						$_SESSION['email'] = $user->getEmail(); # email unique donc ca devrait etre bon
+						# $_SESSION['pwd'] = $user->getPwd(); # ??
+						$_SESSION['token'] = $token; # not sure
 
 
 
-					#echo "MAIS OUI TU ES CONNECTE MON FILS.";
-					$user->setEmail($_POST['email']);
-					# $id = Singleton::findID($email);
-					# $user->setId($id); # peuple l'entité
-					# $user->setPwd($_POST['pwd']); # useless to me
-					header("Location:/editprofil"); # temporairement
-					# $user->deleteAll(); # pour delete immediatement en base
+						#echo "MAIS OUI TU ES CONNECTE MON FILS.";
+						#$user->setEmail($_POST['email']);
+						# $id = Singleton::findID($email);
+						# $user->setId($id); # peuple l'entité
+						# $user->setPwd($_POST['pwd']); # useless to me
 
-					# gère le token aussi
+						#var_dump($res);
+
+						header("Location:/editprofil"); # temporairement
+						# $user->deleteAll(); # pour delete immediatement en 
+					}else{
+						echo "Vous devez aller <strong style='color:red'>confirmer votre compte</strong> avec le mail que vous avez reçu à cette adresse : <strong style='color:blue'>".$user->getEmail()."</strong><br/>";
+						$email = $_POST['email'];
+						echo "<a href='http://localhost/userconfirm?email=$email'>Renvoyer le mail de confirmation</a>";
+						# redirect here
+					}
+
 
 				}else{
 
@@ -247,9 +294,16 @@ class Security
 						$user->setPwd($pwd);
 						$user->setCountry($_POST["country"]);
 
-						$user->save();
+						$token = substr(md5(uniqid(true)), 0, 10); # cut length to 10, no prefix, entropy => for more unicity
+						$user->setToken($token);
 
-						header("Location:login");
+						$user->save();
+						$email = $user->getEmail();
+						header("Location: userconfirm?email=$email");
+						#$this->sendMailUserConfirm($_POST['email']);
+
+						 # header already modified :'(
+						# header("Location:login");
 
 					}else{
 
@@ -279,6 +333,21 @@ class Security
 		//$view->assign("formLogin", $formLogin);
 	}
 
+	# send mail to confirm user then redirect to login
+	public function userConfirmAction(){
+		$user = new User();
+		if(is_null($_GET['email']) || empty($_GET['email']))
+			header("Location: /");
+
+		$user->setAllFromEmail($_GET['email']); # to get user id
+
+		$mailing = Mailing::getMailing();
+		$mailing->mailConfirm($_GET['email'], $user); # set mail confirmation content
+		$mailing->sendMail();
+
+		header("Location: /login");
+		
+	}
 
 
 	public function logoutAction()

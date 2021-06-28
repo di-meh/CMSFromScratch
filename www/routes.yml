@@ -34,6 +34,18 @@
   controller: Security
   action: editProfil
 
+/superadminview:
+  controller: SuperAdmin
+  action: default
+
+/uservalidated:
+  controller: Security
+  action: uservalidated
+
+/userconfirm:
+  controller: Security
+  action: userconfirm
+
 /page/all:
   controller: PageController
   action: default
