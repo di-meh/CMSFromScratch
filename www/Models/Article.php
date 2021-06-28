@@ -8,7 +8,7 @@ use DateTime;
 
 class Article extends Singleton
 {
-    private $table = DBPREFIX . "articles";
+    private $table = DBPREFIX . "article";
     private $id = null;
     protected $title;
     protected $author;
