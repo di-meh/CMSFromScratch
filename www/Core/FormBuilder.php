@@ -76,7 +76,10 @@ class FormBuilder
 
 	public static function renderTextArea($name, $configInput)
 	{
-		return "<textarea id='" . ($configInput["id"] ?? "") . "' name='" . ($name ?? "") . "' rows='" . ($configInput["rows"] ?? "") . "'
-						cols='" . ($configInput["cols"] ?? "") . "'></textarea>";
+		return "<textarea id='" . ($configInput["id"] ?? "") . "'
+				class='" . ($configInput["class"] ?? "") . "' 
+				name='" . ($name ?? "") . "' 
+				rows='" . ($configInput["rows"] ?? "") . "'
+				cols='" . ($configInput["cols"] ?? "") . "'>" . ($configInput['value'] ?? '') . "</textarea>";
 	}
 }

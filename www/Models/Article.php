@@ -73,6 +73,24 @@ class Article extends Singleton
         $this->content = $content;
     }
     
+    public function getCreated()
+    {
+        return $this->created;
+    }
+    public function setCreated($created)
+    {
+        $this->created = $created;
+    }
+
+    public function getModified()
+    {
+        return $this->modified;
+    }
+    public function setModified($modified)
+    {
+        $this->modified = $modified;
+    }
+
     public function getPublished()
     {
         return $this->published;
@@ -123,6 +141,49 @@ class Article extends Singleton
                     "rows" => 10,
                     "id" => "content",
                     "name" => "content",
+                    "class" => "ckeditor",
+                    "placeholder" => "",
+                    "value" => $this->content ?? "",
+                    "error" => "probleme enregistrement base de données",
+                    "required" => true
+                ],
+            ]
+        ];
+    }
+
+    public function formEditArticle()
+    {
+
+        return [
+
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "form_addarticle",
+                "class" => "form_builder",
+                "submit" => "Modifier"
+            ],
+            "inputs" => [
+                "title" => [
+                    "type" => "text",
+                    "label" => "Editez le titre",
+                    "minLength" => 2,
+                    "maxLength" => 60,
+                    "id" => "title",
+                    "class" => "form_input",
+                    "placeholder" => "Exemple: Premier article",
+                    "value" => $this->title ?? "",
+                    "error" => "Votre titre doit faire entre 2 et 155 caractères",
+                    "required" => true
+                ],
+                "content" => [
+                    "type" => "textarea",
+                    "label" => "",
+                    "cols" => 80,
+                    "rows" => 10,
+                    "id" => "content",
+                    "name" => "content",
+                    "class" => "ckeditor",
                     "placeholder" => "",
                     "value" => $this->content ?? "",
                     "error" => "probleme enregistrement base de données",
@@ -162,5 +223,28 @@ class Article extends Singleton
         $req->execute();
         $res = $req->fetchAll(PDO::FETCH_ASSOC);
         return $res;
+    }
+
+    public function getAllById($id){
+        $query = "SELECT * FROM " . $this->getTable() . " WHERE id = '".$id."'";
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
+        $res = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $res;
+    }
+
+    public function setAllById($id)
+    {
+        $res = $this->getAllById($id);
+        $res = $res[0];
+        $this->setId($res['id']);
+        $this->setAuthor($res['author']);
+        $this->setTitle($res['title']);
+        $this->setSlug($res['slug']);
+        $this->setContent($res['content']);
+        $this->setCreated($res['created']);
+        $this->setPublished($res['published']);
+        $this->setModified($res['modified']);
+        $this->setStatus($res['status']);
     }
 }

@@ -18,7 +18,7 @@
                             <td><?=$article["title"];?></td>
                             <td><?=$article["created"];?></td>
                             <td><a href="<?=$article["slug"]?>">Voir</a></td>
-                            <td><a href="#">Modifier</a></td>
+                            <td><a href="/articles/edit?article=<?=$article["id"]?>">Modifier</a></td>
                             </tr>
                             <?php
                             }

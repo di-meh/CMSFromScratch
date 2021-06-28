@@ -42,3 +42,7 @@
 /articles/add:
   controller: ArticleController
   action: addArticle
+
+/articles/edit:
+  controller: ArticleController
+  action: editArticle
