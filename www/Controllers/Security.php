@@ -19,7 +19,7 @@ use App\Models\User;
 
 class Security
 {
-
+	
 
 	public function defaultAction()
 	{
@@ -357,6 +357,14 @@ class Security
 
 		if ($security->isConnected()) session_destroy();
 		header("Location:/");
+
+	}
+
+
+
+	public function category()
+	{
+		header("Location:/category");
 
 	}
 }

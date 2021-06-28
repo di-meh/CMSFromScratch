@@ -1,4 +1,3 @@
-
 /:
   controller: Main
   action: default
@@ -46,3 +45,19 @@
 /userconfirm:
   controller: Security
   action: userconfirm
+
+/page/all:
+  controller: PageController
+  action: default
+
+/page/add:
+  controller: PageController
+  action: addpage
+
+/category:
+  controller: CategoryController
+  action: addcategory
+
+/books:
+  controller: BookController
+  action: index
