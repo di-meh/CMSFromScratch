@@ -17,9 +17,9 @@ class FormBuilder
 
 
 		foreach ($form["inputs"] as $name => $configInput) {
-			$html .= "<br><label for='" . ($configInput["id"] ?? "") . "'>" . ($configInput["label"] ?? "") . " </label>";
 
-
+			$html .= "<div class='input-group'>";
+			$html .= "<label for='" . ($configInput["id"] ?? "") . "'>" . ($configInput["label"] ?? "") . " </label>";
 			if ($configInput["type"] == "select") {
 				$html .= self::renderSelect($name, $configInput);
 			} elseif ($configInput["type"] == "textarea") {
@@ -27,15 +27,13 @@ class FormBuilder
 			} else {
 				$html .= self::renderInput($name, $configInput);
 			}
+
+			$html .= "</div>";
 		}
 
-
-
-		$html .= "</br><input type='submit' value=\"" . ($form["config"]["submit"] ?? "Valider") . "\">";
+		$html .= "<button type='submit' value=\"" . ($form["config"]["submit"] ?? "Valider") . "\" class='btn btn-primary'>" . ($form["config"]["submit"] ?? "Valider") . "</button>";
 
 		$html .= "</form>";
-
-
 
 		echo $html;
 	}
@@ -47,7 +45,7 @@ class FormBuilder
 						name='" . $name . "' 
 						type='" . ($configInput["type"] ?? "text") . "'
 						id='" . ($configInput["id"] ?? "") . "'
-						class='" . ($configInput["class"] ?? "") . "'
+						class='input-field " . ($configInput["class"] ?? "") . "'
 						placeholder='" . ($configInput["placeholder"] ?? "") . "'
 						value='" . ($configInput['value'] ?? '') . "'
 						" . (!empty($configInput["required"]) ? "required='required'" : "") . "
@@ -62,9 +60,7 @@ class FormBuilder
 	public static function renderSelect($name, $configInput)
 	{
 		$html = "<select name='" . $name . "' id='" . ($configInput["id"] ?? "") . "'
-						class='" . ($configInput["class"] ?? "") . "'>";
-
-
+						class='input-field " . ($configInput["class"] ?? "") . "'>";
 		foreach ($configInput["options"] as $key => $value) {
 			$html .= "<option value='" . $key . "'>" . $value . "</option>";
 		}
@@ -82,4 +78,5 @@ class FormBuilder
 				rows='" . ($configInput["rows"] ?? "") . "'
 				cols='" . ($configInput["cols"] ?? "") . "'>" . ($configInput['value'] ?? '') . "</textarea>";
 	}
+
 }

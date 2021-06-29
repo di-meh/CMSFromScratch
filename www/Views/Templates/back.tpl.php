@@ -1,16 +1,47 @@
 <!DOCTYPE html>
 <html lang="FR">
+
 <head>
 	<meta charset="UTF-8">
 	<title>Template de BACK</title>
 	<meta name="description" content="ceci est la description de ma page">
+	<link rel="stylesheet" href="framework/dist/style.css">
+	<script src="framework/dist/main.js"></script>
 </head>
-<body>
-	<header>
-		<h1>Template du back</h1>
-	</header>
 
-	<!-- intégration de la vue -->
+<body>
+	<div class="page-wrapper with-navbar with-sidebar" id="app">
+		<nav class="navbar">
+			<h5 class="navbar-title">Template du back</h5>
+			<div class="navbar-right">
+				<!-- Page profil mais accueil pour l'instant -->
+				<div class="right-link"><a href="/"><span class="material-icons">face</span></a></div>
+				<div class="right-link"><a href="logout"><span class="material-icons">power_settings_new</span></a></div>
+			</div>
+		</nav>
+
+		<div class="sidebar">
+			<h3 class="sidebar-brand">Libly</h3>
+			<ul class="sidebar-list">
+				<li class="list-item"><a href=""><span class="material-icons">home</span>
+						<span class="item-title">Tableau de
+							bord</span></a></li>
+				<li class="list-item"><a href=""><span class="material-icons">receipt_long</span><span class="item-title">Commandes</span></a></li>
+				<li class="list-item"><a href=""><span class="material-icons">menu_book</span><span class="item-title">Livres</span></a>
+				</li>
+				<li class="list-item"><a href=""><span class="material-icons">article</span><span class="item-title">Articles</span></a></li>
+				<li class="list-item"><a href=""><span class="material-icons">people</span><span class="item-title">Utilisateurs</span></a></li>
+				<li class="list-item"><a href=""><span class="material-icons">settings</span><span class="item-title">Paramètres</span></a></li>
+			</ul>
+		</div>
+		<div class="content-wrapper">
+			<!-- intégration de la vue -->
+			<?php include $this->view; ?>
+		</div>
+
+	</div>
+
 
 </body>
+
 </html>

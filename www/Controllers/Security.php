@@ -59,7 +59,7 @@ class Security
 
 		session_start();
 
-		if(!isset($_SESSION['id'])) header("Location:/"); # si user non connecté => redirection
+		if (!isset($_SESSION['id'])) header("Location:/"); # si user non connecté => redirection
 
 		$user = new User();
 		$user->setAllFromId($_SESSION['id']); # recuperer objet depuis session
@@ -67,17 +67,17 @@ class Security
 		# CHERCHER LES INFOS USER EN BASE A PARTIR DE SON ID
 		# A PARTIR DE SON EMAIL UNIQUE A CHACUN CEST BON AUSSI JPENSE
 
-		$view = new View("editProfil"); # appelle View/editProfil.view.php
+		$view = new View("editProfil", 'back'); # appelle View/editProfil.view.php
 
 		$form = $user->formEditProfil(); # recupere les config et inputs de ce formulaire
 
-		if(!empty($_POST)){
+		if (!empty($_POST)) {
 
-			if(!empty($_POST['oldpwd'])){ # il faut le mot de passe pour valider tout changement
+			if (!empty($_POST['oldpwd'])) { # il faut le mot de passe pour valider tout changement
 
-				if(password_verify($_POST['oldpwd'], $user->getPwd())){
+				if (password_verify($_POST['oldpwd'], $user->getPwd())) {
 
-					if($_POST['firstname'] != $user->getFirstname()){ # changer le prenom
+					if ($_POST['firstname'] != $user->getFirstname()) { # changer le prenom
 
 						$user->setFirstname(htmlspecialchars($_POST['firstname']));
 						# $_SESSION['user'] = $user; # update de session
@@ -88,7 +88,7 @@ class Security
 						$view->assign("infos", $infos);
 					}
 
-					if($_POST['lastname'] != $user->getLastname()){ # changer le nom
+					if ($_POST['lastname'] != $user->getLastname()) { # changer le nom
 
 						$user->setLastname(htmlspecialchars($_POST['lastname']));
 						# $_SESSION['user'] = $user; # update de session
@@ -99,7 +99,7 @@ class Security
 						$view->assign("infos", $infos);
 					}
 
-					if($_POST['country'] != $user->getCountry()){
+					if ($_POST['country'] != $user->getCountry()) {
 
 						$user->setCountry($_POST['country']); # options donc no need specialchars
 						# $_SESSION['user'] = $user;
@@ -107,18 +107,17 @@ class Security
 						$form = $user->formEditProfil();
 						$infos[] = "Votre pays a été mis à jour !";
 						$view->assign("infos", $infos);
-
 					}
 
 
-					if(!empty($_POST['pwd'])){
+					if (!empty($_POST['pwd'])) {
 
-						if(!empty($_POST['pwdConfirm'])){
+						if (!empty($_POST['pwdConfirm'])) {
 
 
-							if($_POST['pwd'] === $_POST['pwdConfirm']){
+							if ($_POST['pwd'] === $_POST['pwdConfirm']) {
 
-								if(strlen($_POST['pwd']) > 7){
+								if (strlen($_POST['pwd']) > 7) {
 
 									$pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
 
@@ -127,26 +126,20 @@ class Security
 									$infos[] = "Votre mot de passe a été mis à jour !";
 									$view->assign("infos", $infos); # not an error but well
 									$user->save();
-
-								}else{
+								} else {
 									$view->assign('errors', ["La taille du nouveau mot de passe doit faire 8 caractères au minimum."]);
 								}
-
-							}else{
+							} else {
 								$view->assign("errors", ["La confirmation du mot de passe ne correspond pas."]);
 							}
-
-						}else{
+						} else {
 							$view->assign("errors", ['Veuillez confirmer votre nouveau mot de passe.']);
 						}
-
 					}
-
-				}else{
+				} else {
 					$view->assign("errors", ["Le mot de passe actuel est erroné"]);
 				}
-
-			}else{
+			} else {
 				$view->assign("errors", ['Veuillez indiquer votre mot de passe actuel.']);
 			}
 
@@ -165,7 +158,7 @@ class Security
 
 		session_start();
 
-		if(isset($_SESSION['id'])) header("Location:/"); # user deja connected
+		if (isset($_SESSION['id'])) header("Location:/"); # user deja connected
 
 		$user = new User();
 
@@ -173,15 +166,15 @@ class Security
 
 		$form = $user->formLogin();
 
-		if(!empty($_POST['email'])){
+		if (!empty($_POST['email'])) {
 
 			$mailExists = $user->verifyMail($_POST['email']); # verify unicity in database
 
-			if($mailExists == 1){
+			if ($mailExists == 1) {
 
 				$pwd = $user->verifyPwd($_POST['email']);
 				# cherche le mdp correspond a ce mail en base
-				if(password_verify($_POST['pwd'], $pwd)){
+				if (password_verify($_POST['pwd'], $pwd)) {
 
 					$user->setAllFromEmail($_POST['email']);
 					# set tous les attributs depuis la base
@@ -211,14 +204,17 @@ class Security
 						header("Location:/editprofil"); # temporairement
 						# $user->deleteAll(); # pour delete immediatement en 
 					}else{
-						echo "Vous devez aller <strong style='color:red'>confirmer votre compte</strong> avec le mail que vous avez reçu à cette adresse : <strong style='color:blue'>".$user->getEmail()."</strong><br/>";
-						$email = $_POST['email'];
-						echo "<a href='http://localhost/userconfirm?email=$email'>Renvoyer le mail de confirmation</a>";
+                        $email = $_POST['email'];
+					    $html = "Vous devez aller confirmer votre compte avec le mail que vous avez reçu à cette adresse: " . $user->getEmail() . " . <a href='http://localhost/userconfirm?email=$email'>Renvoyer le mail de confirmation</a>";
+                        $view->assign("infos", [$html]);
+//					    echo "Vous devez aller <strong style='color:red'>confirmer votre compte</strong> avec le mail que vous avez reçu à cette adresse : <strong style='color:blue'>".$user->getEmail()."</strong><br/>";
+//
+//						echo "<a href='http://localhost/userconfirm?email=$email'>Renvoyer le mail de confirmation</a>";
 						# redirect here
 					}
 
 
-				}else{
+				} else {
 
 					$form['inputs']['email']['value'] = $_POST['email']; # re remplissage du champ
 					$view->assign("errors", ["Mot de passe erroné."]);
@@ -226,15 +222,12 @@ class Security
 
 
 				}
-
-			}else{
+			} else {
 				$view->assign("errors", ["Le mail n'existe pas."]);
 			}
-
 		}
 
 		$view->assign("form", $form);
-		
 	}
 
 
@@ -282,12 +275,12 @@ class Security
 				# verify unicity in database
 
 
-				if($mailExists == 0){
+				if ($mailExists == 0) {
 
-					if($_POST['pwd'] == $_POST['pwdConfirm']){
+					if ($_POST['pwd'] == $_POST['pwdConfirm']) {
 
 						$pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
-						
+
 						$user->setFirstname(htmlspecialchars($_POST["firstname"]));
 						$user->setLastname(htmlspecialchars($_POST["lastname"]));
 						$user->setEmail(htmlspecialchars($_POST["email"]));
@@ -302,29 +295,14 @@ class Security
 						header("Location: userconfirm?email=$email");
 						#$this->sendMailUserConfirm($_POST['email']);
 
-						 # header already modified :'(
-						# header("Location:login");
-
-					}else{
-
-
-
-
+						header("Location:login");
+					} else {
 						$view->assign("errors", ["Vos mots de passe sont différents."]);
 					}
-
-
-				}else{
-
-
-
-
-					$view->assign("errors",["Ce mail est déjà utilisé."]);
-
+				} else {
+					$view->assign("errors", ["Ce mail est déjà utilisé."]);
 				}
-
 			} else {
-
 				$view->assign("errors", $errors);
 			}
 		}
@@ -357,7 +335,6 @@ class Security
 
 		if ($security->isConnected()) session_destroy();
 		header("Location:/");
-
 	}
 
 
