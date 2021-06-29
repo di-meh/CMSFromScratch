@@ -60,8 +60,8 @@ class Mailing{
 	}
 
 	# prepare mail to confirm user account
-	public function mailConfirm($recipient, $user){
-		$this->setRecipient($recipient);
+	public function mailConfirm($user){
+
 		$this->setSubject('Veuillez confirmer votre compte Libly !');
 		$id = $user->getId();
 		$token = $user->getToken();
@@ -93,7 +93,7 @@ class Mailing{
 
 		    //Recipients
 		    $this->mail->setFrom(MAILUSERNAME, 'LIBLY');
-		    $this->mail->addAddress('jedidialr@outlook.fr', 'Jed');     //Add a recipient
+		    $this->mail->addAddress($this->recipient);     //Add a recipient
 		    # $this->mail->addAddress($this->recipient, 'User');     //Add a recipient
 
 		    # $mail->addAddress('ellen@example.com');               //Name is optional

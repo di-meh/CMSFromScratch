@@ -23,6 +23,8 @@ class Security
 
 	public function defaultAction()
 	{
+		if(!isset($_SESSION['id'])) $this->logoutAction();
+		
 		echo "Controller security action default";
 	}
 
@@ -192,7 +194,6 @@ class Security
 						$_SESSION['token'] = $token; # not sure
 
 
-
 						#echo "MAIS OUI TU ES CONNECTE MON FILS.";
 						#$user->setEmail($_POST['email']);
 						# $id = Singleton::findID($email);
@@ -291,12 +292,11 @@ class Security
 						$user->setToken($token);
 
 						$user->save();
-						$email = $user->getEmail();
-						header("Location: userconfirm?email=$email");
-						#$this->sendMailUserConfirm($_POST['email']);
 
-						header("Location:login");
-					} else {
+						$email = $_POST['email'];
+						header("Location: userconfirm?email=$email");
+
+					}else{
 						$view->assign("errors", ["Vos mots de passe sont différents."]);
 					}
 				} else {
@@ -320,7 +320,8 @@ class Security
 		$user->setAllFromEmail($_GET['email']); # to get user id
 
 		$mailing = Mailing::getMailing();
-		$mailing->mailConfirm($_GET['email'], $user); # set mail confirmation content
+		$mailing->mailConfirm($user); # set mail confirmation content
+		$mailing->setRecipient($_GET['email']);
 		$mailing->sendMail();
 
 		header("Location: /login");
