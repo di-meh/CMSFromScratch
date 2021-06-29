@@ -2,3 +2,4 @@
 	path = www/framework
 	url = https://github.com/yungmides/LiblyFramework.git
 	update = merge
+	branch = main
