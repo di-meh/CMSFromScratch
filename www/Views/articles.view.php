@@ -30,12 +30,6 @@
 </section>
 
 <section>
-	<br/>
-	<a id="" href="/">Accueil</a>
-	<br/>
+    <br/>
 	<a id="" href="articles/add">Ajouter un article</a>
-	<br/>
-	<a id="" href="logout">Déconnexion</a>
-
-	
 </section>

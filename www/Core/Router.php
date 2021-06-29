@@ -27,11 +27,11 @@ class Router
 				$this->setController($this->routes[$this->uri]["controller"]);
 				$this->setAction($this->routes[$this->uri]["action"]);
 			}elseif (!empty($page->getAllBySlug($this->uri))){
-                $this->setController("PageController");
+                $this->setController("Page");
                 $this->setAction("seePage");
 				
 			}elseif (!empty($article->getAllBySlug($this->uri))){
-                $this->setController("ArticleController");
+                $this->setController("Article");
                 $this->setAction("viewArticle");
 
             }else{
@@ -58,7 +58,7 @@ class Router
 
 
 	public function setController($controller){
-		$this->controller = $controller;
+		$this->controller = $controller."Controller";
 	}
 
 

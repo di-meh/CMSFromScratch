@@ -16,7 +16,7 @@
                             <tr>
                             <td><?php echo $page["title"];?></td>
                             <td><?php echo $page["createdAt"];?></td>
-                            <td><a href="#">Voir ma page</a></td>
+                            <td><a href="<?=$page['slug']?>">Voir ma page</a></td>
                             <td><a href="#">Modifier ma page</a></td>
                             <!--<td><//?php echo $page["slug"];?></td>-->
                             </tr>
@@ -31,9 +31,5 @@
 </section>
 <section>
     <br/>
-    <a id="" href="/">Accueil</a>
-    <br/>
-    <a id="" href="add">Ajouter une page</a>
-    <br/>
-    <a id="" href="logout">Déconnexion</a>
+    <a id="" href="/lbly-admin/pages/add">Ajouter une page</a>
 </section>
