@@ -2,74 +2,74 @@
   controller: Main
   action: default
 
-/admin:
-  controller: Security
-  action: default
+/lbly-admin:
+  controller: Main
+  action: dashboard
 
-/s-inscrire:
-  controller: Security
-  action: register
-
-/register:
+/lbly-admin/s-inscrire:
   controller: Security
   action: register
 
-/se-connecter:
+/lbly-admin/register:
+  controller: Security
+  action: register
+
+/lbly-admin/se-connecter:
   controller: Security
   action: login
 
-/login:
+/lbly-admin/login:
   controller: Security
   action: login
 
-/logout:
+/lbly-admin/logout:
   controller: Security
   action: logout
 
-/se-deconnecter:
+/lbly-admin/se-deconnecter:
   controller: Security
   action: logout
 
-/editprofil:
+/lbly-admin/editprofil:
   controller: Security
   action: editProfil
 
-/superadminview:
+/lbly-admin/superadminview:
   controller: SuperAdmin
   action: default
 
-/uservalidated:
+/lbly-admin/uservalidated:
   controller: Security
   action: uservalidated
 
-/userconfirm:
+/lbly-admin/userconfirm:
   controller: Security
   action: userconfirm
 
-/page/all:
+/lbly-admin/pages:
   controller: PageController
   action: default
 
-/page/add:
+/lbly-admin/pages/add:
   controller: PageController
   action: addpage
 
-/category:
+/lbly-admin/category:
   controller: CategoryController
   action: addcategory
 
-/books:
+/lbly-admin/books:
   controller: BookController
   action: index
 
-/articles:
+/lbly-admin/articles:
   controller: ArticleController
   action: default
 
-/articles/add:
+/lbly-admin/articles/add:
   controller: ArticleController
   action: addArticle
 
-/articles/edit:
+/lbly-admin/articles/edit:
   controller: ArticleController
   action: editArticle

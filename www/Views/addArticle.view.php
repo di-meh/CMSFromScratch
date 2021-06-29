@@ -15,16 +15,6 @@
     <?php App\Core\FormBuilder::render($form); ?>
 <?php endif; ?>
 
-<section>
-	<br/>
-	<a id="" href="/">Accueil</a>
-	<br/>
-	<a id="" href="/articles">Liste des articles</a>
-	<br/>
-	<a id="" href="/logout">Déconnexion</a>
-
-	
-</section>
 <script src="/../ckeditor/ckeditor.js"></script>
 <script>
     CKEDITOR.replace('content');

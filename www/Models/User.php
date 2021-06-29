@@ -60,16 +60,20 @@ class User extends Singleton
         $prepare = $this->getPDO()->prepare($query);
         $prepare->execute();
         $res = $prepare->fetch(PDO::FETCH_ASSOC);
-        $this->setId($id);
-        $this->setFirstname($res['firstname']);
-        $this->setLastname($res['lastname']);
-        $this->setEmail($res['email']);
-        $this->setCountry($res['country']);
-        $this->setStatus($res['status']);
-        $this->setToken($res['token'] ?? '');
+        if($res){
+            $this->setId($id);
+            $this->setFirstname($res['firstname']);
+            $this->setLastname($res['lastname']);
+            $this->setEmail($res['email']);
+            $this->setCountry($res['country']);
+            $this->setStatus($res['status']);
+            $this->setToken($res['token'] ?? '');
+    
+            $this->setPwd($res['pwd']); # un peu dangereux non ? même si hashé
 
-        $this->setPwd($res['pwd']); # un peu dangereux non ? même si hashé
-
+            return true;
+        }
+        return false;
     }
 
     # cherche le mdp correspond a ce mail en base

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Core\View;
+use App\Core\Security;
 use App\Models\Article;
 
 class ArticleController{
@@ -10,14 +11,10 @@ class ArticleController{
 
 	public function defaultAction(){
 
-		
-		session_start();
+		$user = Security::getConnectedUser();
+		if(is_null($user)) header("Location:/lbly-admin/login");
 
-		if(!isset($_SESSION['id'])) header("Location:/login"); # si user non connecté => redirection
-
-		$user = $_SESSION['user']; # recuperer objet depuis session
-
-		$view = new View("articles");
+		$view = new View("articles","back");
 		$article = new Article();
 		$articles = $article->all();
         $view->assign("articles", $articles);
@@ -25,12 +22,14 @@ class ArticleController{
 	}
 
 	public function addArticleAction(){
+		$user = Security::getConnectedUser();
+		if(is_null($user)) header("Location:/lbly-admin/login");
+		// session_start();
+		// if(!isset($_SESSION['id'])) header("Location:/lbly-admin/login"); # si user non connecté => redirection
+		// $user = $_SESSION['user'];
 
-		session_start();
-		if(!isset($_SESSION['id'])) header("Location:/login"); # si user non connecté => redirection
-		$user = $_SESSION['user'];
 
-		$view = new View("addArticle");
+		$view = new View("addArticle","back");
 		$article = new Article();
 
 		if (!empty($_POST)) {
@@ -45,7 +44,7 @@ class ArticleController{
 					$article->setSlug('/articles/' . $article->title2slug($_POST['title']));
 					if (empty($article->getAllBySlug($article->getSlug()))){
 						$article->save();
-						header("Location:/articles/add");
+						header("Location:/lbly-admin/articles/add");
 					}else{
 						echo $article->getSlug();
 						$view->assign("errors", ["Veuillez changer le titre de votre article"]);
@@ -63,12 +62,10 @@ class ArticleController{
 
 	public function editArticleAction()
 	{
+		$user = Security::getConnectedUser();
+		if(is_null($user)) header("Location:/lbly-admin/login");
 
-		session_start();
-
-		if(!isset($_SESSION['id'])) header("Location:/"); # si user non connecté => redirection
-
-		$view = new View("editArticle"); # appelle View/editProfil.view.php
+		$view = new View("editArticle","back"); # appelle View/editProfil.view.php
 		$article = new Article();
 		$article->setAllById($_GET['article']);
 		$form = $article->formEditArticle();
@@ -110,10 +107,8 @@ class ArticleController{
 	}
 
 	public function viewArticleAction(){
-        session_start();
-        if (!isset($_SESSION['id'])) header("Location:/login"); # si user non connecté => redirection
 
-        $user = $_SESSION['user'];
+		session_start();
 
         $article = new Article();
 

@@ -2,16 +2,17 @@
 namespace App\Controller;
 
 use App\Core\View;
+use App\Core\Security;
 use App\Models\Category;
 
 class CategoryController {
     
     public function addcategoryAction()
 	{
-		session_start();
-	if (!isset($_SESSION['id'])) header("Location:/login"); # si user non connecté => redirection
+		$user = Security::getConnectedUser();
+		if(is_null($user)) header("Location:/lbly-admin/login");
 
-		$view = new View("category");
+		$view = new View("category","back");
 
 		$category = new Category();
 			if (!empty($_POST)) {

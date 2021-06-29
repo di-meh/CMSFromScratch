@@ -3,16 +3,17 @@
 namespace App\Controller;
 
 use App\Core\View;
+use App\Core\Security;
 use App\Models\Book;
 
 class BookController
 {
     public function indexAction()
     {
-        session_start();
-        if (!isset($_SESSION['id'])) header("Location:/login"); # si user non connecté => redirection
+        $user = Security::getConnectedUser();
+		if(is_null($user)) header("Location:/lbly-admin/login");
 
-        $view = new View("book");
+        $view = new View("book","back");
 
         $book = new Book();
         if (!empty($_POST)) {

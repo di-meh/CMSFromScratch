@@ -7,7 +7,7 @@ use App\Core\FormValidator;
 
 use App\Core\Singleton;
 
-use App\Core\Redirect;
+use App\Core\Security;
 
 use App\Models\Page;
 use App\Core\Router;
@@ -17,27 +17,24 @@ class PageController
 
 
 	public function defaultAction(){
-        session_start();
-        if (!isset($_SESSION['id'])) header("Location:/login"); # si user non connecté => redirection
-
-        $user = $_SESSION['user'];
+        $user = Security::getConnectedUser();
+		if(is_null($user)) header("Location:/lbly-admin/login");
 
         $page = new Page();
-        $view = new View("pages");
+        $view = new View("pages","back");
 
         $pages = $page->all();
         $view->assign("pages", $pages);
 	}
 
 	public function addPageAction(){
-        session_start();
-        if (!isset($_SESSION['id'])) header("Location:/login"); # si user non connecté => redirection
 
-        $user = $_SESSION['user'];
+        $user = Security::getConnectedUser();
+		if(is_null($user)) header("Location:/lbly-admin/login");
 
 		$page = new Page();
 
-		$view = new View("addPage");
+		$view = new View("addPage","back");
 
 		$form = $page->formAddPage();
 
@@ -59,7 +56,7 @@ class PageController
                     $page->setSlug('/' . $page->title2slug($_POST['title']));
                     if (empty($page->getAllBySlug($page->getSlug()))){
                         $page->save();
-                        header("Location:/");
+                        header("Location:/lbly-admin");
                     }else{
                         echo $page->getSlug();
                         $view->assign("errors", ["Veuillez changer le titre de votre page"]);
@@ -76,11 +73,9 @@ class PageController
 	}
 
 	public function seePageAction(){
+
         session_start();
-        if (!isset($_SESSION['id'])) header("Location:/login"); # si user non connecté => redirection
-
-        $user = $_SESSION['user'];
-
+        
         $page = new Page();
 
         $view = new View("seePage");

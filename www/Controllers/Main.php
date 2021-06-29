@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Core\View;
+use App\Core\Security;
 
 class Main{
 
@@ -10,13 +11,18 @@ class Main{
 	public function defaultAction(){
 
 		session_start();
-		
-		$pseudo = "Super Prof"; //Plus tard on le récupèrera depuis la bdd
 
 		$view = new View("home");
-		// $view->assign("pseudo", $pseudo);
-		// $view->assign("age", 18);
-		// $view->assign("email", "y.skrzypczyk@gmail.com");
+
+
+	}
+
+	public function dashboardAction(){
+
+		$user = Security::getConnectedUser();
+		if(is_null($user)) header("Location:/lbly-admin/login");
+
+		$view = new View("dashboard","back");
 
 
 	}

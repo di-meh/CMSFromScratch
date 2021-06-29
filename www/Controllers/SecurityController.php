@@ -4,25 +4,20 @@ namespace App\Controller;
 
 use App\Core\Helpers;
 
-use App\Core\Security as Secu;
 use App\Core\View;
 use App\Core\FormValidator;
-use App\Core\ConstantMaker as c;
-
-use App\Core\Singleton;
 
 use App\Core\Mailing;
 
-use App\Core\Redirect;
-
 use App\Models\User;
 
-class Security
+class SecurityController
 {
 	
 
 	public function defaultAction()
 	{
+		session_start();
 		if(!isset($_SESSION['id'])) $this->logoutAction();
 		
 		echo "Controller security action default";
@@ -202,7 +197,7 @@ class Security
 
 						#var_dump($res);
 
-						header("Location:/editprofil"); # temporairement
+						header("Location:/lbly-admin/editprofil"); # temporairement
 						# $user->deleteAll(); # pour delete immediatement en 
 					}else{
                         $email = $_POST['email'];
@@ -324,7 +319,7 @@ class Security
 		$mailing->setRecipient($_GET['email']);
 		$mailing->sendMail();
 
-		header("Location: /login");
+		header("Location: /lbly-admin/login");
 		
 	}
 
@@ -336,13 +331,5 @@ class Security
 
 		if ($security->isConnected()) session_destroy();
 		header("Location:/");
-	}
-
-
-
-	public function category()
-	{
-		header("Location:/category");
-
 	}
 }
