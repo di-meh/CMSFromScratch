@@ -44,7 +44,7 @@ class ArticleController{
 					$article->setSlug('/articles/' . $article->title2slug($_POST['title']));
 					if (empty($article->getAllBySlug($article->getSlug()))){
 						$article->save();
-						header("Location:/lbly-admin/articles/add");
+						header("Location:/lbly-admin/articles");
 					}else{
 						echo $article->getSlug();
 						$view->assign("errors", ["Veuillez changer le titre de votre article"]);

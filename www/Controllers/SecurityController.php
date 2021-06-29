@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Core\Helpers;
 
 use App\Core\View;
+use App\Core\Security as Secu;
 use App\Core\FormValidator;
 
 use App\Core\Mailing;
@@ -44,7 +45,7 @@ class SecurityController
 			session_start();
 			$_SESSION['id'] = $user->getId();
 
-			header("Location:/editprofil"); # temporairement
+			header("Location:/lbly-admin"); # temporairement
 
 		}else{
 			echo "ERREUR VERIFICATION ID ET FIRSTNAME !";
@@ -197,7 +198,7 @@ class SecurityController
 
 						#var_dump($res);
 
-						header("Location:/lbly-admin/editprofil"); # temporairement
+						header("Location:/lbly-admin"); # temporairement
 						# $user->deleteAll(); # pour delete immediatement en 
 					}else{
                         $email = $_POST['email'];

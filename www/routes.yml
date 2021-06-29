@@ -47,29 +47,29 @@
   action: userconfirm
 
 /lbly-admin/pages:
-  controller: PageController
+  controller: Page
   action: default
 
 /lbly-admin/pages/add:
-  controller: PageController
+  controller: Page
   action: addpage
 
 /lbly-admin/category:
-  controller: CategoryController
+  controller: Category
   action: addcategory
 
 /lbly-admin/books:
-  controller: BookController
+  controller: Book
   action: index
 
 /lbly-admin/articles:
-  controller: ArticleController
+  controller: Article
   action: default
 
 /lbly-admin/articles/add:
-  controller: ArticleController
+  controller: Article
   action: addArticle
 
 /lbly-admin/articles/edit:
-  controller: ArticleController
+  controller: Article
   action: editArticle

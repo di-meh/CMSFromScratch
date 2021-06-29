@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Core\View;
 use App\Core\Security;
 
-class Main{
+class MainController{
 
 
 	public function defaultAction(){
