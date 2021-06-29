@@ -1,3 +1,4 @@
 [submodule "www/framework"]
 	path = www/framework
 	url = https://github.com/yungmides/LiblyFramework.git
+	update = merge

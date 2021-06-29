@@ -4,7 +4,6 @@ www/.env.dev
 www/.env.prod
 www/vendor
 www/composer.lock
-www/composer.json
 .idea
 .DS_Store
 www/MVC.png
