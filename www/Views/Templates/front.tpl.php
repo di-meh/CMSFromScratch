@@ -16,6 +16,9 @@
 			<h5 class="navbar-title">Template du front</h5>
 			<div class="navbar-right">
 				<?= isset($_SESSION['id']) ? "<div class='right-link'><a id'' href='/lbly-admin'>Dashboard</a></div>" : ""; ?>
+				<div class="right-link">
+					<?= isset($_SESSION['id']) ? "<a id'' href='/lbly-admin/editprofil'>Edition du profil</a></div><div class='right-link'><a id='' href='/lbly-admin/logout'>Déconnexion</a>" : "<a id='' href='/lbly-admin/login'>Connexion</a> | <a id='' href='/lbly-admin/register'>Inscription</a>"; ?>
+				</div>
 			</div>
 		</nav>
 
@@ -25,8 +28,6 @@
 		</div>
 
 	</div>
-
-
 
 
 </body>

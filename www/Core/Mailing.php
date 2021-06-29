@@ -65,7 +65,7 @@ class Mailing{
 		$this->setSubject('Veuillez confirmer votre compte Libly !');
 		$id = $user->getId();
 		$token = $user->getToken();
-		$content = "Validez votre compte en cliquant sur ce lien : <a href='http://localhost/uservalidated?id=$id&token=$token'>Confirmer mon compte !</a>";
+		$content = "Validez votre compte en cliquant sur ce lien : <a href='http://localhost/lbly-admin/uservalidated?id=$id&token=$token'>Confirmer mon compte !</a>";
 		#$content = "<a href='https://www.google.com'>Go lien</a>";
 		$this->setContent($content);
 								
