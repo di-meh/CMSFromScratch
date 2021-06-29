@@ -89,4 +89,13 @@ class PageController
 
     }
 
+    public function editPageAction(){
+        session_start();
+
+        $page = new Page();
+
+        $view = new View("editPage");
+        $view->assign("page", $page);
+    }
+
 }

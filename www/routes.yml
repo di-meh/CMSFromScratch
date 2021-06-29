@@ -54,6 +54,10 @@
   controller: Page
   action: addpage
 
+/lbly-admin/pages/edit:
+  controller: Page
+  action: editpage
+
 /lbly-admin/category:
   controller: Category
   action: addcategory
