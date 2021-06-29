@@ -2,6 +2,7 @@
 namespace App\Core;
 
 use App\Models\Page;
+use App\Models\Article;
 
 class Router
 {
@@ -13,6 +14,7 @@ class Router
 
 	public function __construct($uri){
 	    $page = new Page();
+	    $article = new Article();
 
 
 		$this->setUri($uri);
@@ -27,7 +29,10 @@ class Router
 			}elseif (!empty($page->getAllBySlug($this->uri))){
                 $this->setController("PageController");
                 $this->setAction("seePage");
-			//}elseif (){
+				
+			}elseif (!empty($article->getAllBySlug($this->uri))){
+                $this->setController("ArticleController");
+                $this->setAction("viewArticle");
 
             }else{
 				die("\nChemin inexistant : 404");

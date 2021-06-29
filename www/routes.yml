@@ -61,3 +61,15 @@
 /books:
   controller: BookController
   action: index
+
+/articles:
+  controller: ArticleController
+  action: default
+
+/articles/add:
+  controller: ArticleController
+  action: addArticle
+
+/articles/edit:
+  controller: ArticleController
+  action: editArticle

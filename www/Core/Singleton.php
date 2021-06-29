@@ -74,6 +74,7 @@ class Singleton
 
 		$result = $this->getPDO()->prepare($query)->execute($columns);
 	}
+
 	public function all()
 	{
 		$query = "SELECT * from " . $this->getTable();
