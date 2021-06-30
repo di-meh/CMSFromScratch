@@ -24,6 +24,109 @@ class SecurityController
 		echo "Controller security action default";
 	}
 
+	public function forgetPwdAction(){
+
+		$user = new User();
+
+		$view = new View("forgetpwd");
+
+		$form = $user->formForgetPwd();
+
+
+		if(!empty($_POST['email'])){
+
+			$email = $_POST['email'];
+
+			$mailExists = $user->verifyMail($email); # verify exists and unicity in database
+
+			if($mailExists == 1){ # mail found in db
+
+				$user->setAllFromEmail($email);
+
+				if($user->isValidated()){ # user has validated his account by mail
+
+					# send mail with link to change pwd
+					$mailing = Mailing::getMailing();
+					$mailing->mailForgetPwd($user);
+					$mailing->setRecipient($email);
+					$mailing->sendMail();
+					$infos = htmlspecialchars("Un lien vous a été envoyé par mail pour changer votre mot de passe.");
+					$view->assign("infos", [$infos]);
+
+				}else{
+					$view->assign("infos", ["Vous devez valider votre compte par email.<a href='http://localhost/lbly-admin/userconfirm?email=$email'> Cliquez ici pour renvoyer le mail de confirmation.</a>"]);
+				}
+
+
+			}else{
+				$view->assign("infos", ["Ce mail n'est pas inscrit."]);
+
+			}
+
+		}
+
+		$view->assign("form", $form);
+
+	}
+
+	# action from link by mail to reset pwd user account
+	public function resetPwdAction(){
+
+		if(is_null($_GET['id']) || is_null($_GET['token']))
+			header("Location: /");
+		
+		$id = $_GET['id'];
+		$token = $_GET['token'];
+
+		$user = new User();
+
+		$view = new View("resetpwd");
+
+		$form = $user->formResetPwd();
+		
+		if($user->verifyUser($id,$token) == 1){ # check user in db with its id and token couple
+
+			$user->setAllFromId($id);
+
+			$user->setToken(Helpers::createToken());
+
+			if(!empty($_POST['pwd']) && !empty($_POST['pwdConfirm'])){
+
+				$errors = FormValidator::check($form, $_POST);
+
+				if(empty($errors)){
+
+					if ($_POST['pwd'] == $_POST['pwdConfirm']) {
+
+						$pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
+						$user->setPwd($pwd);
+
+						$user->save();
+
+						header("Location: /lbly-admin/login");
+
+
+					}else{
+						$view->assign("errors", ["Vos mots de passe sont différents."]);
+
+					}
+
+				}else{
+					$view->assign("errors",$errors);
+				}
+
+			}
+
+		}else{
+			header("Location: /"); # ID AND TOKEN NOT FOUND IN DB
+		}
+
+		$view->assign("form",$form);
+
+	}
+
+
+	# action from link sent by mail to confirm user account
 	public function userValidatedAction(){
 
 		if(is_null($_GET['id']) || is_null($_GET['token']))
@@ -48,7 +151,7 @@ class SecurityController
 			header("Location:/lbly-admin"); # temporairement
 
 		}else{
-			echo "ERREUR VERIFICATION ID ET FIRSTNAME !";
+			echo "ERREUR VERIFICATION ID ET TOKEN !";
 		}
 
 	}
@@ -179,7 +282,7 @@ class SecurityController
 					# à partir du mail
 
 					# verify status USERVALIDATED : 4 else no login allowed
-					if($user->getStatus() & 4){
+					if($user->isValidated()){
 
 						$token = substr(md5(uniqid(true)), 0, 10); # cut length to 10, no prefix, entropy => for more unicity
 						$user->setToken($token);
@@ -202,7 +305,7 @@ class SecurityController
 						# $user->deleteAll(); # pour delete immediatement en 
 					}else{
                         $email = $_POST['email'];
-					    $html = "Vous devez aller confirmer votre compte avec le mail que vous avez reçu à cette adresse: " . $user->getEmail() . " . <a href='http://localhost/userconfirm?email=$email'>Renvoyer le mail de confirmation</a>";
+					    $html = "Vous devez aller confirmer votre compte avec le mail que vous avez reçu à cette adresse: " . $user->getEmail() . " . <a href='http://localhost/lbly-admin/userconfirm?email=$email'>Renvoyer le mail de confirmation</a>";
                         $view->assign("infos", [$html]);
 //					    echo "Vous devez aller <strong style='color:red'>confirmer votre compte</strong> avec le mail que vous avez reçu à cette adresse : <strong style='color:blue'>".$user->getEmail()."</strong><br/>";
 //
@@ -323,7 +426,6 @@ class SecurityController
 		header("Location: /lbly-admin/login");
 		
 	}
-
 
 	public function logoutAction()
 	{

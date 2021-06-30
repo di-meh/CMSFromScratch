@@ -261,6 +261,72 @@ class User extends Singleton
         $this->status = $this->status | $status;
     }
 
+    public function isValidated(){
+        return ($this->status & USERVALIDATED);
+    }
+
+    public function formForgetPwd(){
+        return [
+
+            "config" => [
+                    "method" => "POST",
+                    "action" => "",
+                    "id" => "form_forgetpwd",
+                    "class" => "form_builder",
+                    "submit" => "Valider"
+                ],
+            "inputs" => [
+                "email" => [
+                    "type" => "email",
+                    "label" => "Votre email",
+                    "minLength" => 8,
+                    "maxLength" => 320,
+                    "id" => "email",
+                    "class" => "form_input",
+                    "placeholder" => "Exemple: nom@gmail.com",
+                    "value" => $this->getEmail() ?? '',
+                    "error" => "Votre email doit faire entre 8 et 320 caractères",
+                    "required" => true
+                ]
+            ]
+        ];
+    }
+
+    public function formResetPwd(){
+        return [
+
+            "config" => [
+                    "method" => "POST",
+                    "action" => "",
+                    "id" => "form_editprofil",
+                    "class" => "form_builder",
+                    "submit" => "Valider"
+                ],
+            "inputs" => [
+                "pwd" => [
+                    "type" => "password",
+                    "label" => "Votre nouveau mot de passe",
+                    "minLength" => 8,
+                    "id" => "pwd",
+                    "class" => "form_input",
+                    "placeholder" => "",
+                    "error" => "Votre mot de passe doit faire au minimum 8 caractères",
+                    "required" => true
+                ],
+                "pwdConfirm" => [
+                    "type" => "password",
+                    "label" => "Confirmation",
+                    "confirm" => "pwd",
+                    "id" => "pwdConfirm",
+                    "class" => "form_input",
+                    "placeholder" => "",
+                    "error" => "Votre mot de mot de passe de confirmation ne correspond pas",
+                    "required" => true
+                ]
+            ]
+        ];
+    }
+
     public function formEditProfil()
     {
 
