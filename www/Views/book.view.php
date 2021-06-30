@@ -1,38 +1,3 @@
-<?php if (isset($errors)) : ?>
-    <?php foreach ($errors as $error) : ?>
-        <section class="container-fluid">
-            <div class="row">
-                <div class="col-full">
-                    <div class="alert alert-danger">
-                        <button class="alert-close"><span>X</span></button>
-                        <h1 class="alert-heading">Erreur</h1>
-                        <p><?= $error; ?></p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    <?php endforeach; ?>
-<?php endif; ?>
-
-<?php if (isset($infos)) : ?>
-
-    <?php foreach ($infos as $info) : ?>
-        <section class="container-fluid">
-            <div class="row">
-                <div class="col-full">
-                    <div class="alert alert-info">
-                        <button class="alert-close"><span>X</span></button>
-                        <h1 class="alert-heading">Info</h1>
-                        <p><?= $info; ?></p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    <?php endforeach; ?>
-
-<?php endif; ?>
-
 <?php if (isset($books)) : ?>
     <section class="container-fluid">
         <div class="row">
@@ -43,7 +8,25 @@
                         <?php if (empty($books)) : ?>
                             <p>Il n'y a pas de livres dans la bd.</p>
                         <?php else : ?>
-                            <?php var_dump($books); ?>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <td>Titre</td>
+                                <td>Auteur</td>
+                                <td>Nombre de livres en stock</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach ($books as $book) :?>
+                                <tr>
+                                    <td><?= $book['title'];?></td>
+                                    <td><?= $book['author'];?></td>
+                                    <td><?= $book['stock_number'];?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+
                         <?php endif; ?>
                     </div>
                 </div>
