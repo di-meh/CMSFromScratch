@@ -77,3 +77,7 @@
 /forgetpwd:
   controller: Security
   action: forgetPwd
+
+/resetpwd:
+  controller: Security
+  action: resetPwd
