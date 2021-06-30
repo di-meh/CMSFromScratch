@@ -37,6 +37,8 @@ class ConstantMaker
 		define("USERVALIDATED", 4);
 		define("USERDELETED", 8);
 		define("USERBANNISHED", 16);
+		define("USEREDITOR", 32);
+
 
 	}
 

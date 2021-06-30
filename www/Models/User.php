@@ -261,6 +261,10 @@ class User extends Singleton
         $this->status = $this->status | $status;
     }
 
+    public function isAdmin(){
+        return (($this->status & USERADMIN) || ($this->status & USERSUPERADMIN));
+    }
+
     public function isValidated(){
         return ($this->status & USERVALIDATED);
     }

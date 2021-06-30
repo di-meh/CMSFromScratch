@@ -34,9 +34,9 @@
   controller: Security
   action: editProfil
 
-/lbly-admin/superadminview:
-  controller: SuperAdmin
-  action: default
+/lbly-admin/adminview:
+  controller: Security
+  action: getAllUsers
 
 /lbly-admin/uservalidated:
   controller: Security

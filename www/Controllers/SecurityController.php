@@ -24,6 +24,28 @@ class SecurityController
 		echo "Controller security action default";
 	}
 
+	# view all users for admin only
+	public function getAllUsersAction(){
+
+        $user = Secu::getConnectedUser();
+		if(is_null($user)) header("Location:/lbly-admin/login");
+
+		$view = new View("admin","back");
+
+		if($user->isAdmin()){
+
+			$users = $user->all();
+
+			$view->assign("users", $users);
+
+		}else{
+			echo "UNAUTHORIZED TO NON ADMIN USERS";
+		}
+
+
+
+	}
+
 	public function forgetPwdAction(){
 
 		$user = new User();
