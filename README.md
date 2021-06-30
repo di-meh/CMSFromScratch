@@ -10,10 +10,9 @@ Un CMS from scratch en HTML5, CSS3, JS et PHP pour l'ESGI.
   
 - Sinon faire ``git submodule update --init``
   
-- dans le dossier ``www/framework`` faire la commande `npm install` 
+- dans le dossier ``www/framework`` faire la commande `npm install` et ``npm run build``
 
-- ``npm run build``
-  
+- Penser à faire ``git checkout main`` dans le dossier `www/framework`  
 ## CMS
 
 Dans le dossier ``www/``:
