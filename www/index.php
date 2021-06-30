@@ -8,6 +8,8 @@ use App\Core\Helpers as h;
 
 //require "Core/Router.php";
 //require "Core/Security.php";
+#require 'vendor/autoload.php';
+
 
 require "Autoload.php";
 
@@ -23,7 +25,17 @@ $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
 
 $uri = $uriExploded[0];
 
+// if(isset($uriExploded[1])){
+// 	$params = $uriExploded[1];
+// 	$router = new Router($uri, $params);
+
+// }else{
+// 	$router = new Router($uri);
+
+// }
+
 $router = new Router($uri);
+
 
 $c = $router->getController();
 $a = $router->getAction();

@@ -1,18 +1,18 @@
-<h2>Se connecter</h2>
-
-<?php if(isset($errors)):?>
-
-<?php foreach ($errors as $error):?>
-	<li style="color:red"><?=$error;?></li>
-<?php endforeach;?>
-
-<?php endif;?>
-
-
-<?php App\Core\FormBuilder::render($form)?>
-
-<section>
-	<br/>
-	<a id="" href="register">Inscription</a>
-	
+<section class="d-flex flex-direction-column flex-align-items-center flex-justify-content-center s-h-full">
+	<div class="card s-w-350">
+		<h6 class="card-title">Login</h6>
+		<div class="card-content"><?php App\Core\FormBuilder::render($form) ?>
+            <a href="/forgetpwd">Mot de passe oublié ?</a>
+        </div>
+	</div>
 </section>
+
+
+
+
+
+<!-- <section>
+	<br />
+
+
+</section> -->
