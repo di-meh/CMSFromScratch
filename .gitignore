@@ -2,3 +2,13 @@ db_data
 www/.env
 www/.env.dev
 www/.env.prod
+www/vendor
+www/composer.lock
+www/package-lock.json
+node_modules
+.idea
+.DS_Store
+www/MVC.png
+www/Rappel PHP.zip
+www/TP.zip
+www/bidon.php

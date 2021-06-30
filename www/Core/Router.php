@@ -1,6 +1,9 @@
 <?php
 namespace App\Core;
 
+use App\Models\Page;
+use App\Models\Article;
+
 class Router
 {
 	private $routes = [];
@@ -10,6 +13,10 @@ class Router
 	private $action;
 
 	public function __construct($uri){
+	    $page = new Page();
+	    $article = new Article();
+
+
 		$this->setUri($uri);
 		if(file_exists($this->routesPath)){
 			//[/] => Array ( [controller] => Global [action] => default )
@@ -19,14 +26,30 @@ class Router
 
 				$this->setController($this->routes[$this->uri]["controller"]);
 				$this->setAction($this->routes[$this->uri]["action"]);
-			}else{
-				die("Chemin inexistant : 404");
-			}
+			}elseif (!empty($page->getAllBySlug($this->uri))){
+                $this->setController("Page");
+                $this->setAction("seePage");
+				
+			}elseif (!empty($article->getAllBySlug($this->uri))){
+                $this->setController("Article");
+                $this->setAction("viewArticle");
+
+            }else{
+				die("\nChemin inexistant : 404");
+            }
 
 		}else{
 			die("Le fichier routes.yml ne fonctionne pas !");
 		}
 	}
+
+    /**
+     * @return mixed
+     */
+    public function getUri()
+    {
+        return $this->uri;
+    }
 
 	public function setUri($uri){
 		$this->uri = trim(mb_strtolower($uri));
@@ -35,7 +58,7 @@ class Router
 
 
 	public function setController($controller){
-		$this->controller = $controller;
+		$this->controller = $controller."Controller";
 	}
 
 

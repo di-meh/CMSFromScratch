@@ -21,6 +21,6 @@
 
 
 <div class="d-flex flex-direction-column flex-align-items-center flex-justify-content-center s-w-full s-h-full">
-	<h1 class="sp-mb-2">Bienvenue chez Nom de votre site</h1>
+	<h1 class="sp-mb-2">Bienvenue sur le Dashboard</h1>
 	<p>Description de votre site </p>
 </div>
