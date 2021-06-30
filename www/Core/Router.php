@@ -35,7 +35,9 @@ class Router
                 $this->setAction("viewArticle");
 
             }else{
-				die("\nChemin inexistant : 404");
+			    $view = new View('404');
+
+//				die("\nChemin inexistant : 404");
             }
 
 		}else{
