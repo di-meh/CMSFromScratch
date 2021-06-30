@@ -66,11 +66,21 @@ class Mailing{
 		$id = $user->getId();
 		$token = $user->getToken();
 		$content = "Validez votre compte en cliquant sur ce lien : <a href='http://localhost/lbly-admin/uservalidated?id=$id&token=$token'>Confirmer mon compte !</a>";
-		#$content = "<a href='https://www.google.com'>Go lien</a>";
 		$this->setContent($content);
 								
 		# set template, set subject, set content
 	
+	}
+
+	public function mailForgetPwd($user){
+		$this->setSubject("Renouvellement de mot de passe");
+		$id = $user->getId();
+		$token = $user->getToken();
+		$content = "Choisissez un nouveau mot de passe en cliquant sur ce lien : <a href='http://localhost/resetPwd?id=$id&token=$token'>Choisir un nouveau mot de passe</a>";
+		$this->setContent($content);
+
+		# set template, set subject, set content
+
 	}
 
 	public function sendMail(){
