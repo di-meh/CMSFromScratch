@@ -73,3 +73,7 @@
 /lbly-admin/articles/edit:
   controller: Article
   action: editArticle
+
+/forgetpwd:
+  controller: Security
+  action: forgetPwd

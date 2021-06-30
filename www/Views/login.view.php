@@ -2,7 +2,7 @@
 	<div class="card s-w-350">
 		<h6 class="card-title">Login</h6>
 		<div class="card-content"><?php App\Core\FormBuilder::render($form) ?>
-            <a href="/forgetpwd">Mot de passe oublié</a>      
+            <a href="/forgetpwd">Mot de passe oublié ?</a>
         </div>
 	</div>
 </section>
