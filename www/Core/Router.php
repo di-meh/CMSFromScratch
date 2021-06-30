@@ -36,8 +36,6 @@ class Router
 
             }else{
 			    $view = new View('404');
-
-//				die("\nChemin inexistant : 404");
             }
 
 		}else{

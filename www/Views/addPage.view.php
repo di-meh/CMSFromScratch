@@ -13,6 +13,7 @@
     </div>
 </section>
 <script src="/../node_modules/ckeditor4/ckeditor.js"></script>
+
 <script>
     CKEDITOR.replace('editor');
 </script>
