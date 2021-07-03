@@ -34,6 +34,8 @@ class Router
                 $this->setController("Article");
                 $this->setAction("viewArticle");
 
+            //}elseif (){
+
             }else{
                 header("HTTP/1.0 404 Not Found");
 			    $view = new View('404');

@@ -89,4 +89,13 @@ class PageController
 
     }
 
+    public function editPageAction(){
+        $user = Security::getConnectedUser();
+        if(is_null($user)) header("Location:/lbly-admin/login");
+
+        $page = new Page();
+
+        $view = new View("editPage","back");
+    }
+
 }

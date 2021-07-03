@@ -12,6 +12,7 @@ class Page extends Singleton
     protected $content;
     protected $createdBy;
     protected $slug;
+    protected $editSlug;
     private $table = DBPREFIX . "page";
 
     public function __construct(){
@@ -103,6 +104,22 @@ class Page extends Singleton
         $this->slug = $slug;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getEditSlug()
+    {
+        return $this->editSlug;
+    }
+
+    /**
+     * @param mixed $editSlug
+     */
+    public function setEditSlug($editSlug)
+    {
+        $this->editSlug = $editSlug;
+    }
+
 
     public function title2slug($title){
         $title = preg_replace('~[^\pL\d]+~u', '-', $title);
@@ -117,6 +134,7 @@ class Page extends Singleton
         //retire symboles spéciaux
         $title = iconv("UTF-8", "ASCII//TRANSLIT", $title);
 
+        //remplace charactere qui n'est pas une lettre
         $title = preg_replace('~[^-\w]+~', '', $title);
 
         $title = trim($title, '-');
