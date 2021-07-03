@@ -261,12 +261,21 @@ class User extends Singleton
         $this->status = $this->status | $status;
     }
 
+    public function isSuperAdmin(){
+        return ($this->status & USERSUPERADMIN);
+    }
+
     public function isAdmin(){
         return (($this->status & USERADMIN) || ($this->status & USERSUPERADMIN));
     }
 
     public function isValidated(){
-        return ($this->status & USERVALIDATED);
+        return (($this->status & USERVALIDATED) || $this->isAdmin());
+    }
+
+    # form enables to edit users status, give roles and rights
+    public function formCrudAdmin(){
+
     }
 
     public function formForgetPwd(){

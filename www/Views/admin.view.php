@@ -35,7 +35,7 @@
                         </tbody>
                         </table>
                     <?php endif; ?>
-                    <a id="" href="/lbly-admin/users/add"><button class="btn btn-primary">Ajouter une user</button></a>
+                    <a id="" href="/lbly-admin/users/add"><button class="btn btn-primary">Ajouter un user</button></a>
                 </div>
             </div>
         </div>
