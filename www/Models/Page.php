@@ -185,6 +185,46 @@ class Page extends Singleton
         ];
 	}
 
+	public function formEditPage(){
+        return [
+
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "form_editpage",
+                "class" => "form_builder",
+                "submit" => "Modifier"
+            ],
+            "inputs" => [
+                "title" => [
+                    "type" => "text",
+                    "label" => "Editez le titre",
+                    "minLength" => 2,
+                    "maxLength" => 60,
+                    "id" => "title",
+                    "class" => "form_input",
+                    "placeholder" => "Exemple: Premier article",
+                    "value" => $this->title,
+                    "error" => "Votre titre doit faire entre 2 et 155 caractères",
+                    "required" => true
+                ],
+                "content" => [
+                    "type" => "textarea",
+                    "label" => "Contenu de l'article",
+                    "cols" => 80,
+                    "rows" => 10,
+                    "id" => "content",
+                    "name" => "content",
+                    "class" => "ckeditor",
+                    "placeholder" => "",
+                    "value" => $this->content,
+                    "error" => "probleme enregistrement base de données",
+                    "required" => true
+                ],
+            ]
+        ];
+    }
+
     public function getAllBySlug($slug){
         $query = "SELECT * FROM " . $this->getTable() . " WHERE slug = '".$slug."'";
         $req = $this->getPDO()->prepare($query);
@@ -193,4 +233,29 @@ class Page extends Singleton
         return $res;
     }
 
+    public function getAllByEditSlug($editSlug){
+        $query = "SELECT * FROM " . $this->getTable() . " WHERE editSlug = '".$editSlug."'";
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
+        $res = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $res;
+    }
+
+    public function getAllById($id){
+        $query = "SELECT * FROM " . $this->getTable() . " WHERE id = '".$id."'";
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
+        $res = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $res;
+    }
+
+    public function setAllByEditSlug($slug){
+        $res = $this->getAllByEditSlug($slug);
+        $res = $res[0];
+        $this->setId($res['id']);
+        $this->setTitle($res['title']);
+        $this->setContent($res['content']);
+        $this->setSlug($res['slug']);
+        $this->setEditSlug($res['editSlug']);
+    }
 }

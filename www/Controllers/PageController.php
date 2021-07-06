@@ -54,6 +54,7 @@ class PageController
                     $view->assign("errors", ["Veuillez remplir tous les champs"]);
                 }else{
                     $page->setSlug('/' . $page->title2slug($_POST['title']));
+                    $page->setEditSlug('/lbly-admin/edit/' . $page->title2slug($_POST['title']));
                     if (empty($page->getAllBySlug($page->getSlug()))){
                         $page->save();
                         header("Location:/lbly-admin/pages");
@@ -77,7 +78,6 @@ class PageController
         session_start();
 
         $page = new Page();
-
         $view = new View("seePage");
 
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
@@ -93,9 +93,57 @@ class PageController
         $user = Security::getConnectedUser();
         if(is_null($user)) header("Location:/lbly-admin/login");
 
-        $page = new Page();
+        $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
 
-        $view = new View("editPage","back");
+        $uri = $uriExploded[0];
+
+        $page = new Page();
+        $view = new View("editPage");
+
+        //$page = $page->getAllByEditSlug($uri);
+        $page->setAllByEditSlug($uri);
+        $form = $page->formEditPage();
+
+        $errors = FormValidator::check($form, $_POST);
+
+        if (!empty($_POST)){
+            if (empty($errors)){
+                if ($_POST['title'] != $page->getTitle()){
+                    if (!empty($_POST['title'])){
+                        $page->setTitle($_POST['title']);
+                        $page->setSlug('/' . $page->title2slug($_POST['title']));
+                        $page->setEditSlug('/lbly-admin/edit/' . $page->title2slug($_POST['title']));
+                        if (empty($page->getAllBySlug($page->getSlug()))){
+                            $page->save();
+                            $form = $page->formEditPage();
+                            $infos[] = "La page a été mis à jour !";
+                            $view->assign("infos", $infos);
+                        }else{
+                            $view->assign("errors", ["Veuillez changer le titre de votre page"]);
+                        }
+                    }else{
+                        $view->assign("errors", ["Veuillez remplir tous les champs"]);
+                    }
+                }
+
+                if ($_POST['content'] != $page->getContent()){
+                    if (!empty($_POST['content'])){
+                        $page->setContent($_POST['content']);
+                        $page->save();
+                        $form = $page->formEditPage();
+                        $infos[] = "La page a été mis à jour !";
+                        $view->assign("infos", $infos);
+                    }else{
+                        $view->assign("errors", ["Veuillez remplir tous les champs"]);
+                    }
+                }
+            }else{
+                $view->assign("errors", $errors);
+            }
+        }
+
+        $view->assign("form", $form);
+
     }
 
 }

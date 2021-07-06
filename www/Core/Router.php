@@ -34,8 +34,9 @@ class Router
                 $this->setController("Article");
                 $this->setAction("viewArticle");
 
-            //}elseif (){
-
+            }elseif (!empty($page->getAllByEditSlug($this->uri))){
+                $this->setController("Page");
+                $this->setAction("editPage");
             }else{
                 header("HTTP/1.0 404 Not Found");
 			    $view = new View('404');

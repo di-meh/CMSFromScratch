@@ -41,17 +41,17 @@ class FormBuilder
 
 	public static function renderInput($name, $configInput)
 	{
-		return "<input 
-						name='" . $name . "' 
-						type='" . ($configInput["type"] ?? "text") . "'
-						id='" . ($configInput["id"] ?? "") . "'
-						class='input-field " . ($configInput["class"] ?? "") . "'
-						placeholder='" . ($configInput["placeholder"] ?? "") . "'
-						value='" . ($configInput['value'] ?? '') . "'
-						" . (!empty($configInput["required"]) ? "required='required'" : "") . "
-						" . (isset($configInput["disabled"]) ? 'disabled=disabled' : '') . "'
+		return '<input 
+						name="' . $name . '" 
+						type="' . ($configInput["type"] ?? "text") . '"
+						id="' . ($configInput["id"] ?? "") . '"
+						class="input-field ' . ($configInput["class"] ?? "") . '"
+						placeholder="' . ($configInput["placeholder"] ?? "") . '"
+						value="' . ($configInput['value'] ?? '') . '"
+						' . (!empty($configInput["required"]) ? "required='required'" : "") . '
+						' . (isset($configInput["disabled"]) ? 'disabled=disabled' : '') . '
 
-					><br>";
+					><br>';
 	}
 
 
