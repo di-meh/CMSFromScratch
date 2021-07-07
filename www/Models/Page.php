@@ -225,6 +225,29 @@ class Page extends Singleton
         ];
     }
 
+    public function formDeletePage(){
+        return [
+
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "form_deletepage",
+                "class" => "form_builder",
+                "submit" => "Supprimer"
+            ],
+            "inputs" => [
+                "id" => [
+                    "type" => "hidden",
+                    "id" => "title",
+                    "class" => "form_input",
+                    "value" => $this->id,
+                    "error" => "id not found",
+                    "required" => true
+                ]
+            ]
+        ];
+    }
+
     public function getAllBySlug($slug){
         $query = "SELECT * FROM " . $this->getTable() . " WHERE slug = '".$slug."'";
         $req = $this->getPDO()->prepare($query);
@@ -255,6 +278,7 @@ class Page extends Singleton
         $this->setId($res['id']);
         $this->setTitle($res['title']);
         $this->setContent($res['content']);
+        $this->setCreatedBy($res['createdBy']);
         $this->setSlug($res['slug']);
         $this->setEditSlug($res['editSlug']);
     }

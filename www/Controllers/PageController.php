@@ -115,9 +115,9 @@ class PageController
                         $page->setEditSlug('/lbly-admin/edit/' . $page->title2slug($_POST['title']));
                         if (empty($page->getAllBySlug($page->getSlug()))){
                             $page->save();
-                            $form = $page->formEditPage();
-                            $infos[] = "La page a été mis à jour !";
-                            $view->assign("infos", $infos);
+                            header("Location:/lbly-admin/pages");
+                            //$infos[] = "La page a été mis à jour !";
+                            //$view->assign("infos", $infos);
                         }else{
                             $view->assign("errors", ["Veuillez changer le titre de votre page"]);
                         }
@@ -130,9 +130,9 @@ class PageController
                     if (!empty($_POST['content'])){
                         $page->setContent($_POST['content']);
                         $page->save();
-                        $form = $page->formEditPage();
-                        $infos[] = "La page a été mis à jour !";
-                        $view->assign("infos", $infos);
+                        header("Location:/lbly-admin/pages");
+                        //$infos[] = "La page a été mis à jour !";
+                        //$view->assign("infos", $infos);
                     }else{
                         $view->assign("errors", ["Veuillez remplir tous les champs"]);
                     }

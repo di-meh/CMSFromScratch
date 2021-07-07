@@ -13,6 +13,7 @@
                             <tr>
                                 <th>titre</th>
                                 <th>date de création</th>
+                                <th colspan="3">mes actions</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -21,7 +22,7 @@
                                     <td><?php echo $page["title"];?></td>
                                     <td><?php echo $page["createdAt"];?></td>
                                     <td><a href="<?=$page['slug']?>">Voir ma page</a></td>
-                                    <td><a href="#">Modifier ma page</a></td>
+                                    <td><a href="<?=$page['editSlug']?>">Modifier / Supprimer ma page</a></td>
                                     <!--<td><//?php echo $page["slug"];?></td>-->
                                 </tr>
                                 <?php
