@@ -81,3 +81,7 @@
 /resetpwd:
   controller: Security
   action: resetPwd
+
+/installer:
+  controller: Installer
+  action: default

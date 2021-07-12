@@ -9,11 +9,16 @@ use App\Core\Singleton;
 
 use App\Core\Security;
 
+use App\Models\Installer;
 use App\Models\Page;
 use App\Core\Router;
 
 class InstallerController{
     public function defaultAction(){
+        $install = new Installer();
+        $view = new View("installer","back");
+        $form = $install->formInstall();
 
+        $view->assign("form", $form);
     }
 }
