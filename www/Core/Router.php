@@ -1,6 +1,7 @@
 <?php
 namespace App\Core;
 
+use App\Models\Page;
 use App\Models\Article;
 
 class Router
@@ -12,6 +13,7 @@ class Router
 	private $action;
 
 	public function __construct($uri){
+	    $page = new Page();
 	    $article = new Article();
 
 
@@ -24,12 +26,17 @@ class Router
 
 				$this->setController($this->routes[$this->uri]["controller"]);
 				$this->setAction($this->routes[$this->uri]["action"]);
+			}elseif (!empty($page->getAllBySlug($this->uri))){
+                $this->setController("Page");
+                $this->setAction("seePage");
+				
 			}elseif (!empty($article->getAllBySlug($this->uri))){
-                $this->setController("ArticleController");
+                $this->setController("Article");
                 $this->setAction("viewArticle");
 
             }else{
-				die("\nChemin inexistant : 404");
+                header("HTTP/1.0 404 Not Found");
+			    $view = new View('404');
             }
 
 		}else{
@@ -52,7 +59,7 @@ class Router
 
 
 	public function setController($controller){
-		$this->controller = $controller;
+		$this->controller = $controller."Controller";
 	}
 
 

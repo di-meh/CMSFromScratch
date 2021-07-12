@@ -136,7 +136,7 @@ class Article extends Singleton
                 ],
                 "content" => [
                     "type" => "textarea",
-                    "label" => "",
+                    "label" => "Contenu de l'article",
                     "cols" => 80,
                     "rows" => 10,
                     "id" => "content",
@@ -178,7 +178,7 @@ class Article extends Singleton
                 ],
                 "content" => [
                     "type" => "textarea",
-                    "label" => "",
+                    "label" => "Contenu de l'article",
                     "cols" => 80,
                     "rows" => 10,
                     "id" => "content",

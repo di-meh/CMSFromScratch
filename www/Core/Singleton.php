@@ -3,6 +3,8 @@
 namespace App\Core;
 
 use PDO;
+use App\Core\Router;
+use App\Models\Page;
 
 class Singleton
 {
@@ -20,11 +22,11 @@ class Singleton
 		if (is_null(self::$pdo)) {
 			#self::$instance = new Singleton();
 			try {
-				self::$pdo = new \PDO(DBDRIVER . ":dbname=" . DBNAME . ";host=" . DBHOST . ";port=" . DBPORT, DBUSER, DBPWD);
+				self::$pdo = new PDO(DBDRIVER . ":dbname=" . DBNAME . ";host=" . DBHOST . ";port=" . DBPORT, DBUSER, DBPWD);
 
 				if (ENV == "dev") {
-					self::$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-					self::$pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+					self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+					self::$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 				}
 			} catch (\Exception $e) {
 				die("Erreur SQL " . $e->getMessage());
@@ -58,7 +60,7 @@ class Singleton
 				. ") 
 				VALUES ( :" .
 				implode(",:", array_keys($columns))
-				. " );";
+				. " )";
 		} else {
 
 			//UPDATE

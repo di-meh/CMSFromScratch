@@ -1,48 +1,83 @@
-
 /:
   controller: Main
   action: default
 
-/admin:
-  controller: Security
-  action: default
+/lbly-admin:
+  controller: Main
+  action: dashboard
 
-/s-inscrire:
-  controller: Security
-  action: register
-
-/register:
+/lbly-admin/s-inscrire:
   controller: Security
   action: register
 
-/se-connecter:
+/lbly-admin/register:
+  controller: Security
+  action: register
+
+/lbly-admin/se-connecter:
   controller: Security
   action: login
 
-/login:
+/lbly-admin/login:
   controller: Security
-  action: login  
+  action: login
 
-/logout:
-  controller: Security
-  action: logout
-
-/se-deconnecter:
+/lbly-admin/logout:
   controller: Security
   action: logout
 
-/editprofil:
+/lbly-admin/se-deconnecter:
+  controller: Security
+  action: logout
+
+/lbly-admin/editprofil:
   controller: Security
   action: editProfil
 
-/articles:
-  controller: ArticleController
+/lbly-admin/superadminview:
+  controller: SuperAdmin
   action: default
 
-/articles/add:
-  controller: ArticleController
+/lbly-admin/uservalidated:
+  controller: Security
+  action: uservalidated
+
+/lbly-admin/userconfirm:
+  controller: Security
+  action: userconfirm
+
+/lbly-admin/pages:
+  controller: Page
+  action: default
+
+/lbly-admin/pages/add:
+  controller: Page
+  action: addpage
+
+/lbly-admin/category:
+  controller: Category
+  action: addcategory
+
+/lbly-admin/books:
+  controller: Book
+  action: index
+
+/lbly-admin/articles:
+  controller: Article
+  action: default
+
+/lbly-admin/articles/add:
+  controller: Article
   action: addArticle
 
-/articles/edit:
-  controller: ArticleController
+/lbly-admin/articles/edit:
+  controller: Article
   action: editArticle
+
+/forgetpwd:
+  controller: Security
+  action: forgetPwd
+
+/resetpwd:
+  controller: Security
+  action: resetPwd

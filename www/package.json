@@ -1,0 +1,12 @@
+{
+  "name": "libly",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ckeditor4": "^4.16.1"
+  }
+}

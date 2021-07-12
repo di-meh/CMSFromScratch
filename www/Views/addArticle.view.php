@@ -1,31 +1,19 @@
-<h2>Ajout d'un article</h2>
-
-<?php if (isset($errors)) : ?>
-
-    <?php foreach ($errors as $error) : ?>
-        <li style="color:red"><?= $error; ?></li>
-    <?php endforeach; ?>
-
-<?php endif; ?>
-
-
-
-<h3>Formulaire</h3>
-<?php if (isset($form)) : ?>
-    <?php App\Core\FormBuilder::render($form); ?>
-<?php endif; ?>
-
-<section>
-	<br/>
-	<a id="" href="/">Accueil</a>
-	<br/>
-	<a id="" href="/articles">Liste des articles</a>
-	<br/>
-	<a id="" href="/logout">Déconnexion</a>
-
-	
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-full">
+            <div class="card">
+                <h6 class="card-title">Ajouter un article</h6>
+                <div class="card-content">
+                    <?php if (isset($form)) : ?>
+                        <?php App\Core\FormBuilder::render($form); ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
-<script src="/../ckeditor/ckeditor.js"></script>
+
+<script src="/../node_modules/ckeditor4/ckeditor.js"></script>
 <script>
     CKEDITOR.replace('content');
 </script>
