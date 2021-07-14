@@ -77,9 +77,24 @@ class Installer extends Singleton{
                     "error" => "Votre mot de mot de passe de confirmation ne correspond pas",
                     "required" => true
                 ],
+                "country" => [
+                    "type" => "select",
+                    "label" => "Votre pays",
+                    "options" => [
+                        "fr" => "France",
+                        "ru" => "Russie",
+                        "pl" => "Pologne",
+                    ],
+                    "minLength" => 2,
+                    "maxLength" => 2,
+                    "id" => "country",
+                    "class" => "form_input",
+                    "placeholder" => "Exemple: fr",
+                    "error" => "Votre pays doit faire 2 caractères"
+                ],
                 "site" => [
                     "type" => "text",
-                    "label" => "Nom du dite : ",
+                    "label" => "Nom du site : ",
                     "minLength" => 2,
                     "maxLength" => 55,
                     "id" => "site",
@@ -152,7 +167,7 @@ class Installer extends Singleton{
                     "required" => true
                 ],
                 "mailexp" =>[
-                    "type" => "text",
+                    "type" => "email",
                     "label" => "Mail Expediteur : ",
                     "minLength" => 1,
                     "id" => "mailexp",
