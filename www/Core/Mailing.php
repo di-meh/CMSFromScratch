@@ -103,30 +103,15 @@ class Mailing{
 
 		    //Recipients
 		    $this->mail->setFrom(MAILUSERNAME, 'LIBLY');
-		    $this->mail->addAddress($this->recipient);     //Add a recipient
-		    # $this->mail->addAddress($this->recipient, 'User');     //Add a recipient
+		    $this->mail->addAddress($this->recipient);
 
-		    # $mail->addAddress('ellen@example.com');               //Name is optional
-		    # $mail->addReplyTo('info@example.com', 'Information');
-		    # $mail->addCC('cc@example.com');
-		    # $mail->addBCC('bcc@example.com');
-
-		    //Attachments
-		    # $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
-		    # $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
-
-		    //Content
-		    $this->mail->isHTML(true);                                  //Set email format to HTML
-		    $this->mail->Subject = $this->subject;#'Here is the subject';
-
-		    # $this->mail->Subject = $this->subject;
-		    # $this->mail->Body = $this->content;
+		    $this->mail->isHTML(true);
+		    $this->mail->Subject = $this->subject;
 
 		    $this->mail->Body    = $this->content; # 'This is the HTML message body <b>in bold!</b>';
-		    #$this->mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
 		    $this->mail->send();
-		    #echo 'Message has been sent';
+		    $this->mail->clearAllRecipients();
 		} catch (Exception $e) {
 		    echo "Message could not be sent. Mailer Error: {$this->mail->ErrorInfo}";
 		}	

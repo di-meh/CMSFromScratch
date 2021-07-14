@@ -42,7 +42,7 @@ class ConstantMaker
 		define("USERBANNISHED", 128);
 
 
-		# admin (102) = editor + contributor + author + validated
+		# admin () = editor + contributor + author + validated
 
 
 

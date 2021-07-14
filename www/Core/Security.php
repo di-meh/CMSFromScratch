@@ -6,8 +6,6 @@ use App\Models\User;
 class Security
 {
 
-	# A QUOI SERT CETTE CLASSE ?
-
 	public static function isConnected(){
 
 		session_start();

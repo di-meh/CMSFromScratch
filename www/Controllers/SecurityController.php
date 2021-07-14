@@ -162,7 +162,7 @@ class SecurityController
 		if($user->verifyUser($id,$token) == 1){ # check user in db with this id and token couple
 
 			$user->setAllFromId($id);
-			$user->addStatus(USERVALIDATED);; # status USERVALIDATED = 4
+			$user->addStatus(USERVALIDATED);; # status USERVALIDATED = 2
 
 			$user->setToken(Helpers::createToken());
 
@@ -303,7 +303,7 @@ class SecurityController
 					# set tous les attributs depuis la base
 					# à partir du mail
 
-					# verify status USERVALIDATED : 4 else no login allowed
+					# verify status USERVALIDATED : 2 else no login allowed
 					if($user->isValidated()){
 
 						$token = substr(md5(uniqid(true)), 0, 10); # cut length to 10, no prefix, entropy => for more unicity
@@ -356,24 +356,6 @@ class SecurityController
 	public function registerAction()
 	{
 
-		/*
-
-
-		$log = new Log();
-		$log->user("y.skrzypczyk@gmail.com");
-		$log->date(time());
-		$log->success(false);
-		$log->save();
-
-		$user = new User();
-		print_r($user) // VIDE
-		$user->setId(2); // double action de peupler l'objet avec ce qu'il y a en bdd
-		print_r($user) // J'ai le user en bdd
-		$user->setFirstname("Toto");
-		$user->save();
-		*/
-
-
 		$user = new User();
 
 		$view = new View("register");
@@ -409,8 +391,7 @@ class SecurityController
 						$user->setPwd($pwd);
 						$user->setCountry($_POST["country"]);
 
-						$token = substr(md5(uniqid(true)), 0, 10); # cut length to 10, no prefix, entropy => for more unicity
-						$user->setToken($token);
+						$user->setToken(Helpers::createToken());
 
 						$user->save();
 
@@ -445,7 +426,7 @@ class SecurityController
 		$mailing->setRecipient($_GET['email']);
 		$mailing->sendMail();
 
-		header("Location: /lbly-admin/login");
+		#header("Location: /lbly-admin/login");
 		
 	}
 
