@@ -43,7 +43,6 @@ $a = $router->getAction();
 
 
 if (file_exists("./Controllers/" . $c . ".php")) {
-
 	include "./Controllers/" . $c . ".php";
 	// SecurityController =>  App\Controller\SecurityController
 

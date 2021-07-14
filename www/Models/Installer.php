@@ -47,7 +47,7 @@ class Installer extends Singleton{
                 ],
                 "email" => [
                     "type" => "email",
-                    "label" => "Votre email",
+                    "label" => "Votre email : ",
                     "minLength" => 8,
                     "maxLength" => 320,
                     "id" => "email",
@@ -59,7 +59,7 @@ class Installer extends Singleton{
                 ],
                 "pwd" => [
                     "type" => "password",
-                    "label" => "Votre mot de passe",
+                    "label" => "Votre mot de passe : ",
                     "minLength" => 8,
                     "id" => "pwd",
                     "class" => "form_input",
@@ -69,12 +69,24 @@ class Installer extends Singleton{
                 ],
                 "pwdConfirm" => [
                     "type" => "password",
-                    "label" => "Confirmation",
+                    "label" => "Confirmation mot de passe : ",
                     "confirm" => "pwd",
                     "id" => "pwdConfirm",
                     "class" => "form_input",
                     "placeholder" => "",
                     "error" => "Votre mot de mot de passe de confirmation ne correspond pas",
+                    "required" => true
+                ],
+                "site" => [
+                    "type" => "text",
+                    "label" => "Nom du dite : ",
+                    "minLength" => 2,
+                    "maxLength" => 55,
+                    "id" => "site",
+                    "class" => "site",
+                    "placeholder" => "Votre site",
+                    "value" => '',
+                    "error" => "Votre site doit faire entre 2 et 256 caractères",
                     "required" => true
                 ],
                 "dbname" =>[
@@ -90,7 +102,7 @@ class Installer extends Singleton{
                 ],
                 "dbusername" =>[
                     "type" => "text",
-                    "label" => "Nom de la BDD : ",
+                    "label" => "BDD username : ",
                     "minLength" => 1,
                     "id" => "dbusername",
                     "class" => "dbusername",
@@ -101,7 +113,7 @@ class Installer extends Singleton{
                 ],
                 "dbpwd" => [
                     "type" => "password",
-                    "label" => "Votre mot de passe",
+                    "label" => "Mot de passe BDD : ",
                     "minLength" => 8,
                     "id" => "dbpwd",
                     "class" => "form_input",
@@ -111,7 +123,7 @@ class Installer extends Singleton{
                 ],
                 "dbprefix" =>[
                     "type" => "text",
-                    "label" => "Préfix : ",
+                    "label" => "BDD Préfix : ",
                     "minLength" => 1,
                     "id" => "dbprefix",
                     "class" => "dbprefix",
@@ -121,7 +133,7 @@ class Installer extends Singleton{
                 ],
                 "mailhost" =>[
                     "type" => "text",
-                    "label" => "mailhost : ",
+                    "label" => "Mailhost : ",
                     "minLength" => 1,
                     "id" => "mailhost",
                     "class" => "mailhost",
@@ -131,7 +143,7 @@ class Installer extends Singleton{
                 ],
                 "mailport" =>[
                     "type" => "text",
-                    "label" => "mailport : ",
+                    "label" => "Mailport : ",
                     "minLength" => 1,
                     "id" => "mailport",
                     "class" => "mailport",
@@ -141,7 +153,7 @@ class Installer extends Singleton{
                 ],
                 "mailexp" =>[
                     "type" => "text",
-                    "label" => "mailexp : ",
+                    "label" => "Mail Expediteur : ",
                     "minLength" => 1,
                     "id" => "mailexp",
                     "class" => "mailexp",
