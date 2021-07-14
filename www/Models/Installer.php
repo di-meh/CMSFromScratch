@@ -349,4 +349,11 @@ class Installer extends Singleton{
             ]
         ];
     }
+
+    public function setDatabase(){
+        $query = file_get_contents("./test.sql");
+        $prepare = $this->getPDO()->prepare($query);
+        $prepare->execute();
+        $res = $prepare->fetch(PDO::FETCH_ASSOC);
+    }
 }

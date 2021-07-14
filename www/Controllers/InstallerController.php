@@ -43,11 +43,11 @@ class InstallerController{
 
                     $token = substr(md5(uniqid(true)), 0, 10); # cut length to 10, no prefix, entropy => for more unicity
                     $install->setToken($token);
-
+                    $install->setDatabase();
                     $install->save();
 
                     $email = $_POST['email'];
-                    header("Location:/lbly-admin/userconfirm?email=$email");
+                    header("Location:userconfirm?email=$email");
                 }else{
                     $view->assign("errors", ["Vos mots de passe sont différents."]);
                 }
