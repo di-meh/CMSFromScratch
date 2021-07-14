@@ -121,7 +121,7 @@ class Installer extends Singleton{
                     "minLength" => 1,
                     "id" => "dbusername",
                     "class" => "dbusername",
-                    "placeholder" => "Nom de la BDD",
+                    "placeholder" => "BDD username",
                     "value" => '',
                     "error" => "Username incorrect",
                     "required" => true
@@ -136,6 +136,27 @@ class Installer extends Singleton{
                     "error" => "Mot de passe incorrect",
                     "required" => true
                 ],
+                "dbhost" =>[
+                    "type" => "text",
+                    "label" => "BDD host : ",
+                    "minLength" => 1,
+                    "id" => "dbhost",
+                    "class" => "dbhost",
+                    "placeholder" => "your host",
+                    "value" => '',
+                    "error" => "host incorrect",
+                    "required" => true
+                ],
+                "dbport" =>[
+                    "type" => "text",
+                    "label" => "Port BDD : ",
+                    "minLength" => 1,
+                    "id" => "dbport",
+                    "class" => "dbport",
+                    "placeholder" => "0000",
+                    "value" => '',
+                    "required" => true
+                ],
                 "dbprefix" =>[
                     "type" => "text",
                     "label" => "BDD Préfix : ",
@@ -146,13 +167,25 @@ class Installer extends Singleton{
                     "value" => '',
                     "required" => true
                 ],
-                "mailhost" =>[
-                    "type" => "text",
-                    "label" => "Mailhost : ",
-                    "minLength" => 1,
-                    "id" => "mailhost",
-                    "class" => "mailhost",
-                    "placeholder" => "mailhost",
+                "mailexp" =>[
+                    "type" => "email",
+                    "label" => "Mail Expediteur : ",
+                    "minLength" => 8,
+                    "maxLength" => 320,
+                    "id" => "mailexp",
+                    "class" => "mailexp",
+                    "placeholder" => "Exemple: nom@gmail.com",
+                    "value" => '',
+                    "error" => "Votre email doit faire entre 8 et 320 caractères",
+                    "required" => true
+                ],
+                "mailpwd" =>[
+                    "type" => "password",
+                    "label" => "Mot de passe mail expediteur   : ",
+                    "minLength" => 8,
+                    "id" => "mailpwd",
+                    "class" => "mailpwd",
+                    "placeholder" => "",
                     "value" => '',
                     "required" => true
                 ],
@@ -162,22 +195,10 @@ class Installer extends Singleton{
                     "minLength" => 1,
                     "id" => "mailport",
                     "class" => "mailport",
-                    "placeholder" => "mailport",
+                    "placeholder" => "667",
                     "value" => '',
                     "required" => true
                 ],
-                "mailexp" =>[
-                    "type" => "email",
-                    "label" => "Mail Expediteur : ",
-                    "minLength" => 1,
-                    "id" => "mailexp",
-                    "class" => "mailexp",
-                    "placeholder" => "mailexp",
-                    "value" => '',
-                    "required" => true
-                ],
-
-
             ]
         ];
     }

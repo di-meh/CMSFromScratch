@@ -15,17 +15,30 @@ use App\Core\Router;
 
 class InstallerController{
     public function defaultAction(){
+        if (file_exists("./.env.test")){
+            header("Location:/lbly-admin");
+        }
         $install = new Installer();
         $view = new View("installer","back");
         $form = $install->formInstall();
+        $errors = FormValidator::check($form, $_POST);
 
         if (!empty($_POST)){
-            $content = "DBPRREFIX=".$_POST["dbprefix"]."\n";
-            $handle = fopen("./.env.test", "w+");
-            fwrite($handle, $content);
-            echo "jai echo ce message pour voir affichage avant header";
-            header("Location:/lbly-admin");
-            echo "jai echo ce message pour voir affichage apres header";
+            if (empty($errors)){
+                if ($_POST['pwd'] == $_POST['pwdConfirm']) {
+                    $content = "DBHOST=" . $_POST["dbhost"] . "\n" . "DBNAME=" . $_POST["dbname"] . "\n"
+                        ."DBUSER=" . $_POST["dbuser"] . "\n" ."DBPWD=" . $_POST["pwd"] . "\n"
+                        ."DBPORT=" . $_POST["dbport"] . "\n" ."MAILUSERNAME=" . $_POST["mailexp"] . "\n"
+                        ."MAILPWD=" . $_POST["mailpwd"] . "\n" ."MAILPORT=" . $_POST["mailport"] . "\n";
+                    $handle = fopen("./.env.test", "w+");
+                    fwrite($handle, $content);
+                    header("Location:/lbly-admin");
+                }else{
+                    $view->assign("errors", ["Vos mots de passe sont différents."]);
+                }
+            }else {
+                $view->assign("errors", $errors);
+            }
         }
 
         $view->assign("form", $form);
