@@ -6,10 +6,157 @@ use App\Core\Singleton;
 use PDO;
 
 class Installer extends Singleton{
+    private $id = null;
+    protected $firstname;
+    protected $lastname;
+    protected $email;
+    protected $pwd;
+    protected $country = "fr";
+    protected $status = 0; # role, isConfirmed, isDeleted, isBannished
+    protected $token = '';
+
+    private $table = DBPREFIX . "user";
 
     public function __construct(){
 
     }
+
+    /**
+     * @return string
+     */
+    public function getTable()
+    {
+        return $this->table;
+    }
+
+    /**
+     * @return null
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param null $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * @param mixed $firstname
+     */
+    public function setFirstname($firstname)
+    {
+        $this->firstname = $firstname;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * @param mixed $lastname
+     */
+    public function setLastname($lastname)
+    {
+        $this->lastname = $lastname;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param mixed $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPwd()
+    {
+        return $this->pwd;
+    }
+
+    /**
+     * @param mixed $pwd
+     */
+    public function setPwd($pwd)
+    {
+        $this->pwd = $pwd;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param string $country
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param int $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string $token
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
+    }
+
     public function formInstall(){
         return [
 
@@ -21,25 +168,25 @@ class Installer extends Singleton{
                 "submit" => "Valider"
             ],
             "inputs" => [
-                "name" =>[
+                "lastname" =>[
                     "type" => "text",
                     "label" => "Nom : ",
                     "minLength" => 2,
                     "maxLength" => 255,
-                    "id" => "name",
-                    "class" => "name",
+                    "id" => "lastname",
+                    "class" => "form_input",
                     "placeholder" => "Votre nom",
                     "value" => '',
                     "error" => "Votre nom doit faire entre 2 et 255 caractères",
                     "required" => true
                 ],
-                "prenom" => [
+                "firstname" => [
                     "type" => "text",
                     "label" => "Prenom : ",
                     "minLength" => 2,
                     "maxLength" => 55,
-                    "id" => "prenom",
-                    "class" => "prenom",
+                    "id" => "firstname",
+                    "class" => "form_input",
                     "placeholder" => "Votre nom",
                     "value" => '',
                     "error" => "Votre prénom doit faire entre 2 et 256 caractères",
@@ -51,7 +198,7 @@ class Installer extends Singleton{
                     "minLength" => 8,
                     "maxLength" => 320,
                     "id" => "email",
-                    "class" => "email",
+                    "class" => "form_input",
                     "placeholder" => "Exemple: nom@gmail.com",
                     "value" => '',
                     "error" => "Votre email doit faire entre 8 et 320 caractères",
@@ -98,7 +245,7 @@ class Installer extends Singleton{
                     "minLength" => 2,
                     "maxLength" => 55,
                     "id" => "site",
-                    "class" => "site",
+                    "class" => "form_input",
                     "placeholder" => "Votre site",
                     "value" => '',
                     "error" => "Votre site doit faire entre 2 et 256 caractères",
@@ -109,7 +256,7 @@ class Installer extends Singleton{
                     "label" => "Nom de la BDD : ",
                     "minLength" => 1,
                     "id" => "dbname",
-                    "class" => "dbname",
+                    "class" => "form_input",
                     "placeholder" => "Nom de la BDD",
                     "value" => '',
                     "error" => "BDD introuvable",
@@ -120,7 +267,7 @@ class Installer extends Singleton{
                     "label" => "BDD username : ",
                     "minLength" => 1,
                     "id" => "dbusername",
-                    "class" => "dbusername",
+                    "class" => "form_input",
                     "placeholder" => "BDD username",
                     "value" => '',
                     "error" => "Username incorrect",
@@ -141,7 +288,7 @@ class Installer extends Singleton{
                     "label" => "BDD host : ",
                     "minLength" => 1,
                     "id" => "dbhost",
-                    "class" => "dbhost",
+                    "class" => "form_input",
                     "placeholder" => "your host",
                     "value" => '',
                     "error" => "host incorrect",
@@ -152,7 +299,7 @@ class Installer extends Singleton{
                     "label" => "Port BDD : ",
                     "minLength" => 1,
                     "id" => "dbport",
-                    "class" => "dbport",
+                    "class" => "form_input",
                     "placeholder" => "0000",
                     "value" => '',
                     "required" => true
@@ -162,7 +309,7 @@ class Installer extends Singleton{
                     "label" => "BDD Préfix : ",
                     "minLength" => 1,
                     "id" => "dbprefix",
-                    "class" => "dbprefix",
+                    "class" => "form_input",
                     "placeholder" => "abcde",
                     "value" => '',
                     "required" => true
@@ -173,7 +320,7 @@ class Installer extends Singleton{
                     "minLength" => 8,
                     "maxLength" => 320,
                     "id" => "mailexp",
-                    "class" => "mailexp",
+                    "class" => "form_input",
                     "placeholder" => "Exemple: nom@gmail.com",
                     "value" => '',
                     "error" => "Votre email doit faire entre 8 et 320 caractères",
@@ -184,7 +331,7 @@ class Installer extends Singleton{
                     "label" => "Mot de passe mail expediteur   : ",
                     "minLength" => 8,
                     "id" => "mailpwd",
-                    "class" => "mailpwd",
+                    "class" => "form_input",
                     "placeholder" => "",
                     "value" => '',
                     "required" => true
@@ -194,7 +341,7 @@ class Installer extends Singleton{
                     "label" => "Mailport : ",
                     "minLength" => 1,
                     "id" => "mailport",
-                    "class" => "mailport",
+                    "class" => "form_input",
                     "placeholder" => "667",
                     "value" => '',
                     "required" => true
