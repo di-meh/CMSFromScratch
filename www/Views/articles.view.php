@@ -4,6 +4,7 @@
             <div class="card">
                 <h6 class="card-title">Vos articles</h6>
                 <div class="card-content">
+                    <a id="" href="articles/add"><button class="btn btn-primary">Ajouter un article</button></a>
 
                     <?php if (isset($articles)) :?>
                         <?php if (empty($articles)) :?>
@@ -22,7 +23,8 @@
                                     <td><?=$article["title"];?></td>
                                     <td><?=$article["created"];?></td>
                                     <td><a href="<?=$article["slug"]?>">Voir</a></td>
-                                    <td><a href="articles/edit?article=<?=$article["id"]?>">Modifier</a></td>
+                                    <td><a href="articles/edit/<?=$article["slug"]?>">Modifier</a></td>
+                                    <td><a href="articles/delete/<?=$article["slug"]?>">Supprimer</a></td>
                                 </tr>
                                 <?php
                             }
@@ -31,7 +33,6 @@
                         </tbody>
                         </table>
                     <?php endif; ?>
-                    <a id="" href="articles/add"><button class="btn btn-primary">Ajouter un article</button></a>
                 </div>
             </div>
         </div>

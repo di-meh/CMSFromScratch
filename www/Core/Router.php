@@ -21,7 +21,6 @@ class Router
 		if(file_exists($this->routesPath)){
 			//[/] => Array ( [controller] => Global [action] => default )
 			$this->routes = yaml_parse_file($this->routesPath);
-
 			if( !empty($this->routes[$this->uri]) && $this->routes[$this->uri]["controller"] && $this->routes[$this->uri]["action"]){
 
 				$this->setController($this->routes[$this->uri]["controller"]);
@@ -30,11 +29,19 @@ class Router
                 $this->setController("Page");
                 $this->setAction("seePage");
 				
-			}elseif (!empty($article->getAllBySlug($this->uri))){
+			}elseif (substr($this->uri, 0, 10) == "/articles/" && !empty($article->getAllBySlug(substr($this->uri, 10)))){
                 $this->setController("Article");
                 $this->setAction("viewArticle");
 
-            }else{
+            }elseif (substr($this->uri, 0, 26) === "/lbly-admin/articles/edit/" && !empty($article->getAllBySlug(substr($this->uri, 26)))){
+                $this->setController("Article");
+                $this->setAction("editArticle");
+
+            }elseif (substr($this->uri, 0, 28) === "/lbly-admin/articles/delete/" && !empty($article->getAllBySlug(substr($this->uri, 28)))){
+                $this->setController("Article");
+                $this->setAction("deleteArticle");
+
+			}else{
                 header("HTTP/1.0 404 Not Found");
 			    $view = new View('404');
             }

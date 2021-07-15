@@ -19,8 +19,9 @@ class FormBuilder
 		foreach ($form["inputs"] as $name => $configInput) {
 
 			$html .= "<div class='input-group'>";
-			$html .= "<label for='" . ($configInput["id"] ?? "") . "'>" . ($configInput["label"] ?? "") . " </label>";
-			if ($configInput["type"] == "select") {
+			if (!isset($configInput["label"])) {
+				$html .= "<label for='" . ($configInput["id"] ?? "") . "'>" . ($configInput["label"] ?? "") . " </label>";
+			} elseif ($configInput["type"] == "select") {
 				$html .= self::renderSelect($name, $configInput);
 			} elseif ($configInput["type"] == "textarea") {
 				$html .= self::renderTextArea($name, $configInput);

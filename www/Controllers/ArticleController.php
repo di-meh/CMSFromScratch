@@ -41,7 +41,7 @@ class ArticleController{
 				if (empty($_POST['content'])){
 					$view->assign("errors", ["Veuillez remplir tous les champs"]);
 				}else{
-					$article->setSlug('/articles/' . $article->title2slug($_POST['title']));
+					$article->setSlug($article->title2slug($_POST['title']));
 					if (empty($article->getAllBySlug($article->getSlug()))){
 						$article->save();
 						header("Location:/lbly-admin/articles");
@@ -67,7 +67,11 @@ class ArticleController{
 
 		$view = new View("editArticle","back"); # appelle View/editProfil.view.php
 		$article = new Article();
-		$article->setAllById($_GET['article']);
+
+		$uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
+        $uri = substr($uriExploded[0], 26);
+
+		$article->setAllBySlug($uri);
 		$form = $article->formEditArticle();
 
 		if(!empty($_POST)){
@@ -106,6 +110,19 @@ class ArticleController{
 		$view->assign("form", $form); # affiche le formulaire
 	}
 
+	public function deleteArticleAction(){
+
+		$user = Security::getConnectedUser();
+		if(is_null($user)) header("Location:/lbly-admin/login");
+
+		$view = new View("articles","back");
+		$article = new Article();
+		$articles = $article->all();
+        $view->assign("articles", $articles);
+        $view->assign("modal", true);
+
+	}
+
 	public function viewArticleAction(){
 
 		session_start();
@@ -116,7 +133,7 @@ class ArticleController{
 
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
 
-        $uri = $uriExploded[0];
+        $uri = substr($uriExploded[0], 10);
 
         $articles = $article->getAllBySlug($uri);
         $view->assign("article", $articles[0]);

@@ -124,7 +124,7 @@ class Article extends Singleton
             "inputs" => [
                 "title" => [
                     "type" => "text",
-                    "label" => "Editez le titre",
+                    "label" => "Titre",
                     "minLength" => 2,
                     "maxLength" => 60,
                     "id" => "title",
@@ -166,7 +166,7 @@ class Article extends Singleton
             "inputs" => [
                 "title" => [
                     "type" => "text",
-                    "label" => "Editez le titre",
+                    "label" => "Titre",
                     "minLength" => 2,
                     "maxLength" => 60,
                     "id" => "title",
@@ -236,6 +236,21 @@ class Article extends Singleton
     public function setAllById($id)
     {
         $res = $this->getAllById($id);
+        $res = $res[0];
+        $this->setId($res['id']);
+        $this->setAuthor($res['author']);
+        $this->setTitle($res['title']);
+        $this->setSlug($res['slug']);
+        $this->setContent($res['content']);
+        $this->setCreated($res['created']);
+        $this->setPublished($res['published']);
+        $this->setModified($res['modified']);
+        $this->setStatus($res['status']);
+    }
+
+    public function setAllBySlug($slug)
+    {
+        $res = $this->getAllBySlug($slug);
         $res = $res[0];
         $this->setId($res['id']);
         $this->setAuthor($res['author']);
