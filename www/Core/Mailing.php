@@ -84,25 +84,20 @@ class Mailing{
 	}
 
 	public function sendMail(){
-		/*
-			if(empty($this->content))
-				return;
-			$this->setTemplate();
 
-		*/
 		try {
 		    //Server settings
-		    #$this->mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-		    $this->mail->isSMTP();                                            //Send using SMTP
-		    $this->mail->Host       = 'smtp.office365.com';                     //Set the SMTP server to send through
-		    $this->mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-		    $this->mail->Username   = MAILUSERNAME;                     //SMTP username
-		    $this->mail->Password   = MAILPWD;                               //SMTP password
-		    $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-		    $this->mail->Port       = MAILPORT;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+		    $this->mail->SMTPDebug = SMTP::DEBUG_SERVER;                      
+		    $this->mail->isSMTP();                                            
+		    $this->mail->Host       = MAILHOST;
+		    $this->mail->SMTPAuth   = true;                                   
+		    $this->mail->Username   = MAILUSERNAME;                  
+		    $this->mail->Password   = MAILPWD;                               
+		    $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+		    $this->mail->Port       = MAILPORT;                                  
 
 		    //Recipients
-		    $this->mail->setFrom(MAILUSERNAME, 'LIBLY');
+		    $this->mail->setFrom('libly@outlook.fr', 'LIBLY');
 		    $this->mail->addAddress($this->recipient);
 
 		    $this->mail->isHTML(true);

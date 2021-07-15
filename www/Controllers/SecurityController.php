@@ -425,7 +425,7 @@ class SecurityController
 		$mailing->mailConfirm($user); # set mail confirmation content
 		$mailing->setRecipient($_GET['email']);
 		$mailing->sendMail();
-
+		echo "Message has been sent.";
 		#header("Location: /lbly-admin/login");
 		
 	}
