@@ -145,6 +145,7 @@ class PageController
         }
 
         if (!empty($_POST["delete"])){
+            $page->deleteSelectedPage($page->getId());
             header("Location:/lbly-admin/pages");
         }
 

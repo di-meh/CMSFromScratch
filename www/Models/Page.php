@@ -284,4 +284,10 @@ class Page extends Singleton
         $this->setSlug($res['slug']);
         $this->setEditSlug($res['editSlug']);
     }
+
+    public function deleteSelectedPage($id){
+        $query = "DELETE FROM " . $this->getTable() . " WHERE " . $this->getId() . " = '" . $id ."'";
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
+    }
 }
