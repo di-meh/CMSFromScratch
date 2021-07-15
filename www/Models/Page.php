@@ -237,9 +237,9 @@ class Page extends Singleton
                 "btn_class" => "btn btn-danger"
             ],
             "inputs" => [
-                "id" => [
+                "delete" => [
                     "type" => "hidden",
-                    "label" => "",
+                    "label" => "Voulez vous supprimez cette page ?",
                     "id" => "title",
                     "class" => "form_input",
                     "value" => $this->id,

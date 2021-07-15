@@ -23,7 +23,6 @@
                                     <td><?php echo $page["createdAt"];?></td>
                                     <td><a href="<?=$page['slug']?>">Voir ma page</a></td>
                                     <td><a href="<?=$page['editSlug']?>">Modifier / Supprimer ma page</a></td>
-                                    <td><?php App\Core\FormBuilder::render($form); ?></td>
                                     <!--<td><//?php echo $page["slug"];?></td>-->
                                 </tr>
                                 <?php

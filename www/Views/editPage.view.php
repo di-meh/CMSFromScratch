@@ -10,6 +10,10 @@
                     <?php if (isset($form)) : ?>
                         <?php App\Core\FormBuilder::render($form); ?>
                     <?php endif; ?>
+                    <br>
+                    <?php if (isset($formdelete)) : ?>
+                        <?php App\Core\FormBuilder::render($formdelete); ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

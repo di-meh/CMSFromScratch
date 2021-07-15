@@ -22,10 +22,10 @@ class PageController
 
         $page = new Page();
         $view = new View("pages","back");
-        $form = $page->formDeletePage();
+        //$form = $page->formDeletePage();
         $pages = $page->all();
         $view->assign("pages", $pages);
-        $view->assign("form", $form);
+       // $view->assign("form", $form);
 	}
 
 	public function addPageAction(){
@@ -104,6 +104,7 @@ class PageController
         //$page = $page->getAllByEditSlug($uri);
         $page->setAllByEditSlug($uri);
         $form = $page->formEditPage();
+        $formdelete = $page->formDeletePage();
 
         $errors = FormValidator::check($form, $_POST);
 
@@ -143,6 +144,11 @@ class PageController
             }
         }
 
+        if (!empty($_POST["delete"])){
+            header("Location:/lbly-admin/pages");
+        }
+
+        $view->assign("formdelete", $formdelete);
         $view->assign("form", $form);
 
     }
