@@ -262,4 +262,10 @@ class Article extends Singleton
         $this->setModified($res['modified']);
         $this->setStatus($res['status']);
     }
+
+    public function deleteBySlug($slug){
+        $query = "DELETE FROM " . $this->getTable() . " WHERE slug  = '" . $slug ."'";
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
+    }
 }
