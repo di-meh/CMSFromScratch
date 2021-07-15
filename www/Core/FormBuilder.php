@@ -31,7 +31,7 @@ class FormBuilder
 			$html .= "</div>";
 		}
 
-		$html .= "<button type='submit' value=\"" . ($form["config"]["submit"] ?? "Valider") . "\" class='btn btn-primary'>" . ($form["config"]["submit"] ?? "Valider") . "</button>";
+		$html .= "<button type='submit' value=\"" . ($form["config"]["submit"] ?? "Valider") . "\" class=\"".($form["config"]["btn_class"] ?? "btn btn-primary") ."\">" . ($form["config"]["submit"] ?? "Valider") . "</button>";
 
 		$html .= "</form>";
 

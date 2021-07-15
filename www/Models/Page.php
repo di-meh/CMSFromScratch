@@ -233,11 +233,13 @@ class Page extends Singleton
                 "action" => "",
                 "id" => "form_deletepage",
                 "class" => "form_builder",
-                "submit" => "Supprimer"
+                "submit" => "Supprimer",
+                "btn_class" => "btn btn-danger"
             ],
             "inputs" => [
                 "id" => [
                     "type" => "hidden",
+                    "label" => "",
                     "id" => "title",
                     "class" => "form_input",
                     "value" => $this->id,

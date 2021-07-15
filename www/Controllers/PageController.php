@@ -22,9 +22,10 @@ class PageController
 
         $page = new Page();
         $view = new View("pages","back");
-
+        $form = $page->formDeletePage();
         $pages = $page->all();
         $view->assign("pages", $pages);
+        $view->assign("form", $form);
 	}
 
 	public function addPageAction(){
