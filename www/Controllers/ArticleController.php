@@ -118,8 +118,15 @@ class ArticleController{
 		$view = new View("articles","back");
 		$article = new Article();
 		$articles = $article->all();
+
+		$uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
+        $uri = substr($uriExploded[0], 28);
+
+        $article = $article->getAllBySlug($uri);
+
         $view->assign("articles", $articles);
-        $view->assign("modal", true);
+        $view->assign("article", $article[0]);
+        $view->assign("deletemodal", true);
 
 	}
 
@@ -134,7 +141,6 @@ class ArticleController{
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
 
         $uri = substr($uriExploded[0], 10);
-
         $articles = $article->getAllBySlug($uri);
         $view->assign("article", $articles[0]);
 
