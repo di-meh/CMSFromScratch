@@ -56,7 +56,7 @@
 
 /lbly-admin/category:
   controller: Category
-  action: addcategory
+  action: index
 
 /lbly-admin/books:
   controller: Book
