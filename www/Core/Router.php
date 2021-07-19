@@ -13,23 +13,22 @@ class Router
 	private $action;
 
 	public function __construct($uri){
-	    $page = new Page();
-	    $article = new Article();
-
-
 		$this->setUri($uri);
         if ($this->uri == "/installer"){
-            if (!file_exists("./.env.test")){
-                $this->setUri("/installer");
+            if (!file_exists("./.env")){
                 $this->setController("Installer");
                 $this->setAction("default");
             }else{
                 header("Location:/lbly-admin");
             }
         }elseif(file_exists($this->routesPath)){
-            if (!file_exists("./.env.test")){
+            if (!file_exists("./.env")){
                 header("Location:/installer");
             }
+			
+			$page = new Page();
+			$article = new Article();
+
 			//[/] => Array ( [controller] => Global [action] => default )
 			$this->routes = yaml_parse_file($this->routesPath);
 

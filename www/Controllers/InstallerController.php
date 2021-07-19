@@ -16,11 +16,11 @@ use App\Core\Router;
 
 class InstallerController{
     public function defaultAction(){
-        if (file_exists("./.env.test")){
+        if (file_exists("./.env")){
             header("Location:/lbly-admin");
         }
         $install = new User();
-        $view = new View("installer","back");
+        $view = new View("installer","front");
         $form = $install->formInstall();
         $errors = FormValidator::check($form, $_POST);
 
@@ -32,7 +32,7 @@ class InstallerController{
                             ."DBPWD=" . $_POST["pwd"] . "\n" ."DBPORT=" . $_POST["dbport"] . "\n"
                             ."MAILUHOST=" . $_POST["mailhost"] . "\n" ."MAILUSERNAME=" . $_POST["mailexp"] . "\n"
                             ."MAILPWD=" . $_POST["mailpwd"] . "\n" ."MAILPORT=" . $_POST["mailport"] . "\n";
-                        $handle = fopen("./.env.test", "w+");
+                        $handle = fopen("./.env", "w+");
                         fwrite($handle, $content);
 
                         $pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);

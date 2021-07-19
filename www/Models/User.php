@@ -17,7 +17,7 @@ class User extends Singleton
     protected $status = 0; # role, isConfirmed, isDeleted, isBannished
     protected $token = '';
 
-    private $table = DBPREFIX . "user";
+    private $table =  "lbly_user";
 
     public function __construct()
     {

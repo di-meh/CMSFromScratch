@@ -12,9 +12,7 @@ class ConstantMaker
 
 		$this->defineUserStatus();
 
-		if(!file_exists($this->envPath)){
-			die("Le fichier ".$this->envPath." n'existe pas");
-		}
+		
 
 		//.env
 		$this->parseEnv($this->envPath);

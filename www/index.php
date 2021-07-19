@@ -15,8 +15,9 @@ require "Autoload.php";
 
 Autoload::register();
 
-
-new ConstantMaker();
+if(file_exists('./.env')){
+	new ConstantMaker();
+}
 
 
 
