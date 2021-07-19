@@ -83,8 +83,7 @@ CREATE TABLE `lbly_page` (
   `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `createdBy` int(11) NOT NULL,
-  `slug` varchar(70) NOT NULL,
-  `editSlug` varchar(75) NOT NULL
+  `slug` varchar(70) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------

@@ -18,15 +18,11 @@ class Router
 
 
 		$this->setUri($uri);
-        if (file_exists("./.env.test")){
-            $this->setController("Security");
-            $this->setAction("login");
-        }else{
+        if (!file_exists("./.env.test")){
             $this->setUri("/installer");
             $this->setController("Installer");
             $this->setAction("default");
-        }
-		if(file_exists($this->routesPath)){
+        }elseif(file_exists($this->routesPath)){
 			//[/] => Array ( [controller] => Global [action] => default )
 			$this->routes = yaml_parse_file($this->routesPath);
 
