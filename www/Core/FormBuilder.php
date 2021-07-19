@@ -19,9 +19,10 @@ class FormBuilder
 		foreach ($form["inputs"] as $name => $configInput) {
 
 			$html .= "<div class='input-group'>";
-			if (!isset($configInput["label"])) {
+			if (isset($configInput["label"])) {
 				$html .= "<label for='" . ($configInput["id"] ?? "") . "'>" . ($configInput["label"] ?? "") . " </label>";
-			} elseif ($configInput["type"] == "select") {
+			}
+			if ($configInput["type"] == "select") {
 				$html .= self::renderSelect($name, $configInput);
 			} elseif ($configInput["type"] == "textarea") {
 				$html .= self::renderTextArea($name, $configInput);
@@ -33,6 +34,19 @@ class FormBuilder
 		}
 
 		$html .= "<button type='submit' value=\"" . ($form["config"]["submit"] ?? "Valider") . "\" class=\"".($form["config"]["btn_class"] ?? "btn btn-primary") ."\">" . ($form["config"]["submit"] ?? "Valider") . "</button>";
+
+		// if(isset($form["buttons"])){
+
+		// 	foreach ($form["buttons"] as $name => $configButton) {
+
+		// 		$html .= "<a id='" . ($configButton["id"] ?? "") . "' class='" . ($configButton["class"] ?? "") . "' ";
+		// 		if (isset($configButton["href"])) {
+		// 			$html .= "href='" . ($configButton["href"] ?? "") . "'><button class='" . ($configButton["btn_class"] ?? "") . "'>" . ($configButton["text"] ?? "");
+		// 		}
+	
+		// 		$html .= "</button></a>";
+		// 	}
+		// }
 
 		$html .= "</form>";
 

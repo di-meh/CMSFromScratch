@@ -193,6 +193,31 @@ class Article extends Singleton
         ];
     }
 
+    public function formDeleteArticle(){
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "form_deletearticle",
+                "class" => "form_builder",
+                "submit" => "Supprimer",
+                "btn_class" => "btn btn-danger"
+            ],
+            "inputs" => [
+                "delete" => [
+                    "type" => "hidden",
+                    "label" => "Voulez vous supprimez cet article : ".$this->title." ?",
+                    "id" => "title",
+                    "class" => "form_input",
+                    "value" => $this->slug,
+                    "error" => "slug not found",
+                    "required" => true
+                ]
+            ]
+
+        ];
+    }
+
     public function title2slug($title){
         $title = preg_replace('~[^\pL\d]+~u', '-', $title);
 

@@ -5,8 +5,11 @@
                 <div class="card">
                     <h6 class="card-title">Delete Modal</h6>
                     <div class="card-content">
-                        <p>Voulez vous supprimer cette page : <?=$article["title"]?> ?<br/><br/>
-                        <a id="" href=""><button class="btn btn-primary">Supprimer</button></a>
+                        <?php if (isset($formdelete)) : ?>
+                            <?php App\Core\FormBuilder::render($formdelete); ?>
+                        <?php endif; ?>
+                        <!-- <a id="" href=""><button class="btn btn-primary">Supprimer</button></a> -->
+                        <br/>
                         <a id="" href="/lbly-admin/articles"><button class="btn btn-danger">Annuler</button></a>
                     </div>
                 </div>
@@ -16,6 +19,7 @@
                 <h6 class="card-title">Vos articles</h6>
                 <div class="card-content">
                     <a id="" href="articles/add"><button class="btn btn-primary">Ajouter un article</button></a>
+                    <br/><br/>
 
                     <?php if (isset($articles)) :?>
                         <?php if (empty($articles)) :?>

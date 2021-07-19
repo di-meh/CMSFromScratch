@@ -122,21 +122,34 @@ class ArticleController{
 		$uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
         $uri = substr($uriExploded[0], 28);
 
-        $article = $article->getAllBySlug($uri);
+        $article->setAllBySlug($uri);
+        $articlecontent = $article->getAllBySlug($uri)[0];
+
+		if (!empty($_POST["delete"])){
+            $article->deleteBySlug($uri);
+            header("Location:/lbly-admin/articles");
+        }
 
         $view->assign("articles", $articles);
-        $view->assign("article", $article[0]);
+        $view->assign("article", $articlecontent);
         $view->assign("deletemodal", true);
+
+		// var_dump($article->formDeleteArticle());
+        $formdelete = $article->formDeleteArticle();
+        $view->assign("formdelete", $formdelete);
+		
+
 
 	}
 
-	public function viewArticleAction(){
+
+	public function seeArticleAction(){
 
 		session_start();
 
         $article = new Article();
 
-        $view = new View("viewArticle");
+        $view = new View("seeArticle");
 
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
 
