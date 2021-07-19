@@ -18,11 +18,18 @@ class Router
 
 
 		$this->setUri($uri);
-        if (!file_exists("./.env.test")){
-            $this->setUri("/installer");
-            $this->setController("Installer");
-            $this->setAction("default");
+        if ($this->uri == "/installer"){
+            if (!file_exists("./.env.test")){
+                $this->setUri("/installer");
+                $this->setController("Installer");
+                $this->setAction("default");
+            }else{
+                header("Location:/lbly-admin");
+            }
         }elseif(file_exists($this->routesPath)){
+            if (!file_exists("./.env.test")){
+                header("Location:/installer");
+            }
 			//[/] => Array ( [controller] => Global [action] => default )
 			$this->routes = yaml_parse_file($this->routesPath);
 
