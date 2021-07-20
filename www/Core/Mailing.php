@@ -62,10 +62,11 @@ class Mailing{
 	# prepare mail to confirm user account
 	public function mailConfirm($user){
 
-		$this->setSubject('Veuillez confirmer votre compte Libly !');
+		$this->setSubject(utf8_decode('Un nouvel utilisateur a été créé'));
 		$id = $user->getId();
 		$token = $user->getToken();
-		$content = "Validez votre compte en cliquant sur ce lien : <a href='http://localhost/lbly-admin/uservalidated?id=$id&token=$token'>Confirmer mon compte !</a>";
+		$content = utf8_decode("Un compte avec le mail ". $user->getEmail()." a été créé. ");
+		$content .= "Validez le en cliquant sur ce lien : <a href='http://localhost/lbly-admin/uservalidated?id=$id&token=$token'>Confirmer mon compte !</a>";
 		$this->setContent($content);
 								
 		# set template, set subject, set content

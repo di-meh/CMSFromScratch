@@ -312,13 +312,11 @@ class SecurityController
 		if($user->verifyUser($id,$token) == 1){ # check user in db with this id and token couple
 
 			$user->setAllFromId($id);
-			$user->addStatus(USERVALIDATED);; # status USERVALIDATED = 2
+			$user->addStatus(USERVALIDATED);
 
 			$user->setToken(Helpers::createToken());
 
 			$user->save();
-			session_start();
-			$_SESSION['id'] = $user->getId();
 
 			header("Location:/lbly-admin"); # temporairement
 
@@ -506,11 +504,18 @@ class SecurityController
 	public function registerAction()
 	{
 
-		$user = new User();
+		session_start();
+		if(isset($_SESSION['id'])){
+			$user = new User();
+			$user->setAllFromId($_SESSION['id']);
+		}
+
+
+		$userRegister = new User();
 
 		$view = new View("register");
 
-		$form = $user->formRegister();
+		$form = $userRegister->formRegister();
 
 		if (!empty($_POST)) {
 
@@ -525,7 +530,7 @@ class SecurityController
 
 			if (empty($errors)) {
 
-				$mailExists = $user->verifyMail($_POST['email'], $user->getTable());
+				$mailExists = $userRegister->verifyMail($_POST['email'], $userRegister->getTable());
 				# verify unicity in database
 
 
@@ -535,18 +540,28 @@ class SecurityController
 
 						$pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
 
-						$user->setFirstname(htmlspecialchars($_POST["firstname"]));
-						$user->setLastname(htmlspecialchars($_POST["lastname"]));
-						$user->setEmail(htmlspecialchars($_POST["email"]));
-						$user->setPwd($pwd);
-						$user->setCountry($_POST["country"]);
+						$userRegister->setFirstname(htmlspecialchars($_POST["firstname"]));
+						$userRegister->setLastname(htmlspecialchars($_POST["lastname"]));
+						$userRegister->setEmail(htmlspecialchars($_POST["email"]));
+						$userRegister->setPwd($pwd);
+						$userRegister->setCountry($_POST["country"]);
 
-						$user->setToken(Helpers::createToken());
+						$userRegister->setToken(Helpers::createToken());
 
-						$user->save();
+						if(isset($user) && $user->isAdmin()){
+							$userRegister->addStatus(USERVALIDATED);
+							header("Location: /lbly-admin/adminview");
 
-						$email = $_POST['email'];
-						header("Location: userconfirm?email=$email");
+
+						}else{
+
+							$email = $_POST['email'];
+							header("Location: userconfirm?email=$email");
+
+						}	
+
+							$userRegister->save();
+
 
 					}else{
 						$view->assign("errors", ["Vos mots de passe sont différents."]);
@@ -569,11 +584,11 @@ class SecurityController
 		if(is_null($_GET['email']) || empty($_GET['email']))
 			header("Location: /");
 
-		$user->setAllFromEmail($_GET['email']); # to get user id
+		$user->setAllFromEmail($_GET['email']);
 
 		$mailing = Mailing::getMailing();
-		$mailing->mailConfirm($user); # set mail confirmation content
-		$mailing->setRecipient($_GET['email']);
+		$mailing->mailConfirm($user);
+		$mailing->setRecipient(MAILUSERNAME);
 		$mailing->sendMail();
 		header("Location: /lbly-admin/login");
 		

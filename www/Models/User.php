@@ -43,7 +43,7 @@ class User extends Singleton
         $this->setFirstname($res['firstname']);
         $this->setLastname($res['lastname']);
         $this->setEmail($email);
-        $this->setCountry($res['country']);
+        $this->setCountry($res['country']??'');
         $this->setStatus($res['status']);
         $this->setToken($res['token'] ?? '');
 
