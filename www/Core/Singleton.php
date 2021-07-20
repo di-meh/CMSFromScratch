@@ -44,6 +44,14 @@ class Singleton
 		$prepare->execute();
 	}
 
+	/*	delete one tuple from child table	*/
+	public function delete(){
+		$query = "DELETE FROM ". $this->getTable()." WHERE id=".$this->getId();
+		$prepare = self::$pdo->prepare($query);
+		$prepare->execute();
+
+	}
+
 	public function save()
 	{
 

@@ -38,6 +38,10 @@
   controller: Security
   action: getAllUsers
 
+/deleteuser:
+  controller: Security
+  action: deleteUser
+
 /lbly-admin/uservalidated:
   controller: Security
   action: uservalidated

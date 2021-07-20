@@ -278,6 +278,29 @@ class User extends Singleton
 
     }
 
+    public function formDelete(){
+        return [
+
+            "config" => [
+                    "method" => "POST",
+                    "action" => "",
+                    "id" => "form_delete",
+                    "class" => "form_builder",
+                    "submit" => "Valider"
+                ],
+            "inputs" => [
+                "pwdConfirm" => [
+                    "type" => "password",
+                    "label" => "Confirmez avec votre mot de passe",
+                    "id" => "confirmpwd",
+                    "class" => "form_input",
+                    "placeholder" => "",
+                    "required" => true
+                ]
+            ]
+        ];
+    }
+
     public function formForgetPwd(){
         return [
 

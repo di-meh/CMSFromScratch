@@ -30,19 +30,95 @@ class SecurityController
         $user = Secu::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
-		$view = new View("admin","back");
 
 		if($user->isAdmin()){
+			$view = new View("admin","back");
 
 			$users = $user->all();
 
 			$view->assign("users", $users);
 
 		}else{
-			echo "UNAUTHORIZED TO NON ADMIN USERS";
-			# raise a 403 for 5 seconds then redirect
+			header("HTTP/1.0 403 Forbidden");
+		 	$view = new View('403');
 		}
 
+
+
+	}
+
+	/*	
+	*	superadmin can modify all users status
+	*	admin can modify all users status except admin
+	*/
+	public function modifyStatus(){
+
+	}
+
+	/*	delete user form asking for the user pwd or the admin pwd	*/
+	public function deleteUserAction(){
+
+		$user = Secu::getConnectedUser();
+		if(is_null($user)) header("Location:/lbly-admin/login");
+
+		$view = new View("deleteuser");
+
+		$form = $user->formDelete(); # confirm pwd of the user or the admin
+
+		$userDelete = new User();
+
+		$self = false; # not self delete
+
+		# admin can delete a user 
+		if(isset($_GET['userid']) && $user->isAdmin()){
+			if($_GET['userid'] == $user->getId())
+				$self = true;
+			$userDelete->setAllFromId($_GET['userid']);
+
+		}else if(isset($_GET['userid']) && !$user->isAdmin()){
+			header("Location: /");
+
+		# user delete himself
+		}else{ 
+			$userDelete = $user;
+			$self = true;
+		}
+
+		$mailExists = $user->verifyMail($userDelete->getEmail());
+
+		if($mailExists == 1){
+
+			if(isset($_POST['pwdConfirm'])){
+
+				if(password_verify($_POST['pwdConfirm'], $user->getPwd())){
+					$userDelete->delete();
+					$view->assign("infos", ["Le compte ".$userDelete->getEmail()." a bien été supprimé."]);
+					$view->assign("infos", ["Vous allez être redirigé."]);
+
+					if($self)
+						header("Refresh:4; url=/lbly-admin/logout", true, 303); 
+					else
+						header("Refresh:4; url=/", true, 303);
+
+
+				}else{
+					$view->assign("errors", ["Le mot de passe est erroné"]);
+
+				}
+				
+
+			}
+
+
+		}else{
+
+			$view->assign("errors",["mail not exist"]);
+
+			#header("Location: /");
+
+		}
+			
+		$view->assign("form", $form);
 
 
 	}
