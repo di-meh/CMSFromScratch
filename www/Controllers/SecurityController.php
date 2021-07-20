@@ -40,6 +40,7 @@ class SecurityController
 
 		}else{
 			echo "UNAUTHORIZED TO NON ADMIN USERS";
+			# raise a 403 for 5 seconds then redirect
 		}
 
 
