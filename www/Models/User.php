@@ -837,7 +837,7 @@ class User extends Singleton
                   `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                   `updatedAt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
                   `createdBy` int(11) NOT NULL,
-                  `slug` varchar(70) NOT NULL,
+                  `slug` varchar(70) NOT NULL
                 ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
         $prepare = $this->getPDO()->prepare($query);
         $prepare->execute();
