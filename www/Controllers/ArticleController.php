@@ -35,7 +35,7 @@ class ArticleController{
 		if (!empty($_POST)) {
 			
 		    if (empty($errors)){
-				$article->setTitle($_POST['title']);
+				$article->setTitle(htmlspecialchars($_POST['title']));
 				$article->setAuthor($user->getID());
 				$article->setContent($_POST['content']);
 				if (empty($_POST['content'])){
@@ -78,7 +78,7 @@ class ArticleController{
 			if($_POST['title'] != $article->getTitle()){ # changer le prenom
 
 				if (!empty($_POST['title'])){
-					$article->setTitle($_POST['title']);
+					$article->setTitle(htmlspecialchars($_POST['title']));
 					$article->setSlug('/articles/' . $article->title2slug($_POST['title']));
 					if (empty($article->getAllBySlug($article->getSlug()))){
 						$article->save();

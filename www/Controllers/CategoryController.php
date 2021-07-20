@@ -23,8 +23,8 @@ class CategoryController {
                 if (empty($_POST['nameCategory'])){
                     $view->assign("errors", ["Veuillez saisir un nom de catégorie."]);
                 }else{
-                $category->setNameCategory($_POST['nameCategory']);
-                $category->setColorCategory($_POST['colorCategory']);
+                $category->setNameCategory(htmlspecialchars($_POST['nameCategory']));
+                $category->setColorCategory(htmlspecialchars($_POST['colorCategory']));
 
                     if (!empty($category->checkCategory($category->getNameCategory()))){
                         $view->assign("errors", ["La catégorie existe déjà!"]);

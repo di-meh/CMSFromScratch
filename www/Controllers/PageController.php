@@ -90,7 +90,7 @@ class PageController
 			if($_POST['title'] != $page->getTitle()){ # changer le prenom
 
 				if (!empty($_POST['title'])){
-					$page->setTitle($_POST['title']);
+					$page->setTitle(htmlspecialchars($_POST['title']));
 					$page->setSlug($page->title2slug($_POST['title']));
 					if (empty($page->getAllBySlug($page->getSlug()))){
 						$page->save();
