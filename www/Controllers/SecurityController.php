@@ -97,6 +97,16 @@ class SecurityController
 
 					}
 
+					if(isset($_POST['validated'])){
+						$userModified->addStatus(USERVALIDATED);
+						$view->assign("infos", [$userModified->getEmail()." a été validé."]);
+
+
+					}else{
+						$userModified->unflagStatus(USERVALIDATED);
+
+					}
+
 					$userModified->save();
 
 				}else{
