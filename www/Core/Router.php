@@ -31,20 +31,35 @@ class Router
 
 			//[/] => Array ( [controller] => Global [action] => default )
 			$this->routes = yaml_parse_file($this->routesPath);
-
 			if( !empty($this->routes[$this->uri]) && $this->routes[$this->uri]["controller"] && $this->routes[$this->uri]["action"]){
 
 				$this->setController($this->routes[$this->uri]["controller"]);
 				$this->setAction($this->routes[$this->uri]["action"]);
-			}elseif (!empty($page->getAllBySlug($this->uri))){
+			}elseif (!empty($page->getAllBySlug(substr($this->uri, 1)))){
                 $this->setController("Page");
                 $this->setAction("seePage");
 				
-			}elseif (!empty($article->getAllBySlug($this->uri))){
+			}elseif (substr($this->uri, 0, 10) == "/articles/" && !empty($article->getAllBySlug(substr($this->uri, 10)))){
                 $this->setController("Article");
-                $this->setAction("viewArticle");
+                $this->setAction("seeArticle");
 
-            }else{
+            }elseif (substr($this->uri, 0, 26) === "/lbly-admin/articles/edit/" && !empty($article->getAllBySlug(substr($this->uri, 26)))){
+                $this->setController("Article");
+                $this->setAction("editArticle");
+
+            }elseif (substr($this->uri, 0, 28) === "/lbly-admin/articles/delete/" && !empty($article->getAllBySlug(substr($this->uri, 28)))){
+                $this->setController("Article");
+                $this->setAction("deleteArticle");
+
+			}elseif (substr($this->uri, 0, 17) === "/lbly-admin/edit/" && !empty($page->getAllBySlug(substr($this->uri, 17)))){
+                $this->setController("Page");
+                $this->setAction("editPage");
+
+            }elseif (substr($this->uri, 0, 19) === "/lbly-admin/delete/" && !empty($page->getAllBySlug(substr($this->uri, 19)))){
+                $this->setController("Page");
+                $this->setAction("deletePage");
+
+			}else{
                 header("HTTP/1.0 404 Not Found");
 			    $view = new View('404');
             }
