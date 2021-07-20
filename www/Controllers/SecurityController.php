@@ -92,8 +92,7 @@ class SecurityController
 
 				if(password_verify($_POST['pwdConfirm'], $user->getPwd())){
 					$userDelete->delete();
-					$view->assign("infos", ["Le compte ".$userDelete->getEmail()." a bien été supprimé."]);
-					$view->assign("infos", ["Vous allez être redirigé."]);
+					$view->assign("infos", ["Le compte ".$userDelete->getEmail()." a bien été supprimé.</br>Vous allez être redirigé."]);
 
 					if($self)
 						header("Refresh:4; url=/lbly-admin/logout", true, 303); 
