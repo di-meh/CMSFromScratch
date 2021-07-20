@@ -27,6 +27,7 @@
                                     <td><?php echo $user["email"];?></td>
                                     <td><?php echo $user["country"];?></td>
                                     <td><?php echo App\Core\Security::readStatus($user["status"]);?></td>
+                                    <td><a href="/lbly-admin/changerole?userid=<?=$user["id"]?>"><button class="btn btn-primary">Modifier droits</button></a></td> 
                                     <td><a href="/deleteuser?userid=<?=$user["id"]?>"><button class="btn btn-danger">Supprimer</button></a></td> 
                                         
 

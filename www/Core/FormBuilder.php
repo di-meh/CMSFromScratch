@@ -50,6 +50,8 @@ class FormBuilder
 						value='" . ($configInput['value'] ?? '') . "'
 						" . (!empty($configInput["required"]) ? "required='required'" : "") . "
 						" . (isset($configInput["disabled"]) ? 'disabled=disabled' : '') . "'
+						" . (!empty($configInput["checked"]) ? "checked" : "") . "
+
 
 					><br>";
 	}

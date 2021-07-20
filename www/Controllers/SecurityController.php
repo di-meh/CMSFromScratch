@@ -14,15 +14,6 @@ use App\Models\User;
 
 class SecurityController
 {
-	
-
-	public function defaultAction()
-	{
-		session_start();
-		if(!isset($_SESSION['id'])) $this->logoutAction();
-		
-		echo "Controller security action default";
-	}
 
 	# view all users for admin only
 	public function getAllUsersAction(){
@@ -51,7 +42,32 @@ class SecurityController
 	*	superadmin can modify all users status
 	*	admin can modify all users status except admin
 	*/
-	public function modifyStatus(){
+	public function modifyRoleAction(){
+
+		$user = Secu::getConnectedUser();
+		if(is_null($user)) header("Location:/lbly-admin/login");
+
+		if($user->isAdmin()){
+
+			if(isset($_GET['userid'])){
+
+				$userModified = new User();
+				$userModified->setAllFromId($_GET['userid']);
+
+				$view = new View("changeRole");
+				$form = $user->formRoles();
+
+				$view->assign("form",$form);
+
+			}else{
+				header("Location: /");
+			}
+
+		}else{
+			header("HTTP/1.0 403 Forbidden");
+		 	$view = new View('403');
+
+		}
 
 	}
 

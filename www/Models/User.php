@@ -273,9 +273,69 @@ class User extends Singleton
         return (($this->status & USERVALIDATED) || $this->isAdmin());
     }
 
-    # form enables to edit users status, give roles and rights
-    public function formCrudAdmin(){
+    public function isContributor(){
+        return $this->status & USERCONTRIBUTOR;
+    }
 
+    public function isEditor(){
+        return $this->status & USEREDITOR;
+    }
+
+    public function isAuthor(){
+        return $this->status & USERAUTHOR;
+    }
+
+    # form enables to edit users status, give roles and rights
+    public function formRoles(){
+        return [
+
+            "config" => [
+                    "method" => "POST",
+                    "action" => "",
+                    "id" => "form_delete",
+                    "class" => "form_builder",
+                    "submit" => "Valider"
+                ],
+            "inputs" => [
+                "admin" => [
+                    "type" => "checkbox",
+                    "label" => "Administrateur",
+                    "id" => "admin",
+                    "class" => "form_input",
+                    "checked" => ($this->isAdmin())?"checked":""
+                ],
+                "contributor" => [
+                    "type" => "checkbox",
+                    "label" => "Contributeur",
+                    "id" => "contributor",
+                    "class" => "form_input",
+                    "checked" => ($this->isContributor())?"checked":""
+                ],
+                "author" => [
+                    "type" => "checkbox",
+                    "label" => "Auteur",
+                    "id" => "author",
+                    "class" => "form_input",
+                    "checked" => ($this->isAuthor())?"checked":""
+                ],
+                "editor" => [
+                    "type" => "checkbox",
+                    "label" => "Editeur",
+                    "id" => "editor",
+                    "class" => "form_input",
+                    "checked" => ($this->isEditor())?"checked":""
+
+                ],
+                "validated" => [
+                    "type" => "checkbox",
+                    "label" => "Valider",
+                    "id" => "editor",
+                    "class" => "form_input",
+                    "checked" => ($this->isValidated())?true:false
+
+                ]
+            ]
+        ];
     }
 
     public function formDelete(){

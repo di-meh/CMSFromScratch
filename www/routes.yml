@@ -38,6 +38,10 @@
   controller: Security
   action: getAllUsers
 
+/lbly-admin/changerole:
+  controller: Security
+  action: modifyRole
+
 /deleteuser:
   controller: Security
   action: deleteUser
