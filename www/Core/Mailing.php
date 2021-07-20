@@ -66,7 +66,7 @@ class Mailing{
 		$id = $user->getId();
 		$token = $user->getToken();
 		$content = utf8_decode("Un compte avec le mail ". $user->getEmail()." a été créé. ");
-		$content .= "Validez le en cliquant sur ce lien : <a href='http://localhost/lbly-admin/uservalidated?id=$id&token=$token'>Confirmer mon compte !</a>";
+		$content .= "Validez le en cliquant sur ce lien : <a href='http://localhost/lbly-admin/uservalidated?id=$id&token=$token'>Confirmer le compte</a>";
 		$this->setContent($content);
 								
 		# set template, set subject, set content

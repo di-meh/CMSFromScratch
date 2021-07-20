@@ -215,7 +215,7 @@ class SecurityController
 
 				$user->setAllFromEmail($email);
 
-				if($user->isValidated()){ # user has validated his account by mail
+				if($user->isValidated()){ # only superadmin validates
 
 					# send mail with link to change pwd
 					$mailing = Mailing::getMailing();
@@ -226,7 +226,7 @@ class SecurityController
 					$view->assign("infos", [$infos]);
 
 				}else{
-					$view->assign("infos", ["Vous devez valider votre compte par email.<a href='http://localhost/lbly-admin/userconfirm?email=$email'> Cliquez ici pour renvoyer le mail de confirmation.</a>"]);
+					$view->assign("infos", ["Votre compte n'a pas été validé."]);
 				}
 
 
@@ -475,7 +475,7 @@ class SecurityController
 						# $user->deleteAll(); # pour delete immediatement en 
 					}else{
                         $email = $_POST['email'];
-					    $html = "Vous devez aller confirmer votre compte avec le mail que vous avez reçu à cette adresse: " . $user->getEmail() . " . <a href='http://localhost/lbly-admin/userconfirm?email=$email'>Renvoyer le mail de confirmation</a>";
+					    $html = "Votre compte n'a pas été validé.";
                         $view->assign("infos", [$html]);
 //					    echo "Vous devez aller <strong style='color:red'>confirmer votre compte</strong> avec le mail que vous avez reçu à cette adresse : <strong style='color:blue'>".$user->getEmail()."</strong><br/>";
 //
@@ -550,6 +550,7 @@ class SecurityController
 
 						if(isset($user) && $user->isAdmin()){
 							$userRegister->addStatus(USERVALIDATED);
+							# envoi de mail au nouvel user créé pour quil change son pwd
 							header("Location: /lbly-admin/adminview");
 
 
