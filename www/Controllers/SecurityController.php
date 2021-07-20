@@ -179,7 +179,7 @@ class SecurityController
 				if($self)
 					header("Refresh:4; url=/lbly-admin/logout", true, 303); 
 				else
-					header("Refresh:4; url=/", true, 303);
+					header("Refresh:4; url=/lbly-admin/adminview", true, 303);
 
 
 			}else{
