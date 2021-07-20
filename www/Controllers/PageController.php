@@ -47,7 +47,7 @@ class PageController
 
 		    if (empty($errors)){
 
-                $page->setTitle($_POST['title']);
+                $page->setTitle(htmlspecialchars($_POST['title']));
                 $page->setContent($_POST['editor']);
                 $page->setCreatedBy($user->getID());
                 if (empty($_POST['editor'])){
