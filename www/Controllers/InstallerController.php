@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Core\View;
 use App\Core\FormValidator;
+use App\Core\ConstantMaker;
 
 use App\Core\Singleton;
 
@@ -27,13 +28,14 @@ class InstallerController{
         if (!empty($_POST)){
                 if (empty($errors)){
                     if ($_POST['pwd'] == $_POST['pwdConfirm']) {
-                        $content = "DBDRIVER=mysql\n" . "DBPREFIX=lbly_\n" . "DBHOST=" . $_POST["dbhost"] . "\n"
+                        $content = "DBDRIVER=" . $_POST["dbdriver"] . "\n" . "DBPREFIX=lbly_\n" . "DBHOST=" . $_POST["dbhost"] . "\n"
                             . "DBNAME=" . $_POST["dbname"] . "\n" ."DBUSER=" . $_POST["dbusername"] . "\n"
-                            ."DBPWD=" . $_POST["pwd"] . "\n" ."DBPORT=" . $_POST["dbport"] . "\n"
+                            ."DBPWD=" . $_POST["dbpwd"] . "\n" ."DBPORT=" . $_POST["dbport"] . "\n"
                             ."MAILUHOST=" . $_POST["mailhost"] . "\n" ."MAILUSERNAME=" . $_POST["mailexp"] . "\n"
                             ."MAILPWD=" . $_POST["mailpwd"] . "\n" ."MAILPORT=" . $_POST["mailport"] . "\n";
                         $handle = fopen("./.env", "w+");
                         fwrite($handle, $content);
+                        new ConstantMaker();
 
                         $pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
 

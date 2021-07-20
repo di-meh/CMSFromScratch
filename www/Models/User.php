@@ -649,6 +649,17 @@ class User extends Singleton
                     "error" => "Votre site doit faire entre 2 et 256 caractères",
                     "required" => true
                 ],
+                "dbdriver" =>[
+                    "type" => "text",
+                    "label" => "BDD driver : ",
+                    "minLength" => 1,
+                    "id" => "dbdriver",
+                    "class" => "form_input",
+                    "placeholder" => "your driver",
+                    "value" => '',
+                    "error" => "host incorrect",
+                    "required" => true
+                ],
                 "dbname" =>[
                     "type" => "text",
                     "label" => "Nom de la BDD : ",
