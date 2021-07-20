@@ -76,6 +76,23 @@ class User extends Singleton
         return false;
     }
 
+    # cherche cet id en base
+    public function verifyId($id){
+
+        $id = htmlspecialchars($id);
+
+        $query = "SELECT id FROM " . $this->table . " WHERE id = '" . $id."'";
+        $prepare = $this->getPDO()->prepare($query);
+        $prepare->execute();
+        $result = $prepare->fetch(PDO::FETCH_ASSOC);
+
+        if(is_null($result['id']) || empty($result['id']))
+            return 0;
+        else
+            return 1;
+
+    }
+
     # cherche le mdp correspond a ce mail en base
     public function verifyPwd($email)
     {
@@ -112,7 +129,7 @@ class User extends Singleton
         }
     }
 
-    # verify email and firstname given to set user status to uservalidated
+    # verify token and firstname given to set user status to uservalidated
     public function verifyUser($id, $token){
         $id = htmlspecialchars($id);
         $token = htmlspecialchars($token);
@@ -258,7 +275,11 @@ class User extends Singleton
     }
 
     public function addStatus($status){
-        $this->status = $this->status | $status;
+        $this->status |= $status;
+    }
+
+    public function unflagStatus($status){
+        $this->status &= ~$status;
     }
 
     public function isSuperAdmin(){

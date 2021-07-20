@@ -52,12 +52,59 @@ class SecurityController
 			if(isset($_GET['userid'])){
 
 				$userModified = new User();
-				$userModified->setAllFromId($_GET['userid']);
+				if($userModified->verifyId($_GET['userid']) == 1){
 
-				$view = new View("changeRole");
-				$form = $user->formRoles();
+					$userModified->setAllFromId($_GET['userid']);
 
-				$view->assign("form",$form);
+					$view = new View("changeRole", "back");
+					$form = $userModified->formRoles();
+
+					if(isset($_POST['admin'])){
+						$userModified->addStatus(USERADMIN);
+						$view->assign("infos", [$userModified->getEmail()." est devenu Administrateur."]);
+
+					}else{
+						$userModified->unflagStatus(USERADMIN);
+
+					}
+					if(isset($_POST['contributor'])){
+						$userModified->addStatus(USERCONTRIBUTOR);
+						$view->assign("infos", [$userModified->getEmail()." est devenu Contributeur."]);
+
+
+					}else{
+						$userModified->unflagStatus(USERCONTRIBUTOR);
+
+					}
+
+					if(isset($_POST['author'])){
+						$userModified->addStatus(USERAUTHOR);
+						$view->assign("infos", [$userModified->getEmail()." est devenu Auteur."]);
+
+
+					}else{
+						$userModified->unflagStatus(USERAUTHOR);
+
+					}
+
+					if(isset($_POST['editor'])){
+						$userModified->addStatus(USEREDITOR);
+						$view->assign("infos", [$userModified->getEmail()." est devenu Editeur."]);
+
+
+					}else{
+						$userModified->unflagStatus(USEREDITOR);
+
+					}
+
+					$userModified->save();
+
+				}else{
+
+					$view->assign("errors", ["Id inexistant.</br>Redirection..."]);
+					header("Refresh:3; url=/", true, 303);
+				}
+
 
 			}else{
 				header("Location: /");
@@ -69,6 +116,8 @@ class SecurityController
 
 		}
 
+					$view->assign("form",$form);
+
 	}
 
 	/*	delete user form asking for the user pwd or the admin pwd	*/
@@ -77,7 +126,7 @@ class SecurityController
 		$user = Secu::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
-		$view = new View("deleteuser");
+		$view = new View("deleteuser", "back");
 
 		$form = $user->formDelete(); # confirm pwd of the user or the admin
 
@@ -87,9 +136,20 @@ class SecurityController
 
 		# admin can delete a user 
 		if(isset($_GET['userid']) && $user->isAdmin()){
+
 			if($_GET['userid'] == $user->getId())
 				$self = true;
-			$userDelete->setAllFromId($_GET['userid']);
+			
+			if($userDelete->verifyId($_GET['userid']) == 1){
+				$userDelete->setAllFromId($_GET['userid']);
+
+			}else{
+				# id does not exist
+				$view->assign("errors", ["Id inexistant.</br>Redirection..."]);
+				header("Refresh:3; url=/", true, 303);
+
+			}
+
 
 		}else if(isset($_GET['userid']) && !$user->isAdmin()){
 			header("Location: /");
@@ -100,38 +160,26 @@ class SecurityController
 			$self = true;
 		}
 
-		$mailExists = $user->verifyMail($userDelete->getEmail());
+		if(isset($_POST['pwdConfirm'])){
 
-		if($mailExists == 1){
+			if(password_verify($_POST['pwdConfirm'], $user->getPwd())){
+				$userDelete->delete();
+				$view->assign("infos", ["Le compte ".$userDelete->getEmail()." a bien été supprimé.</br>Vous allez être redirigé."]);
 
-			if(isset($_POST['pwdConfirm'])){
-
-				if(password_verify($_POST['pwdConfirm'], $user->getPwd())){
-					$userDelete->delete();
-					$view->assign("infos", ["Le compte ".$userDelete->getEmail()." a bien été supprimé.</br>Vous allez être redirigé."]);
-
-					if($self)
-						header("Refresh:4; url=/lbly-admin/logout", true, 303); 
-					else
-						header("Refresh:4; url=/", true, 303);
+				if($self)
+					header("Refresh:4; url=/lbly-admin/logout", true, 303); 
+				else
+					header("Refresh:4; url=/", true, 303);
 
 
-				}else{
-					$view->assign("errors", ["Le mot de passe est erroné"]);
-
-				}
-				
+			}else{
+				$view->assign("errors", ["Le mot de passe est erroné"]);
 
 			}
-
-
-		}else{
-
-			$view->assign("errors",["mail not exist"]);
-
-			#header("Location: /");
+			
 
 		}
+
 			
 		$view->assign("form", $form);
 
