@@ -38,7 +38,7 @@ class BookController
             }
 
             $book->setPublisher(htmlspecialchars($_POST['publisher']));
-            $book->setPrice(htmlspecialchars($_POST['price']);
+            $book->setPrice(htmlspecialchars($_POST['price']));
             $book->setCategory(htmlspecialchars($_POST['category']));
             $book->setStockNumber(htmlspecialchars($_POST['stock_number']));
             $book->save();
