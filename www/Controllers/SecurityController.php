@@ -59,55 +59,69 @@ class SecurityController
 					$view = new View("changeRole", "back");
 					$form = $userModified->formRoles();
 
-					if(isset($_POST['admin'])){
+					/*if(isset($_POST['admin'])){
 						$userModified->addStatus(USERADMIN);
-						$view->assign("infos", [$userModified->getEmail()." est devenu Administrateur."]);
+						$infos[] = $userModified->getEmail()." est devenu Administrateur.";
 
 					}else{
 						$userModified->unflagStatus(USERADMIN);
 
 					}
+
 					if(isset($_POST['contributor'])){
 						$userModified->addStatus(USERCONTRIBUTOR);
-						$view->assign("infos", [$userModified->getEmail()." est devenu Contributeur."]);
+						$infos[] = $userModified->getEmail()." est devenu Contributeur.";
 
-
-					}else{
+					}else){
 						$userModified->unflagStatus(USERCONTRIBUTOR);
 
 					}
 
 					if(isset($_POST['author'])){
 						$userModified->addStatus(USERAUTHOR);
-						$view->assign("infos", [$userModified->getEmail()." est devenu Auteur."]);
+						$infos[] = $userModified->getEmail()." est devenu Auteur.";
 
 
 					}else{
 						$userModified->unflagStatus(USERAUTHOR);
 
-					}
+					}*/
 
-					if(isset($_POST['editor'])){
+					if(isset($_POST['editor']) && !$userModified->isEditor()){
+
+						$infos[] = $userModified->getEmail()." est devenu Editeur.";
 						$userModified->addStatus(USEREDITOR);
-						$view->assign("infos", [$userModified->getEmail()." est devenu Editeur."]);
 
+					}else if(isset($_POST['valider'])){
+						if($userModified->isEditor()){
+							$infos[] = $userModified->getEmail()." n'est plus Editeur.";
 
-					}else{
+						}
 						$userModified->unflagStatus(USEREDITOR);
 
 					}
 
-					if(isset($_POST['validated'])){
+					if(isset($_POST['validated']) && !$userModified->isValidated()){
 						$userModified->addStatus(USERVALIDATED);
-						$view->assign("infos", [$userModified->getEmail()." a été validé."]);
+						$infos[] = $userModified->getEmail()." a été validé.";
 
 
-					}else{
+					}else if(isset($_POST['valider'])){
+						
+						$infos[] = $userModified->getEmail()." a été invalidé.";
 						$userModified->unflagStatus(USERVALIDATED);
 
 					}
 
+					if(isset($infos)){
+						$view->assign("infos", $infos);
+						header("Refresh:3; url=/lbly-admin/adminview", true, 303);
+
+					}
+
 					$userModified->save();
+					$form = $userModified->formRoles();
+
 
 				}else{
 
@@ -170,10 +184,15 @@ class SecurityController
 			$self = true;
 		}
 
+		if($userDelete->isDeleted()){
+			header("Location: /lbly-admin/adminview");
+		}
+
 		if(isset($_POST['pwdConfirm'])){
 
 			if(password_verify($_POST['pwdConfirm'], $user->getPwd())){
-				$userDelete->delete();
+				$userDelete->addStatus(USERDELETED);
+				$userDelete->save();
 				$view->assign("infos", ["Le compte ".$userDelete->getEmail()." a bien été supprimé.</br>Vous allez être redirigé."]);
 
 				if($self)
@@ -395,7 +414,7 @@ class SecurityController
 									$user->setPwd($pwd);
 									#$_SESSION['user'] = $user; # update de session
 									$infos[] = "Votre mot de passe a été mis à jour !";
-									$view->assign("infos", $infos); # not an error but well
+									$view->assign("infos", $infos);
 									$user->save();
 								} else {
 									$view->assign('errors', ["La taille du nouveau mot de passe doit faire 8 caractères au minimum."]);
@@ -451,8 +470,12 @@ class SecurityController
 					# set tous les attributs depuis la base
 					# à partir du mail
 
+					if($user->isDeleted()){
+						$view->assign("infos", ["Ce compte a été supprimé."]);
+					
+
 					# verify status USERVALIDATED : 2 else no login allowed
-					if($user->isValidated()){
+					}else if($user->isValidated() && !$user->isDeleted()){
 
 						$token = substr(md5(uniqid(true)), 0, 10); # cut length to 10, no prefix, entropy => for more unicity
 						$user->setToken($token);

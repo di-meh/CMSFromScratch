@@ -31,7 +31,11 @@ class FormBuilder
 			$html .= "</div>";
 		}
 
-		$html .= "<button type='submit' value=\"" . ($form["config"]["submit"] ?? "Valider") . "\" class='btn btn-primary'>" . ($form["config"]["submit"] ?? "Valider") . "</button>";
+		if(isset($form["config"]["name"])){
+			$namePost = "name=\"".$form["config"]["name"]."\"";
+		}
+
+		$html .= "<button ".($namePost??'')." type='submit' value=\"" . ($form["config"]["submit"] ?? "Valider") . "\" class='btn btn-primary'>" . ($form["config"]["submit"] ?? "Valider") . "</button>";
 
 		$html .= "</form>";
 
@@ -49,7 +53,7 @@ class FormBuilder
 						placeholder='" . ($configInput["placeholder"] ?? "") . "'
 						value='" . ($configInput['value'] ?? '') . "'
 						" . (!empty($configInput["required"]) ? "required='required'" : "") . "
-						" . (isset($configInput["disabled"]) ? 'disabled=disabled' : '') . "'
+						" . (isset($configInput["disabled"]) ? 'disabled=disabled' : '') . "
 						" . (!empty($configInput["checked"]) ? "checked" : "") . "
 
 

@@ -306,6 +306,10 @@ class User extends Singleton
         return $this->status & USERAUTHOR;
     }
 
+    public function isDeleted(){
+        return $this->status & USERDELETED;
+    }
+
     # form enables to edit users status, give roles and rights
     public function formRoles(){
         return [
@@ -315,6 +319,7 @@ class User extends Singleton
                     "action" => "",
                     "id" => "form_delete",
                     "class" => "form_builder",
+                    "name" => "valider",
                     "submit" => "Valider"
                 ],
             "inputs" => [
@@ -350,9 +355,9 @@ class User extends Singleton
                 "validated" => [
                     "type" => "checkbox",
                     "label" => "Valider",
-                    "id" => "editor",
+                    "id" => "validated",
                     "class" => "form_input",
-                    "checked" => ($this->isValidated())?true:false
+                    "checked" => ($this->isValidated())?"checked":""
 
                 ]
             ]
