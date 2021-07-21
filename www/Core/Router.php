@@ -3,6 +3,7 @@ namespace App\Core;
 
 use App\Models\Page;
 use App\Models\Article;
+use App\Models\Category;
 
 class Router
 {
@@ -29,6 +30,7 @@ class Router
 			
 			$page = new Page();
 			$article = new Article();
+			$category = new Category();
 
 			//[/] => Array ( [controller] => Global [action] => default )
 			$this->routes = yaml_parse_file($this->routesPath);
@@ -62,6 +64,14 @@ class Router
             }elseif (substr($this->uri, 0, 19) === "/lbly-admin/delete/" && !empty($page->getAllBySlug(substr($this->uri, 19)))){
                 $this->setController("Page");
                 $this->setAction("deletePage");
+
+			}elseif (substr($this->uri, 0, 26) === "/lbly-admin/category/edit/" && !empty($category->getAllBySlug(substr($this->uri, 26)))){
+                $this->setController("Category");
+                $this->setAction("editCategory");
+
+            }elseif (substr($this->uri, 0, 28) === "/lbly-admin/category/delete/" && !empty($category->getAllBySlug(substr($this->uri, 28)))){
+                $this->setController("Category");
+                $this->setAction("deleteCategory");
 
 			}else{
                 header("HTTP/1.0 404 Not Found");

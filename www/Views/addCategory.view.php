@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-full">
             <div class="card">
-                <h6 class="card-title">Ajouter une page</h6>
+                <h6 class="card-title">Ajouter une catégorie</h6>
                 <div class="card-content">
                     <?php if (isset($form)) : ?>
                         <?php App\Core\FormBuilder::render($form); ?>
@@ -12,12 +12,4 @@
             </div>
         </div>
     </div>
-<<<<<<< HEAD
 </section>
-<script src="/../node_modules/ckeditor4/ckeditor.js"></script>
-<script>
-    CKEDITOR.replace('editor');
-</script>
-=======
-</section>
->>>>>>> feature/article_controller

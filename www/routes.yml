@@ -56,27 +56,15 @@
 
 /lbly-admin/category:
   controller: Category
-  action: addcategory
-
-/lbly-admin/books:
-  controller: Book
-  action: index
-
-/lbly-admin/articles:
-  controller: Article
   action: default
 
-/lbly-admin/pages/add:
-  controller: Page
-  action: addpage
-
-/lbly-admin/category:
+/lbly-admin/category/add:
   controller: Category
-  action: index
+  action: addCategory
 
 /lbly-admin/books:
   controller: Book
-  action: index
+  action: default
 
 /lbly-admin/articles:
   controller: Article
