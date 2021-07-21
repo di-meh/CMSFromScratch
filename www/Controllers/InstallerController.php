@@ -32,11 +32,11 @@ class InstallerController{
                             . "DBPREFIX=lbly_\n" . "DBHOST=" . htmlspecialchars($_POST["dbhost"]) . "\n"
                             . "DBNAME=" . htmlspecialchars($_POST["dbname"]) . "\n"
                             ."DBUSER=" . htmlspecialchars($_POST["dbusername"]) . "\n"
-                            ."DBPWD=" . htmlspecialchars($_POST["dbpwd"]) . "\n"
+                            ."DBPWD=" . $_POST["dbpwd"] . "\n"
                             ."DBPORT=" . htmlspecialchars($_POST["dbport"]) . "\n"
-                            ."MAILUHOST=" . htmlspecialchars($_POST["mailhost"]) . "\n"
+                            ."MAILHOST=" . htmlspecialchars($_POST["mailhost"]) . "\n"
                             ."MAILUSERNAME=" . htmlspecialchars($_POST["mailexp"]) . "\n"
-                            ."MAILPWD=" . htmlspecialchars($_POST["mailpwd"]) . "\n"
+                            ."MAILPWD=" . $_POST["mailpwd"] . "\n"
                             ."MAILPORT=" . htmlspecialchars($_POST["mailport"]) . "\n";
                         $handle = fopen("./.env", "w+");
                         fwrite($handle, $content);

@@ -1,9 +1,6 @@
 <section class="container-fluid">
     <div class="row">
         <div class="col-full">
-            <div class="card">
-                <h6 class="card-title">Vos articles</h6>
-                <div class="card-content">
             <?php if (isset($deletemodal)) :?>
                 <div class="card">
                     <h6 class="card-title">Delete Modal</h6>
@@ -44,7 +41,7 @@
                                     <td><?=$article["title"];?></td>
                                     <td><?=$article["created"];?></td>
                                     <td><?=$article["status"];?></td>
-                                    <td><a href="/<?=$article["slug"]?>"><button class="btn btn-primary">Voir</button></a></td>
+                                    <td><a href="/articles/<?=$article["slug"]?>"><button class="btn btn-primary">Voir</button></a></td>
                                     <td><a href="/lbly-admin/articles/edit/<?=$article["slug"]?>"><button class="btn btn-primary">Modifier</button></a></td>
                                     <td><a href="/lbly-admin/articles/delete/<?=$article["slug"]?>"><button class="btn btn-danger">Supprimer</button></a></td>
                                 </tr>
@@ -55,8 +52,7 @@
                         </tbody>
                         </table>
                     <?php endif; ?>
-                    <a id="" href="articles/add"><button class="btn btn-primary">Ajouter un article</button></a>
-                </div>
+                     </div>
             </div>
         </div>
     </div>
