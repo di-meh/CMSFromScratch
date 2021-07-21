@@ -824,7 +824,8 @@ class User extends Singleton
         $query = "CREATE TABLE `lbly_category` (
                   `id` int(11) NOT NULL,
                   `nameCategory` varchar(255) NOT NULL,
-                  `colorCategory` varchar(7)
+                  `colorCategory` varchar(7),
+                  `slug` varchar(70) NOT NULL
                 ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
         $prepare = $this->getPDO()->prepare($query);
         $prepare->execute();
