@@ -124,7 +124,7 @@ class Article extends Singleton
             "inputs" => [
                 "title" => [
                     "type" => "text",
-                    "label" => "Editez le titre",
+                    "label" => "Titre",
                     "minLength" => 2,
                     "maxLength" => 60,
                     "id" => "title",
@@ -136,7 +136,7 @@ class Article extends Singleton
                 ],
                 "content" => [
                     "type" => "textarea",
-                    "label" => "",
+                    "label" => "Contenu de l'article",
                     "cols" => 80,
                     "rows" => 10,
                     "id" => "content",
@@ -166,7 +166,7 @@ class Article extends Singleton
             "inputs" => [
                 "title" => [
                     "type" => "text",
-                    "label" => "Editez le titre",
+                    "label" => "Titre",
                     "minLength" => 2,
                     "maxLength" => 60,
                     "id" => "title",
@@ -178,7 +178,7 @@ class Article extends Singleton
                 ],
                 "content" => [
                     "type" => "textarea",
-                    "label" => "",
+                    "label" => "Contenu de l'article",
                     "cols" => 80,
                     "rows" => 10,
                     "id" => "content",
@@ -190,6 +190,31 @@ class Article extends Singleton
                     "required" => true
                 ],
             ]
+        ];
+    }
+
+    public function formDeleteArticle(){
+        return [
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "form_deletearticle",
+                "class" => "form_builder",
+                "submit" => "Supprimer",
+                "btn_class" => "btn btn-danger"
+            ],
+            "inputs" => [
+                "delete" => [
+                    "type" => "hidden",
+                    "label" => "Voulez vous supprimez cet article : ".$this->title." ?",
+                    "id" => "title",
+                    "class" => "form_input",
+                    "value" => $this->slug,
+                    "error" => "slug not found",
+                    "required" => true
+                ]
+            ]
+
         ];
     }
 
@@ -246,5 +271,26 @@ class Article extends Singleton
         $this->setPublished($res['published']);
         $this->setModified($res['modified']);
         $this->setStatus($res['status']);
+    }
+
+    public function setAllBySlug($slug)
+    {
+        $res = $this->getAllBySlug($slug);
+        $res = $res[0];
+        $this->setId($res['id']);
+        $this->setAuthor($res['author']);
+        $this->setTitle($res['title']);
+        $this->setSlug($res['slug']);
+        $this->setContent($res['content']);
+        $this->setCreated($res['created']);
+        $this->setPublished($res['published']);
+        $this->setModified($res['modified']);
+        $this->setStatus($res['status']);
+    }
+
+    public function deleteBySlug($slug){
+        $query = "DELETE FROM " . $this->getTable() . " WHERE slug  = '" . $slug ."'";
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
     }
 }

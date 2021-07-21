@@ -66,6 +66,22 @@
   controller: Article
   action: default
 
+/lbly-admin/pages/add:
+  controller: Page
+  action: addpage
+
+/lbly-admin/category:
+  controller: Category
+  action: index
+
+/lbly-admin/books:
+  controller: Book
+  action: index
+
+/lbly-admin/articles:
+  controller: Article
+  action: default
+
 /lbly-admin/articles/add:
   controller: Article
   action: addArticle
@@ -81,3 +97,7 @@
 /resetpwd:
   controller: Security
   action: resetPwd
+
+/installer:
+  controller: Installer
+  action: default

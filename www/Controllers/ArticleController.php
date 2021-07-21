@@ -35,13 +35,13 @@ class ArticleController{
 		if (!empty($_POST)) {
 			
 		    if (empty($errors)){
-				$article->setTitle($_POST['title']);
+				$article->setTitle(htmlspecialchars($_POST['title']));
 				$article->setAuthor($user->getID());
 				$article->setContent($_POST['content']);
 				if (empty($_POST['content'])){
 					$view->assign("errors", ["Veuillez remplir tous les champs"]);
 				}else{
-					$article->setSlug('/articles/' . $article->title2slug($_POST['title']));
+					$article->setSlug($article->title2slug($_POST['title']));
 					if (empty($article->getAllBySlug($article->getSlug()))){
 						$article->save();
 						header("Location:/lbly-admin/articles");
@@ -67,14 +67,18 @@ class ArticleController{
 
 		$view = new View("editArticle","back"); # appelle View/editProfil.view.php
 		$article = new Article();
-		$article->setAllById($_GET['article']);
+
+		$uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
+        $uri = substr($uriExploded[0], 26);
+
+		$article->setAllBySlug($uri);
 		$form = $article->formEditArticle();
 
 		if(!empty($_POST)){
 			if($_POST['title'] != $article->getTitle()){ # changer le prenom
 
 				if (!empty($_POST['title'])){
-					$article->setTitle($_POST['title']);
+					$article->setTitle(htmlspecialchars($_POST['title']));
 					$article->setSlug('/articles/' . $article->title2slug($_POST['title']));
 					if (empty($article->getAllBySlug($article->getSlug()))){
 						$article->save();
@@ -106,18 +110,50 @@ class ArticleController{
 		$view->assign("form", $form); # affiche le formulaire
 	}
 
-	public function viewArticleAction(){
+	public function deleteArticleAction(){
+
+		$user = Security::getConnectedUser();
+		if(is_null($user)) header("Location:/lbly-admin/login");
+
+		$view = new View("articles","back");
+		$article = new Article();
+		$articles = $article->all();
+
+		$uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
+        $uri = substr($uriExploded[0], 28);
+
+        $article->setAllBySlug($uri);
+        $articlecontent = $article->getAllBySlug($uri)[0];
+
+		if (!empty($_POST["delete"])){
+            $article->deleteBySlug($uri);
+            header("Location:/lbly-admin/articles");
+        }
+
+        $view->assign("articles", $articles);
+        $view->assign("article", $articlecontent);
+        $view->assign("deletemodal", true);
+
+		// var_dump($article->formDeleteArticle());
+        $formdelete = $article->formDeleteArticle();
+        $view->assign("formdelete", $formdelete);
+		
+
+
+	}
+
+
+	public function seeArticleAction(){
 
 		session_start();
 
         $article = new Article();
 
-        $view = new View("viewArticle");
+        $view = new View("seeArticle");
 
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
 
-        $uri = $uriExploded[0];
-
+        $uri = substr($uriExploded[0], 10);
         $articles = $article->getAllBySlug($uri);
         $view->assign("article", $articles[0]);
 

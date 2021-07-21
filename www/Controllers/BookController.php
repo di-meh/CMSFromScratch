@@ -17,9 +17,9 @@ class BookController
 
         $book = new Book();
         if (!empty($_POST)) {
-            $book->setTitle($_POST['title']);
-            $book->setDescription($_POST['description']);
-            $book->setAuthor($_POST['author']);
+            $book->setTitle(htmlspecialchars($_POST['title']));
+            $book->setDescription(htmlspecialchars($_POST['description']));
+            $book->setAuthor(htmlspecialchars($_POST['author']));
             $book->setPublicationDate($_POST['publication_date']);
             // $book->setImage($_POST['image']);
             // store image sur le serveur
@@ -37,11 +37,10 @@ class BookController
                 $book->setImage($image);
             }
 
-
-            $book->setPublisher($_POST['publisher']);
-            $book->setPrice($_POST['price']);
-            $book->setCategory($_POST['category']);
-            $book->setStockNumber($_POST['stock_number']);
+            $book->setPublisher(htmlspecialchars($_POST['publisher']));
+            $book->setPrice(htmlspecialchars($_POST['price']);
+            $book->setCategory(htmlspecialchars($_POST['category']));
+            $book->setStockNumber(htmlspecialchars($_POST['stock_number']));
             $book->save();
         }
         $books = $book->all();
