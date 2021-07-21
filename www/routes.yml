@@ -66,6 +66,10 @@
   controller: Book
   action: default
 
+/lbly-admin/books/add:
+  controller: Book
+  action: addBook
+
 /lbly-admin/articles:
   controller: Article
   action: default
