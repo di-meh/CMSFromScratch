@@ -1,22 +1,24 @@
 <section class="container-fluid">
     <div class="row">
         <div class="col-full">
-            <div class="card">
-                <h6 class="card-title">Ajouter une catégorie</h6>
-                <div class="card-content">
-                    <?php if (isset($form)) : ?>
-                        <?php App\Core\FormBuilder::render($form); ?>
-                    <?php endif; ?>
+            <?php if (isset($deletemodal)) :?>
+                <div class="card">
+                    <h6 class="card-title">Delete Modal</h6>
+                    <div class="card-content">
+                        <?php if (isset($formdelete)) : ?>
+                            <?php App\Core\FormBuilder::render($formdelete); ?>
+                        <?php endif; ?>
+                        <br/>
+                        <a id="" href="/lbly-admin/category"><button class="btn btn-danger">Annuler</button></a>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-full">
+                <br/>
+            <?php endif; ?>
             <div class="card">
-                <h6 class="card-title">Liste des catégories</h6>
+                <h6 class="card-title">Vos catégories</h6>
                 <div class="card-content">
+                    <a id="" href="/lbly-admin/category/add"><button class="btn btn-primary">Ajouter une catégorie</button></a>
+                    <br/><br/>
                     <?php if (isset($categorys)) :?>
                         <?php if (empty($categorys)) :?>
                             <p>Vous n'avez pas créé de catégorie</p>
@@ -26,6 +28,8 @@
                             <tr>
                                 <th>Nom</th>
                                 <th>Couleur</th>
+                                <th>Options</th>
+                                <th>Options</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -35,7 +39,9 @@
                                     <td>   
                                         <?=$category["colorCategory"];?>
                                         <span class="material-icons" style="color:<?=$category["colorCategory"];?>;">palette</span>
-                                    </td>                     
+                                    </td>
+                                    <td><a href="/lbly-admin/category/edit/<?=$category["nameCategory"]?>"><button class="btn btn-primary">Modifier</button></a></td>
+                                    <td><a href="/lbly-admin/category/delete/<?=$category["nameCategory"]?>"><button class="btn btn-danger">Supprimer</button></a></td>                
                                 </tr>
                                 <?php
                             }

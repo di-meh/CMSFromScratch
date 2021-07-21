@@ -8,7 +8,7 @@ use App\Models\Book;
 
 class BookController
 {
-    public function indexAction()
+    public function defaultAction()
     {
         $user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");

@@ -56,11 +56,15 @@
 
 /lbly-admin/category:
   controller: Category
-  action: index
+  action: default
+
+/lbly-admin/category/add:
+  controller: Category
+  action: addCategory
 
 /lbly-admin/books:
   controller: Book
-  action: index
+  action: default
 
 /lbly-admin/articles:
   controller: Article
