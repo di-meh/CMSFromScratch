@@ -61,7 +61,7 @@ class SecurityController
 
 					$infos = [];
 
-					if(!$userModified->isValidated()){
+					if(!$userModified->isValidated() && !$userModified->isSuperAdmin()){
 
 						$infos[0] =  "Un Administrateur doit valider cet utilisateur</br>";
 						$view->assign("infos", $infos);

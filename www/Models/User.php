@@ -352,7 +352,9 @@ class User extends Singleton
                     "type" => "checkbox",
                     "label" => "Valider",
                     "id" => "validated",
-                    "class" => "form_input"
+                    "class" => "form_input",
+                    "hidden" => $this->isValidated()?true:false
+
 
                 ]
             ]

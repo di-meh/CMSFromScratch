@@ -19,7 +19,11 @@ class FormBuilder
 		foreach ($form["inputs"] as $name => $configInput) {
 
 			$html .= "<div class='input-group'>";
-			$html .= "<label for='" . ($configInput["id"] ?? "") . "'>" . ($configInput["label"] ?? "") . " </label>";
+			if(!isset($configInput['hidden']) || (isset($configInput['hidden']) && $configInput['hidden'] == false)){
+				$html .= "<label for='" . ($configInput["id"] ?? "") . "'>" . ($configInput["label"] ?? "") . " </label>";
+			}
+
+
 			if ($configInput["type"] == "select") {
 				$html .= self::renderSelect($name, $configInput);
 			} elseif ($configInput["type"] == "textarea") {
@@ -45,7 +49,8 @@ class FormBuilder
 
 	public static function renderInput($name, $configInput)
 	{
-		return "<input 
+		if(!isset($configInput['hidden']) || (isset($configInput['hidden']) && $configInput['hidden'] == false)){
+			return "<input 
 						name='" . $name . "' 
 						type='" . ($configInput["type"] ?? "text") . "'
 						id='" . ($configInput["id"] ?? "") . "'
@@ -58,6 +63,7 @@ class FormBuilder
 
 
 					><br>";
+		}
 	}
 
 
