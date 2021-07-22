@@ -973,7 +973,7 @@ class User extends Singleton
                   `email` varchar(320) NOT NULL,
                   `pwd` varchar(255) NOT NULL,
                   `country` char(2) NOT NULL DEFAULT 'fr',
-                  `status` tinyint(4) NOT NULL DEFAULT '0',
+                  `status` int NOT NULL DEFAULT '0',
                   `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                   `updatedAt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
                   `token` text
