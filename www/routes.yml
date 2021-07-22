@@ -82,6 +82,10 @@
   controller: Article
   action: editArticle
 
+/lbly-admin/books/edit:
+  controller: Book
+  action: editBook
+
 /forgetpwd:
   controller: Security
   action: forgetPwd

@@ -1,6 +1,7 @@
 <?php
 namespace App\Core;
 
+use App\Models\Book;
 use App\Models\Page;
 use App\Models\Article;
 use App\Models\Category;
@@ -31,13 +32,11 @@ class Router
 			$page = new Page();
 			$article = new Article();
 			$category = new Category();
+            $book = new Book();
 
-			//[/] => Array ( [controller] => Global [action] => default )
+            //[/] => Array ( [controller] => Global [action] => default )
 			$this->routes = yaml_parse_file($this->routesPath);
 			if( !empty($this->routes[$this->uri]) && $this->routes[$this->uri]["controller"] && $this->routes[$this->uri]["action"]){
-
-                $page = new Page();
-                $article = new Article();
 
 				$this->setController($this->routes[$this->uri]["controller"]);
 				$this->setAction($this->routes[$this->uri]["action"]);
@@ -73,7 +72,14 @@ class Router
                 $this->setController("Category");
                 $this->setAction("deleteCategory");
 
-			}else{
+			}elseif (substr($this->uri, 0, 26) === "/lbly-admin/books/edit/" && !empty($book->getAllBySlug(substr($this->uri, 23)))){
+                $this->setController("Book");
+                $this->setAction("editBook");
+
+            }elseif (substr($this->uri, 0, 25) === "/lbly-admin/books/delete/" && !empty($book->getAllBySlug(substr($this->uri, 25)))) {
+                $this->setController("Book");
+                $this->setAction("deleteBook");
+            }else{
                 header("HTTP/1.0 404 Not Found");
 			    $view = new View('404');
             }

@@ -814,7 +814,8 @@ class User extends Singleton
                   `publisher` varchar(255) COLLATE utf8_bin NOT NULL,
                   `price` smallint(6) NOT NULL,
                   `category` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-                  `stock_number` int(11) NOT NULL DEFAULT '0'
+                  `stock_number` int(11) NOT NULL DEFAULT '0',
+                  `slug` text NOT NULL
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin";
         $prepare = $this->getPDO()->prepare($query);
         $prepare->execute();

@@ -1,53 +1,59 @@
-<?php if (isset($books)) : ?>
-    <section class="container-fluid">
-        <div class="row">
-            <div class="col-full">
+<section class="container-fluid">
+    <div class="row">
+        <div class="col-full">
+            <?php if (isset($deletemodal)) :?>
                 <div class="card">
-                    <h6 class="card-title">Liste de livres</h6>
+                    <h6 class="card-title">Delete Modal</h6>
                     <div class="card-content">
-                        <?php if (empty($books)) : ?>
-                            <p>Il n'y a pas de livres dans la bd.</p>
-                        <?php else : ?>
-                        <table class="table">
+                        <?php if (isset($formdelete)) : ?>
+                            <?php App\Core\FormBuilder::render($formdelete); ?>
+                        <?php endif; ?>
+                        <!-- <a id="" href=""><button class="btn btn-primary">Supprimer</button></a> -->
+                        <br/>
+                        <a id="" href="/lbly-admin/pages"><button class="btn btn-danger">Annuler</button></a>
+                    </div>
+                </div>
+                <br/>
+            <?php endif; ?>
+            <div class="card">
+                <h6 class="card-title">Vos livres</h6>
+                <div class="card-content">
+                    <a id="" href="/lbly-admin/books/add"><button class="btn btn-primary">Ajouter un livre</button></a>
+                    <br/><br/>
+                    <?php if (isset($books)) :?>
+                        <?php if (empty($books)) :?>
+                            <p>Vous n'avez pas crée de livre.</p>
+                        <?php else: ?>
+                            <table class="table">
                             <thead>
                             <tr>
-                                <td>Titre</td>
-                                <td>Auteur</td>
-                                <td>Nombre de livres en stock</td>
+                                <th>titre</th>
+                                <th>Auteur</th>
+                                <th>Stock</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <?php foreach ($books as $book) :?>
+                            <?php foreach ($books as $book) { ?>
                                 <tr>
-                                    <td><?= $book['title'];?></td>
-                                    <td><?= $book['author'];?></td>
-                                    <td><?= $book['stock_number'];?></td>
+                                    <td><?php echo $book["title"];?></td>
+                                    <td><?php echo $book["author"];?></td>
+                                    <td><?php echo $book["stock_number"];?></td>
+                                    <td><a href="/books/<?=$book["slug"]?>"><button class="btn btn-primary">Voir</button></a></td>
+                                    <td><a href="/lbly-admin/books/edit/<?=$book["slug"]?>"><button class="btn btn-primary">Modifier</button></a></td>
+                                    <td><a href="/lbly-admin/books/delete/<?=$book["slug"]?>"><button class="btn btn-danger">Supprimer</button></a></td>
                                 </tr>
-                            <?php endforeach; ?>
-                            </tbody>
+                                <?php
+                            }
+                        endif; ?>
+
+                        </tbody>
                         </table>
-
-                        <?php endif; ?>
-                    </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+
+</section>
 
 
-<?php endif; ?>
-
-    <section class="container-fluid">
-        <div class="row">
-            <div class="col-full">
-                <div class="card">
-                    <h6 class="card-title">Ajouter un livre</h6>
-                    <div class="card-content">
-                        <?php if (isset($form)) : ?>
-                            <?php App\Core\FormBuilder::render($form); ?>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>

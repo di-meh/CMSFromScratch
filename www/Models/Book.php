@@ -195,6 +195,31 @@ class Book extends Singleton
         ];
     }
 
+    public function formDeleteBook(){
+        return [
+
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "form_deletebook",
+                "class" => "form_builder",
+                "submit" => "Supprimer",
+                "btn_class" => "btn btn-danger"
+            ],
+            "inputs" => [
+                "delete" => [
+                    "type" => "hidden",
+                    "label" => "Voulez vous supprimez ce livre : ".$this->title." ?",
+                    "id" => "title",
+                    "class" => "form_input",
+                    "value" => $this->slug,
+                    "error" => "id not found",
+                    "required" => true
+                ]
+            ]
+        ];
+    }
+
     // Getters & Setters
     public function getTable()
     {
@@ -303,5 +328,26 @@ class Book extends Singleton
         $req->execute();
         $res = $req->fetchAll(PDO::FETCH_ASSOC);
         return $res;
+    }
+
+    public function setAllBySlug($slug){
+        $res = $this->getAllBySlug($slug);
+        $res = $res[0];
+        $this->setId($res['id']);
+        $this->setTitle($res['title']);
+        $this->setDescription($res['description']);
+        $this->setAuthor($res['author']);
+        $this->setImage($res['image']);
+        $this->setPublisher($res['publisher']);
+        $this->setPrice($res['price']);
+        $this->setCategory($res['category']);
+        $this->setStockNumber($res['stock_number']);
+        $this->setSlug($res['slug']);
+    }
+
+    public function deleteBySlug($slug){
+        $query = "DELETE FROM " . $this->getTable() . " WHERE slug = '" . $slug ."'";
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
     }
 }
