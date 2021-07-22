@@ -35,9 +35,11 @@ class InstallerController{
                             ."DBPWD=" . $_POST["dbpwd"] . "\n"
                             ."DBPORT=" . htmlspecialchars($_POST["dbport"]) . "\n"
                             ."MAILHOST=" . htmlspecialchars($_POST["mailhost"]) . "\n"
-                            ."MAILUSERNAME=" . htmlspecialchars($_POST["mailexp"]) . "\n"
+                            ."MAILSENDER=" . htmlspecialchars($_POST["mailexp"]) . "\n"
+                            ."MAILSUPERADMIN=" . htmlspecialchars($_POST["email"]) . "\n"
                             ."MAILPWD=" . $_POST["mailpwd"] . "\n"
-                            ."MAILPORT=" . htmlspecialchars($_POST["mailport"]) . "\n";
+                            ."MAILPORT=" . htmlspecialchars($_POST["mailport"]) . "\n"
+                            ."MAILSMTPAUTH=true\n";
                         $handle = fopen("./.env", "w+");
                         fwrite($handle, $content);
                         new ConstantMaker();
@@ -49,6 +51,7 @@ class InstallerController{
                         $install->setEmail(htmlspecialchars($_POST["email"]));
                         $install->setPwd($pwd);
                         $install->setCountry($_POST["country"]);
+                        $install->addStatus(USERSUPERADMIN);
 
                         $token = substr(md5(uniqid(true)), 0, 10); # cut length to 10, no prefix, entropy => for more unicity
                         $install->setToken($token);

@@ -92,7 +92,7 @@ class Mailing{
 		    $this->mail->isSMTP();                                            
 		    $this->mail->Host       = MAILHOST;
 		    $this->mail->SMTPAuth   = MAILSMTPAUTH;                                   
-		    $this->mail->Username   = MAILUSERNAME;                  
+		    $this->mail->Username   = MAILSENDER;                  
 		    $this->mail->Password   = MAILPWD;                               
 		    $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
 		    $this->mail->Port       = MAILPORT;                                  

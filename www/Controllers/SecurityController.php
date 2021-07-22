@@ -519,7 +519,7 @@ class SecurityController
 					
 
 					# verify status USERVALIDATED : 2 else no login allowed
-					}else if(($user->isValidated() || $user->isSuperAdmin()) && !$user->isDeleted()){
+					}else if($user->isValidated() && !$user->isDeleted()){
 
 						$token = substr(md5(uniqid(true)), 0, 10); # cut length to 10, no prefix, entropy => for more unicity
 						$user->setToken($token);
@@ -647,7 +647,7 @@ class SecurityController
 
 		$mailing = Mailing::getMailing();
 		$mailing->mailConfirm($user);
-		$mailing->setRecipient(MAILUSERNAME);
+		$mailing->setRecipient(MAILSUPERADMIN);
 		$mailing->sendMail();
 		header("Location: /lbly-admin/login");
 		
