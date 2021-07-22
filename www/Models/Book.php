@@ -98,7 +98,7 @@ class Book extends Singleton
                     "id" => "title",
                     "class" => "form_input",
                     "placeholder" => "Exemple: Harry Potter et La Coupe de Feu",
-                    "value" => $this->title ?? "",
+                    "value" => "",
                     "error" => "Le titre doit faire entre 1 et 100 caractères ",
                     "required" => true
                 ],
@@ -110,7 +110,7 @@ class Book extends Singleton
                     "id" => "description",
                     "class" => "form_input",
                     "placeholder" => "Un super livre",
-                    "value" => $this->description ?? "",
+                    "value" => "",
                     "error" => "Votre description doit faire entre 1 et 255 caractères",
                     "required" => true
                 ],
@@ -122,7 +122,7 @@ class Book extends Singleton
                     "id" => "author",
                     "class" => "form_input",
                     "placeholder" => "Exemple: Sun Tzu",
-                    "value" => $this->getAuthor() ?? '',
+                    "value" => '',
                     "error" => "Le nom de l'auteur doit faire entre 1 et 320 caractères",
                     "required" => true,
                 ],
@@ -216,6 +216,129 @@ class Book extends Singleton
                     "error" => "id not found",
                     "required" => true
                 ]
+            ]
+        ];
+    }
+
+    public function formEditBook()
+    {
+
+        return [
+
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "form_editbook",
+                "class" => "form_builder",
+                "submit" => "Valider"
+            ],
+            "inputs" => [
+                "title" => [
+                    "type" => "text",
+                    "label" => "Titre du livre",
+                    "minLength" => 1,
+                    "maxLength" => 100,
+                    "id" => "title",
+                    "class" => "form_input",
+                    "placeholder" => "Exemple: Harry Potter et La Coupe de Feu",
+                    "value" => $this->title ?? "",
+                    "error" => "Le titre doit faire entre 1 et 100 caractères ",
+                    "required" => true
+                ],
+                "description" => [
+                    "type" => "text",
+                    "label" => "Description du livre",
+                    "minLength" => 1,
+                    "maxLength" => 255,
+                    "id" => "description",
+                    "class" => "form_input",
+                    "placeholder" => "Un super livre",
+                    "value" => $this->description ?? "",
+                    "error" => "Votre description doit faire entre 1 et 255 caractères",
+                    "required" => true
+                ],
+                "author" => [
+                    "type" => "text",
+                    "label" => "Nom de l'auteur",
+                    "minLength" => 1,
+                    "maxLength" => 100,
+                    "id" => "author",
+                    "class" => "form_input",
+                    "placeholder" => "Exemple: Sun Tzu",
+                    "value" => $this->author ?? '',
+                    "error" => "Le nom de l'auteur doit faire entre 1 et 320 caractères",
+                    "required" => true,
+                ],
+                "publication_date" => [
+                    "type" => "date",
+                    "label" => "Date de publication",
+                    "id" => "publication_date",
+                    "class" => "form_input",
+                    "placeholder" => "",
+                    "value" => $this->publication_date ?? '',
+                    "error" => "La date rentrée est incorrecte",
+                    "required" => true
+                ],
+                "image" => [
+                    "type" => "file",
+                    "label" => "Image de couverture du livre",
+                    "accept" => "image/*",
+                    "id" => "image",
+                    "class" => "form_input",
+                    "placeholder" => "",
+                    "value" => $this->image ?? '',
+                    "error" => "Le fichier envoyé est incorrect",
+                    "required" => false
+                ],
+                "publisher" => [
+                    "type" => "text",
+                    "label" => "Maison d'édition",
+                    "minLength" => 1,
+                    "maxLength" => 100,
+                    "id" => "publisher",
+                    "class" => "form_input",
+                    "placeholder" => "Exemple: Flammarion",
+                    "value" => $this->publisher ?? '',
+                    "error" => "La maison d'édition doit faire entre 1 et 100 caractères",
+                    "required" => true
+                ],
+                "price" => [
+                    "type" => "number",
+                    "label" => "Prix de vente",
+                    "min" => 1,
+                    "step" => "any",
+                    "id" => "price",
+                    "class" => "form_input",
+                    "placeholder" => "200",
+                    "value" => $this->price ?? '',
+                    "error" => "Le prix doit être au moins supérieur à 1€",
+                    "required" => true
+                ],
+                //category g pas encore fait, faudra faire un options
+                // Pour l'instant on a un input type text
+                "category" => [
+                    "type" => "text",
+                    "label" => "Catégorie",
+                    "minLength" => 1,
+                    "maxLength" => 100,
+                    "id" => "category",
+                    "class" => "form_input",
+                    "placeholder" => "Exemple: Science-fiction",
+                    "value" => $this->category ?? '',
+                    "error" => "La catégorie doit faire entre 1 et 100 caractères",
+                    "required" => true
+                ],
+                "stock_number" => [
+                    "type" => "number",
+                    "label" => "Nombre de livres en stock",
+                    "min" => 1,
+                    "id" => "stock_number",
+                    "class" => "form_input",
+                    "placeholder" => "200",
+                    "value" => $this->stock_number ?? '',
+                    "error" => "Le nombre de livres doit être au moins supérieur à 1",
+                    "required" => true
+                ],
             ]
         ];
     }
