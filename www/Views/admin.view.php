@@ -15,7 +15,7 @@
                                 <th>Prénom</th>
                                 <th>Mail</th>
                                 <th>Pays</th>
-                                <th>Statut</th>
+                                <th>Roles</th>
 
                             </tr>
                             </thead>

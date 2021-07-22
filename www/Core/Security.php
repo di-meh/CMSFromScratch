@@ -29,19 +29,18 @@ class Security
 
 	public static function readStatus($status){
 
-		$readStatus = "";
+        if($status & USERSUPERADMIN) return "SUPERADMIN";
         if($status == 0) return "NON VALIDATED USER";
+        if(!($status & USERVALIDATED)) return "NON VALIDATED USER";
         if($status & USERDELETED) return "DELETED";
 
+		$readStatus = "";
 
-        if($status & USERSUPERADMIN) return "SUPERADMIN";
         if($status & USERADMIN) $readStatus .= "ADMIN</br>";
-        if($status & USERVALIDATED) $readStatus .= "VALIDATED</br>";
         if($status & USERCONTRIBUTOR) $readStatus .= "CONTRIBUTOR</br>";
         if($status & USERAUTHOR) $readStatus .= "AUTHOR</br>";
         if($status & USEREDITOR) $readStatus .= "EDITOR</br>";
         if($status & USERBANNISHED) $readStatus .= "BANNISHED</br>";
-
 
         return $readStatus;
 

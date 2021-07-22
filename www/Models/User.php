@@ -291,7 +291,7 @@ class User extends Singleton
     }
 
     public function isValidated(){
-        return (($this->status & USERVALIDATED) || $this->isAdmin());
+        return ($this->status & USERVALIDATED);
     }
 
     public function isContributor(){

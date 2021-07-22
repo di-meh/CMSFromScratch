@@ -61,32 +61,36 @@ class SecurityController
 
 					$infos = [];
 
-					if($userModified->isAdmin()){
-						$infos[0] = " Administrateur</br>";
-						$view->assign("infos", $infos);
-					}
-					if($userModified->isContributor()){
-						isset($infos[0])? $infos[0].= " Contributeur</br>":$infos[0] = "Contributeur</br>";
+					if(!$userModified->isValidated()){
+
+						$infos[0] =  "Un Administrateur doit valider cet utilisateur</br>";
 						$view->assign("infos", $infos);
 
+					}else{
+
+						if($userModified->isAdmin()){
+							isset($infos[0])? $infos[0].= "Administrateur</br>":$infos[0] = "Administrateur</br>";
+							$view->assign("infos", $infos);
+						}
+						if($userModified->isContributor()){
+							isset($infos[0])? $infos[0].= " Contributeur</br>":$infos[0] = "Contributeur</br>";
+							$view->assign("infos", $infos);
+
+						}
+						if($userModified->isAuthor()){
+							isset($infos[0])? $infos[0].= " Auteur</br>":$infos[0] = "Auteur</br>";
+
+							$view->assign("infos", $infos);
+
+						}
+						if($userModified->isEditor()){
+							isset($infos[0])? $infos[0].= " Editeur</br>":$infos[0] = "Editeur</br>";
+
+							$view->assign("infos", $infos);
+
+						}
 					}
-					if($userModified->isAuthor()){
-						isset($infos[0])? $infos[0].= " Auteur</br>":$infos[0] = "Auteur</br>";
 
-						$view->assign("infos", $infos);
-
-					}
-					if($userModified->isEditor()){
-						isset($infos[0])? $infos[0].= " Editeur</br>":$infos[0] = "Editeur</br>";
-
-						$view->assign("infos", $infos);
-
-					}
-					if($userModified->isValidated()){
-						isset($infos[0])? $infos[0].= "Utilisateur Validé</br>":$infos[0] = "Utilisateur Validé</br>";
-						$view->assign("infos", $infos);
-
-					}
 
 					if(!empty($_POST)){
 						$infos = [];
@@ -520,7 +524,7 @@ class SecurityController
 					
 
 					# verify status USERVALIDATED : 2 else no login allowed
-					}else if($user->isValidated() && !$user->isDeleted()){
+					}else if(($user->isValidated() || $user->isSuperAdmin()) && !$user->isDeleted()){
 
 						$token = substr(md5(uniqid(true)), 0, 10); # cut length to 10, no prefix, entropy => for more unicity
 						$user->setToken($token);
@@ -529,15 +533,6 @@ class SecurityController
 						$_SESSION['email'] = $user->getEmail(); # email unique donc ca devrait etre bon
 						# $_SESSION['pwd'] = $user->getPwd(); # ??
 						$_SESSION['token'] = $token; # not sure
-
-
-						#echo "MAIS OUI TU ES CONNECTE MON FILS.";
-						#$user->setEmail($_POST['email']);
-						# $id = Singleton::findID($email);
-						# $user->setId($id); # peuple l'entité
-						# $user->setPwd($_POST['pwd']); # useless to me
-
-						#var_dump($res);
 
 						header("Location:/lbly-admin"); # temporairement
 						# $user->deleteAll(); # pour delete immediatement en 
