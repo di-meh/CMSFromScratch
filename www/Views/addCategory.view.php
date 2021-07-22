@@ -4,7 +4,7 @@
         <div class="col-full">
             <div class="card">
                 <div class="card-title">
-                    <a href="../category"><button class='btn btn-light'><span class='material-icons'>undo</span></button></a>
+                    <a href="/lbly-admin/category"><button class='btn btn-light'><span class='material-icons'>undo</span></button></a>
                     <h6>Ajouter une catégorie</h6>
                 </div>
                 <div class="card-content">
