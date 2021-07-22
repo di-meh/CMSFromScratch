@@ -55,9 +55,8 @@ class PageController
                 }else{
                     $page->setSlug($page->title2slug($_POST['title']));
                     if (empty($page->getAllBySlug($page->getSlug()))){
-                        var_dump($page);
                         $page->save();
-                        // header("Location:/lbly-admin/pages");
+                         header("Location:/lbly-admin/pages");
                     }else{
                         echo $page->getSlug();
                         $view->assign("errors", ["Veuillez changer le titre de votre page"]);

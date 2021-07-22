@@ -103,8 +103,9 @@ class BookController
 
         $formdelete = $book->formDeleteBook();
         $view->assign("formdelete", $formdelete);
+    }
 
-
+    public function editBookAction(){
 
     }
 }
