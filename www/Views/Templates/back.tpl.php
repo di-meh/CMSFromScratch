@@ -15,7 +15,7 @@
 			<h5 class="navbar-title">Template du back</h5>
 			<div class="navbar-right">
 				<!-- Page profil mais accueil pour l'instant -->
-				<div class="right-link"><a href="/"><span class="material-icons">face</span></a></div>
+				<div class="right-link"><a href="/lbly-admin/editprofil"><span class="material-icons">face</span></a></div>
 				<div class="right-link"><a href="/lbly-admin/logout"><span class="material-icons">power_settings_new</span></a></div>
 			</div>
 		</nav>

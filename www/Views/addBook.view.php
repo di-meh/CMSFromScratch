@@ -4,7 +4,7 @@
         <div class="col-full">
             <div class="card">
                 <div class="card-title">
-                    <button class='btn btn-light' onclick='history.go(-1)'><span class='material-icons'>undo</span></button>
+                    <a href="../lbly-admin/books"><button class='btn btn-light'><span class='material-icons'>undo</span></button></a>
                     <h6>Ajouter un Livre</h6>
                 </div>
                 <div class="card-content">
