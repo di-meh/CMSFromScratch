@@ -30,9 +30,9 @@ class Security
 	public static function readStatus($status){
 
         if($status & USERSUPERADMIN) return "SUPERADMIN";
+        if($status & USERDELETED) return "DELETED";
         if($status == 0) return "NON VALIDATED USER";
         if(!($status & USERVALIDATED)) return "NON VALIDATED USER";
-        if($status & USERDELETED) return "DELETED";
 
 		$readStatus = "";
 
