@@ -66,7 +66,9 @@ CREATE TABLE `lbly_books` (
 
 CREATE TABLE `lbly_category` (
   `id` int(11) NOT NULL,
-  `nameCategory` varchar(255) NOT NULL
+  `nameCategory` varchar(255) NOT NULL,
+  `colorCategory` varchar(7),
+  `slug` varchar(70) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -181,7 +183,7 @@ ALTER TABLE `lbly_user`
 -- Contraintes pour la table `lbly_page`
 --
 ALTER TABLE `lbly_page`
-  ADD CONSTRAINT `lbly_page_ibfk_1` FOREIGN KEY (`createdBy`) REFERENCES `lbly_user` (`id`);
+  ADD CONSTRAINT `lbly_page_ibfk_1` FOREIGN KEY (`createdBy`) REFERENCES `lbly_user` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

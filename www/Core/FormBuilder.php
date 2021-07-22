@@ -19,10 +19,12 @@ class FormBuilder
 		foreach ($form["inputs"] as $name => $configInput) {
 
 			$html .= "<div class='input-group'>";
-			if(!isset($configInput['hidden']) || (isset($configInput['hidden']) && $configInput['hidden'] == false)){
-				$html .= "<label for='" . ($configInput["id"] ?? "") . "'>" . ($configInput["label"] ?? "") . " </label>";
-			}
 
+			if (isset($configInput["label"])) {
+        if(!isset($configInput['hidden']) || (isset($configInput['hidden']) && $configInput['hidden'] == false)){
+				  $html .= "<label for='" . ($configInput["id"] ?? "") . "'>" . ($configInput["label"] ?? "") . " </label>";
+			  }
+			}
 
 			if ($configInput["type"] == "select") {
 				$html .= self::renderSelect($name, $configInput);
@@ -40,6 +42,19 @@ class FormBuilder
 		}
 
 		$html .= "<button ".($namePost??'')." type='submit' value=\"" . ($form["config"]["submit"] ?? "Valider") . "\" class='btn btn-primary'>" . ($form["config"]["submit"] ?? "Valider") . "</button>";
+
+		// 	foreach ($form["buttons"] as $name => $configButton) {
+
+
+		// 		$html .= "<a id='" . ($configButton["id"] ?? "") . "' class='" . ($configButton["class"] ?? "") . "' ";
+		// 		if (isset($configButton["href"])) {
+		// 			$html .= "href='" . ($configButton["href"] ?? "") . "'><button class='" . ($configButton["btn_class"] ?? "") . "'>" . ($configButton["text"] ?? "");
+		// 		}
+	
+		// 		$html .= "</button></a>";
+		// 	}
+		// }
+
 
 		$html .= "</form>";
 

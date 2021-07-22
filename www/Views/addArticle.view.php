@@ -1,3 +1,4 @@
+<script src="/../node_modules/ckeditor4/ckeditor.js"></script>
 <section class="container-fluid">
     <div class="row">
         <div class="col-full">
@@ -12,8 +13,3 @@
         </div>
     </div>
 </section>
-
-<script src="/../ckeditor/ckeditor.js"></script>
-<script>
-    CKEDITOR.replace('content');
-</script>

@@ -17,6 +17,7 @@ class Book extends Singleton
     protected $price = 0;
     protected $category;
     protected $stock_number = 0;
+    protected $slug;
 
     private $table = DBPREFIX . "books";
     public function __construct()
@@ -49,6 +50,30 @@ class Book extends Singleton
     public function stockDown($number = 1)
     {
         $this->setStockNumber($this->getStockNumber() - $number);
+    }
+
+    public function book2slug($book){
+        $book = preg_replace('~[^\pL\d]+~u', '-', $book);
+
+        $unwanted_array = array(    'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+            'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
+            'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
+            'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
+            'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y' );
+        $book = strtr( $book, $unwanted_array );
+
+        //retire symboles spéciaux
+        $book = iconv("UTF-8", "ASCII//TRANSLIT", $book);
+
+        $book = preg_replace('~[^-\w]+~', '', $book);
+
+        $book = trim($book, '-');
+        //suprimme double -
+        $book = preg_replace('~-+~', '-', $book);
+        //minuscule
+        $book = strtolower($book);
+
+        return $book;
     }
 
     // Forms
@@ -170,6 +195,31 @@ class Book extends Singleton
         ];
     }
 
+    public function formDeleteBook(){
+        return [
+
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "form_deletebook",
+                "class" => "form_builder",
+                "submit" => "Supprimer",
+                "btn_class" => "btn btn-danger"
+            ],
+            "inputs" => [
+                "delete" => [
+                    "type" => "hidden",
+                    "label" => "Voulez vous supprimez ce livre : ".$this->title." ?",
+                    "id" => "title",
+                    "class" => "form_input",
+                    "value" => $this->slug,
+                    "error" => "id not found",
+                    "required" => true
+                ]
+            ]
+        ];
+    }
+
     // Getters & Setters
     public function getTable()
     {
@@ -254,5 +304,50 @@ class Book extends Singleton
     public function setStockNumber($stock_number)
     {
         $this->stock_number = $stock_number >= 0 ? $stock_number : 0;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    }
+
+    public function getAllBySlug($slug){
+        $query = "SELECT * FROM " . $this->getTable() . " WHERE slug = '".$slug."'";
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
+        $res = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $res;
+    }
+
+    public function setAllBySlug($slug){
+        $res = $this->getAllBySlug($slug);
+        $res = $res[0];
+        $this->setId($res['id']);
+        $this->setTitle($res['title']);
+        $this->setDescription($res['description']);
+        $this->setAuthor($res['author']);
+        $this->setImage($res['image']);
+        $this->setPublisher($res['publisher']);
+        $this->setPrice($res['price']);
+        $this->setCategory($res['category']);
+        $this->setStockNumber($res['stock_number']);
+        $this->setSlug($res['slug']);
+    }
+
+    public function deleteBySlug($slug){
+        $query = "DELETE FROM " . $this->getTable() . " WHERE slug = '" . $slug ."'";
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
     }
 }
