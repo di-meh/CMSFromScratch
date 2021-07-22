@@ -327,37 +327,32 @@ class User extends Singleton
                     "type" => "checkbox",
                     "label" => "Administrateur",
                     "id" => "admin",
-                    "class" => "form_input",
-                    "checked" => ($this->isAdmin())?"checked":""
+                    "class" => "form_input"
                 ],
                 "contributor" => [
                     "type" => "checkbox",
                     "label" => "Contributeur",
                     "id" => "contributor",
-                    "class" => "form_input",
-                    "checked" => ($this->isContributor())?"checked":""
+                    "class" => "form_input"
                 ],
                 "author" => [
                     "type" => "checkbox",
                     "label" => "Auteur",
                     "id" => "author",
-                    "class" => "form_input",
-                    "checked" => ($this->isAuthor())?"checked":""
+                    "class" => "form_input"
                 ],
                 "editor" => [
                     "type" => "checkbox",
                     "label" => "Editeur",
                     "id" => "editor",
                     "class" => "form_input",
-                    "checked" => ($this->isEditor())?"checked":""
 
                 ],
                 "validated" => [
                     "type" => "checkbox",
                     "label" => "Valider",
                     "id" => "validated",
-                    "class" => "form_input",
-                    "checked" => ($this->isValidated())?"checked":""
+                    "class" => "form_input"
 
                 ]
             ]

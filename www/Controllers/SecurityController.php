@@ -59,11 +59,48 @@ class SecurityController
 					$view = new View("changeRole", "back");
 					$form = $userModified->formRoles();
 
-					/*if(isset($_POST['admin'])){
+					$infos = [];
+
+					if($userModified->isAdmin()){
+						$infos[0] = " Administrateur</br>";
+						$view->assign("infos", $infos);
+					}
+					if($userModified->isContributor()){
+						isset($infos[0])? $infos[0].= " Contributeur</br>":$infos[0] = "Contributeur</br>";
+						$view->assign("infos", $infos);
+
+					}
+					if($userModified->isAuthor()){
+						isset($infos[0])? $infos[0].= " Auteur</br>":$infos[0] = "Auteur</br>";
+
+						$view->assign("infos", $infos);
+
+					}
+					if($userModified->isEditor()){
+						isset($infos[0])? $infos[0].= " Editeur</br>":$infos[0] = "Editeur</br>";
+
+						$view->assign("infos", $infos);
+
+					}
+					if($userModified->isValidated()){
+						isset($infos[0])? $infos[0].= "Utilisateur Validé</br>":$infos[0] = "Utilisateur Validé</br>";
+						$view->assign("infos", $infos);
+
+					}
+
+					if(!empty($_POST)){
+						$infos = [];
+					}					
+
+
+					if(isset($_POST['admin'])){
 						$userModified->addStatus(USERADMIN);
 						$infos[] = $userModified->getEmail()." est devenu Administrateur.";
 
-					}else{
+					}else if(isset($_POST['valider'])){
+						if($userModified->isAdmin()){
+							$infos[] = $userModified->getEmail()." n'est plus Administrateur.";
+						}
 						$userModified->unflagStatus(USERADMIN);
 
 					}
@@ -72,7 +109,10 @@ class SecurityController
 						$userModified->addStatus(USERCONTRIBUTOR);
 						$infos[] = $userModified->getEmail()." est devenu Contributeur.";
 
-					}else){
+					}else if(isset($_POST['valider'])){
+						if($userModified->isAuthor()){
+							$infos[] = $userModified->getEmail()." n'est plus Contributeur.";
+						}
 						$userModified->unflagStatus(USERCONTRIBUTOR);
 
 					}
@@ -82,12 +122,16 @@ class SecurityController
 						$infos[] = $userModified->getEmail()." est devenu Auteur.";
 
 
-					}else{
-						$userModified->unflagStatus(USERAUTHOR);
+					}else if(isset($_POST['valider'])){
+						if($userModified->isAuthor()){
+							$infos[] = $userModified->getEmail()." n'est plus Auteur.";
 
-					}*/
+						}
+							$userModified->unflagStatus(USERAUTHOR);
 
-					if(isset($_POST['editor']) && !$userModified->isEditor()){
+					}
+
+					if(isset($_POST['editor'])){
 
 						$infos[] = $userModified->getEmail()." est devenu Editeur.";
 						$userModified->addStatus(USEREDITOR);
@@ -95,33 +139,34 @@ class SecurityController
 					}else if(isset($_POST['valider'])){
 						if($userModified->isEditor()){
 							$infos[] = $userModified->getEmail()." n'est plus Editeur.";
-
 						}
 						$userModified->unflagStatus(USEREDITOR);
 
 					}
 
-					if(isset($_POST['validated']) && !$userModified->isValidated()){
+					if(isset($_POST['validated'])){
 						$userModified->addStatus(USERVALIDATED);
 						$infos[] = $userModified->getEmail()." a été validé.";
 
 
 					}else if(isset($_POST['valider'])){
-						
-						$infos[] = $userModified->getEmail()." a été invalidé.";
+						if($userModified->isValidated()){
+							$infos[] = $userModified->getEmail()." a été invalidé.";
+						}
+
+
 						$userModified->unflagStatus(USERVALIDATED);
 
 					}
 
 					if(isset($infos)){
+
 						$view->assign("infos", $infos);
-						header("Refresh:3; url=/lbly-admin/adminview", true, 303);
+						#header("Refresh:5; url=/lbly-admin/adminview", true, 303);
 
 					}
 
 					$userModified->save();
-					$form = $userModified->formRoles();
-
 
 				}else{
 
