@@ -56,6 +56,9 @@ class SecurityController
 
 					$userModified->setAllFromId($_GET['userid']);
 
+					if($userModified->isSuperAdmin())
+						header("Location: /lbly-admin/adminview");
+
 					$view = new View("changeRole", "back");
 					$form = $userModified->formRoles();
 
@@ -153,14 +156,6 @@ class SecurityController
 						$infos[] = $userModified->getEmail()." a été validé.";
 
 
-					}else if(isset($_POST['valider'])){
-						if($userModified->isValidated()){
-							$infos[] = $userModified->getEmail()." a été invalidé.";
-						}
-
-
-						$userModified->unflagStatus(USERVALIDATED);
-
 					}
 
 					if(isset($infos)){
@@ -233,7 +228,7 @@ class SecurityController
 			$self = true;
 		}
 
-		if($userDelete->isDeleted()){
+		if($userDelete->isDeleted() || $userDelete->isSuperAdmin()){
 			header("Location: /lbly-admin/adminview");
 		}
 
