@@ -32,7 +32,9 @@
 				<li class="list-item"><a href="/lbly-admin/category"><span class="material-icons">category</span><span class="item-title">Catégorie</span></a></li>
 				<li class="list-item"><a href="/lbly-admin/pages"><span class="material-icons">article</span><span class="item-title">Pages</span></a></li>
 				<li class="list-item"><a href="/lbly-admin/articles"><span class="material-icons">article</span><span class="item-title">Articles</span></a></li>
-				<li class="list-item"><a href="/lbly-admin/"><span class="material-icons">people</span><span class="item-title">Utilisateurs</span></a></li>
+				<li class="list-item"><a href="/lbly-admin/adminview"><span class="material-icons">people</span><span class="item-title">Utilisateurs</span></a></li>
+
+
 				<li class="list-item"><a href="/lbly-admin/"><span class="material-icons">settings</span><span class="item-title">Paramètres</span></a></li>
 			</ul>
 		</div>

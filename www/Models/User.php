@@ -43,7 +43,7 @@ class User extends Singleton
         $this->setFirstname($res['firstname']);
         $this->setLastname($res['lastname']);
         $this->setEmail($email);
-        $this->setCountry($res['country']);
+        $this->setCountry($res['country']??'');
         $this->setStatus($res['status']);
         $this->setToken($res['token'] ?? '');
 
@@ -74,6 +74,23 @@ class User extends Singleton
             return true;
         }
         return false;
+    }
+
+    # cherche cet id en base
+    public function verifyId($id){
+
+        $id = htmlspecialchars($id);
+
+        $query = "SELECT id FROM " . $this->table . " WHERE id = '" . $id."'";
+        $prepare = $this->getPDO()->prepare($query);
+        $prepare->execute();
+        $result = $prepare->fetch(PDO::FETCH_ASSOC);
+
+        if(is_null($result['id']) || empty($result['id']))
+            return 0;
+        else
+            return 1;
+
     }
 
     # cherche le mdp correspond a ce mail en base
@@ -112,7 +129,7 @@ class User extends Singleton
         }
     }
 
-    # verify email and firstname given to set user status to uservalidated
+    # verify token and firstname given to set user status to uservalidated
     public function verifyUser($id, $token){
         $id = htmlspecialchars($id);
         $token = htmlspecialchars($token);
@@ -258,11 +275,113 @@ class User extends Singleton
     }
 
     public function addStatus($status){
-        $this->status = $this->status | $status;
+        $this->status |= $status;
+    }
+
+    public function unflagStatus($status){
+        $this->status &= ~$status;
+    }
+
+    public function isSuperAdmin(){
+        return ($this->status & USERSUPERADMIN);
+    }
+
+    public function isAdmin(){
+        return (($this->status & USERADMIN) || ($this->status & USERSUPERADMIN));
     }
 
     public function isValidated(){
         return ($this->status & USERVALIDATED);
+    }
+
+    public function isContributor(){
+        return $this->status & USERCONTRIBUTOR;
+    }
+
+    public function isEditor(){
+        return $this->status & USEREDITOR;
+    }
+
+    public function isAuthor(){
+        return $this->status & USERAUTHOR;
+    }
+
+    public function isDeleted(){
+        return $this->status & USERDELETED;
+    }
+
+    # form enables to edit users status, give roles and rights
+    public function formRoles(){
+        return [
+
+            "config" => [
+                    "method" => "POST",
+                    "action" => "",
+                    "id" => "form_delete",
+                    "class" => "form_builder",
+                    "name" => "valider",
+                    "submit" => "Valider"
+                ],
+            "inputs" => [
+                "admin" => [
+                    "type" => "checkbox",
+                    "label" => "Administrateur",
+                    "id" => "admin",
+                    "class" => "form_input"
+                ],
+                "contributor" => [
+                    "type" => "checkbox",
+                    "label" => "Contributeur",
+                    "id" => "contributor",
+                    "class" => "form_input"
+                ],
+                "author" => [
+                    "type" => "checkbox",
+                    "label" => "Auteur",
+                    "id" => "author",
+                    "class" => "form_input"
+                ],
+                "editor" => [
+                    "type" => "checkbox",
+                    "label" => "Editeur",
+                    "id" => "editor",
+                    "class" => "form_input",
+
+                ],
+                "validated" => [
+                    "type" => "checkbox",
+                    "label" => "Valider",
+                    "id" => "validated",
+                    "class" => "form_input",
+                    "hidden" => $this->isValidated()?true:false
+
+
+                ]
+            ]
+        ];
+    }
+
+    public function formDelete(){
+        return [
+
+            "config" => [
+                    "method" => "POST",
+                    "action" => "",
+                    "id" => "form_delete",
+                    "class" => "form_builder",
+                    "submit" => "Valider"
+                ],
+            "inputs" => [
+                "pwdConfirm" => [
+                    "type" => "password",
+                    "label" => "Confirmez avec votre mot de passe",
+                    "id" => "confirmpwd",
+                    "class" => "form_input",
+                    "placeholder" => "",
+                    "required" => true
+                ]
+            ]
+        ];
     }
 
     public function formForgetPwd(){

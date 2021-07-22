@@ -14,14 +14,249 @@ use App\Models\User;
 
 class SecurityController
 {
-	
 
-	public function defaultAction()
-	{
-		session_start();
-		if(!isset($_SESSION['id'])) $this->logoutAction();
-		
-		echo "Controller security action default";
+	# view all users for admin only
+	public function getAllUsersAction(){
+
+        $user = Secu::getConnectedUser();
+		if(is_null($user)) header("Location:/lbly-admin/login");
+
+
+		if($user->isAdmin()){
+			$view = new View("admin","back");
+
+			$users = $user->all();
+
+			$view->assign("users", $users);
+
+		}else{
+			header("HTTP/1.0 403 Forbidden");
+		 	$view = new View('403');
+		}
+
+
+
+	}
+
+	/*	
+	*	superadmin can modify all users status
+	*	admin can modify all users status except admin
+	*/
+	public function modifyRoleAction(){
+
+		$user = Secu::getConnectedUser();
+		if(is_null($user)) header("Location:/lbly-admin/login");
+
+		if($user->isAdmin()){
+
+			if(isset($_GET['userid'])){
+
+				$userModified = new User();
+				if($userModified->verifyId($_GET['userid']) == 1){
+
+					$userModified->setAllFromId($_GET['userid']);
+
+					if($userModified->isSuperAdmin())
+						header("Location: /lbly-admin/adminview");
+
+					$view = new View("changeRole", "back");
+					$form = $userModified->formRoles();
+
+					$infos = [];
+
+					if(!$userModified->isValidated() && !$userModified->isSuperAdmin()){
+
+						$infos[0] =  "Un Administrateur doit valider cet utilisateur</br>";
+						$view->assign("infos", $infos);
+
+					}else{
+
+						if($userModified->isAdmin()){
+							isset($infos[0])? $infos[0].= "Administrateur</br>":$infos[0] = "Administrateur</br>";
+							$view->assign("infos", $infos);
+						}
+						if($userModified->isContributor()){
+							isset($infos[0])? $infos[0].= " Contributeur</br>":$infos[0] = "Contributeur</br>";
+							$view->assign("infos", $infos);
+
+						}
+						if($userModified->isAuthor()){
+							isset($infos[0])? $infos[0].= " Auteur</br>":$infos[0] = "Auteur</br>";
+
+							$view->assign("infos", $infos);
+
+						}
+						if($userModified->isEditor()){
+							isset($infos[0])? $infos[0].= " Editeur</br>":$infos[0] = "Editeur</br>";
+
+							$view->assign("infos", $infos);
+
+						}
+					}
+
+
+					if(!empty($_POST)){
+						$infos = [];
+					}					
+
+
+					if(isset($_POST['admin'])){
+						$userModified->addStatus(USERADMIN);
+						$infos[] = $userModified->getEmail()." est devenu Administrateur.";
+
+					}else if(isset($_POST['valider'])){
+						if($userModified->isAdmin()){
+							$infos[] = $userModified->getEmail()." n'est plus Administrateur.";
+						}
+						$userModified->unflagStatus(USERADMIN);
+
+					}
+
+					if(isset($_POST['contributor'])){
+						$userModified->addStatus(USERCONTRIBUTOR);
+						$infos[] = $userModified->getEmail()." est devenu Contributeur.";
+
+					}else if(isset($_POST['valider'])){
+						if($userModified->isAuthor()){
+							$infos[] = $userModified->getEmail()." n'est plus Contributeur.";
+						}
+						$userModified->unflagStatus(USERCONTRIBUTOR);
+
+					}
+
+					if(isset($_POST['author'])){
+						$userModified->addStatus(USERAUTHOR);
+						$infos[] = $userModified->getEmail()." est devenu Auteur.";
+
+
+					}else if(isset($_POST['valider'])){
+						if($userModified->isAuthor()){
+							$infos[] = $userModified->getEmail()." n'est plus Auteur.";
+
+						}
+							$userModified->unflagStatus(USERAUTHOR);
+
+					}
+
+					if(isset($_POST['editor'])){
+
+						$infos[] = $userModified->getEmail()." est devenu Editeur.";
+						$userModified->addStatus(USEREDITOR);
+
+					}else if(isset($_POST['valider'])){
+						if($userModified->isEditor()){
+							$infos[] = $userModified->getEmail()." n'est plus Editeur.";
+						}
+						$userModified->unflagStatus(USEREDITOR);
+
+					}
+
+					if(isset($_POST['validated'])){
+						$userModified->addStatus(USERVALIDATED);
+						$infos[] = $userModified->getEmail()." a été validé.";
+
+
+					}
+
+					if(isset($infos)){
+
+						$view->assign("infos", $infos);
+						#header("Refresh:5; url=/lbly-admin/adminview", true, 303);
+
+					}
+
+					$userModified->save();
+
+				}else{
+
+					$view->assign("errors", ["Id inexistant.</br>Redirection..."]);
+					header("Refresh:3; url=/", true, 303);
+				}
+
+
+			}else{
+				header("Location: /");
+			}
+
+		}else{
+			header("HTTP/1.0 403 Forbidden");
+		 	$view = new View('403');
+
+		}
+
+					$view->assign("form",$form);
+
+	}
+
+	/*	delete user form asking for the user pwd or the admin pwd	*/
+	public function deleteUserAction(){
+
+		$user = Secu::getConnectedUser();
+		if(is_null($user)) header("Location:/lbly-admin/login");
+
+		$view = new View("deleteuser", "back");
+
+		$form = $user->formDelete(); # confirm pwd of the user or the admin
+
+		$userDelete = new User();
+
+		$self = false; # not self delete
+
+		# admin can delete a user 
+		if(isset($_GET['userid']) && $user->isAdmin()){
+
+			if($_GET['userid'] == $user->getId())
+				$self = true;
+			
+			if($userDelete->verifyId($_GET['userid']) == 1){
+				$userDelete->setAllFromId($_GET['userid']);
+
+			}else{
+				# id does not exist
+				$view->assign("errors", ["Id inexistant.</br>Redirection..."]);
+				header("Refresh:3; url=/", true, 303);
+
+			}
+
+
+		}else if(isset($_GET['userid']) && !$user->isAdmin()){
+			header("Location: /");
+
+		# user delete himself
+		}else{ 
+			$userDelete = $user;
+			$self = true;
+		}
+
+		if($userDelete->isDeleted() || $userDelete->isSuperAdmin()){
+			header("Location: /lbly-admin/adminview");
+		}
+
+		if(isset($_POST['pwdConfirm'])){
+
+			if(password_verify($_POST['pwdConfirm'], $user->getPwd())){
+				$userDelete->addStatus(USERDELETED);
+				$userDelete->save();
+				$view->assign("infos", ["Le compte ".$userDelete->getEmail()." a bien été supprimé.</br>Vous allez être redirigé."]);
+
+				if($self)
+					header("Refresh:4; url=/lbly-admin/logout", true, 303); 
+				else
+					header("Refresh:4; url=/lbly-admin/adminview", true, 303);
+
+
+			}else{
+				$view->assign("errors", ["Le mot de passe est erroné"]);
+
+			}
+			
+
+		}
+
+			
+		$view->assign("form", $form);
+
+
 	}
 
 	public function forgetPwdAction(){
@@ -43,7 +278,7 @@ class SecurityController
 
 				$user->setAllFromEmail($email);
 
-				if($user->isValidated()){ # user has validated his account by mail
+				if($user->isValidated()){ # only superadmin validates
 
 					# send mail with link to change pwd
 					$mailing = Mailing::getMailing();
@@ -54,7 +289,7 @@ class SecurityController
 					$view->assign("infos", [$infos]);
 
 				}else{
-					$view->assign("infos", ["Vous devez valider votre compte par email.<a href='http://localhost/lbly-admin/userconfirm?email=$email'> Cliquez ici pour renvoyer le mail de confirmation.</a>"]);
+					$view->assign("infos", ["Votre compte n'a pas été validé."]);
 				}
 
 
@@ -140,13 +375,11 @@ class SecurityController
 		if($user->verifyUser($id,$token) == 1){ # check user in db with this id and token couple
 
 			$user->setAllFromId($id);
-			$user->addStatus(USERVALIDATED);; # status USERVALIDATED = 4
+			$user->addStatus(USERVALIDATED);
 
 			$user->setToken(Helpers::createToken());
 
 			$user->save();
-			session_start();
-			$_SESSION['id'] = $user->getId();
 
 			header("Location:/lbly-admin"); # temporairement
 
@@ -225,7 +458,7 @@ class SecurityController
 									$user->setPwd($pwd);
 									#$_SESSION['user'] = $user; # update de session
 									$infos[] = "Votre mot de passe a été mis à jour !";
-									$view->assign("infos", $infos); # not an error but well
+									$view->assign("infos", $infos);
 									$user->save();
 								} else {
 									$view->assign('errors', ["La taille du nouveau mot de passe doit faire 8 caractères au minimum."]);
@@ -281,8 +514,12 @@ class SecurityController
 					# set tous les attributs depuis la base
 					# à partir du mail
 
-					# verify status USERVALIDATED : 4 else no login allowed
-					if($user->isValidated()){
+					if($user->isDeleted()){
+						$view->assign("infos", ["Ce compte a été supprimé."]);
+					
+
+					# verify status USERVALIDATED : 2 else no login allowed
+					}else if(($user->isValidated() || $user->isSuperAdmin()) && !$user->isDeleted()){
 
 						$token = substr(md5(uniqid(true)), 0, 10); # cut length to 10, no prefix, entropy => for more unicity
 						$user->setToken($token);
@@ -292,20 +529,11 @@ class SecurityController
 						# $_SESSION['pwd'] = $user->getPwd(); # ??
 						$_SESSION['token'] = $token; # not sure
 
-
-						#echo "MAIS OUI TU ES CONNECTE MON FILS.";
-						#$user->setEmail($_POST['email']);
-						# $id = Singleton::findID($email);
-						# $user->setId($id); # peuple l'entité
-						# $user->setPwd($_POST['pwd']); # useless to me
-
-						#var_dump($res);
-
 						header("Location:/lbly-admin"); # temporairement
 						# $user->deleteAll(); # pour delete immediatement en 
 					}else{
                         $email = $_POST['email'];
-					    $html = "Vous devez aller confirmer votre compte avec le mail que vous avez reçu à cette adresse: " . $user->getEmail() . " . <a href='http://localhost/lbly-admin/userconfirm?email=$email'>Renvoyer le mail de confirmation</a>";
+					    $html = "Votre compte n'a pas été validé.";
                         $view->assign("infos", [$html]);
 //					    echo "Vous devez aller <strong style='color:red'>confirmer votre compte</strong> avec le mail que vous avez reçu à cette adresse : <strong style='color:blue'>".$user->getEmail()."</strong><br/>";
 //
@@ -334,29 +562,18 @@ class SecurityController
 	public function registerAction()
 	{
 
-		/*
+		session_start();
+		if(isset($_SESSION['id'])){
+			$user = new User();
+			$user->setAllFromId($_SESSION['id']);
+		}
 
 
-		$log = new Log();
-		$log->user("y.skrzypczyk@gmail.com");
-		$log->date(time());
-		$log->success(false);
-		$log->save();
-
-		$user = new User();
-		print_r($user) // VIDE
-		$user->setId(2); // double action de peupler l'objet avec ce qu'il y a en bdd
-		print_r($user) // J'ai le user en bdd
-		$user->setFirstname("Toto");
-		$user->save();
-		*/
-
-
-		$user = new User();
+		$userRegister = new User();
 
 		$view = new View("register");
 
-		$form = $user->formRegister();
+		$form = $userRegister->formRegister();
 
 		if (!empty($_POST)) {
 
@@ -371,7 +588,7 @@ class SecurityController
 
 			if (empty($errors)) {
 
-				$mailExists = $user->verifyMail($_POST['email'], $user->getTable());
+				$mailExists = $userRegister->verifyMail($_POST['email'], $userRegister->getTable());
 				# verify unicity in database
 
 
@@ -381,19 +598,29 @@ class SecurityController
 
 						$pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
 
-						$user->setFirstname(htmlspecialchars($_POST["firstname"]));
-						$user->setLastname(htmlspecialchars($_POST["lastname"]));
-						$user->setEmail(htmlspecialchars($_POST["email"]));
-						$user->setPwd($pwd);
-						$user->setCountry($_POST["country"]);
+						$userRegister->setFirstname(htmlspecialchars($_POST["firstname"]));
+						$userRegister->setLastname(htmlspecialchars($_POST["lastname"]));
+						$userRegister->setEmail(htmlspecialchars($_POST["email"]));
+						$userRegister->setPwd($pwd);
+						$userRegister->setCountry($_POST["country"]);
 
-						$token = substr(md5(uniqid(true)), 0, 10); # cut length to 10, no prefix, entropy => for more unicity
-						$user->setToken($token);
+						$userRegister->setToken(Helpers::createToken());
 
-						$user->save();
+						if(isset($user) && $user->isAdmin()){
+							$userRegister->addStatus(USERVALIDATED);
+							# envoi de mail au nouvel user créé pour quil change son pwd
+							header("Location: /lbly-admin/adminview");
 
-						$email = $_POST['email'];
-						header("Location: userconfirm?email=$email");
+
+						}else{
+
+							$email = $_POST['email'];
+							header("Location: userconfirm?email=$email");
+
+						}	
+
+							$userRegister->save();
+
 
 					}else{
 						$view->assign("errors", ["Vos mots de passe sont différents."]);
@@ -416,13 +643,12 @@ class SecurityController
 		if(is_null($_GET['email']) || empty($_GET['email']))
 			header("Location: /");
 
-		$user->setAllFromEmail($_GET['email']); # to get user id
+		$user->setAllFromEmail($_GET['email']);
 
 		$mailing = Mailing::getMailing();
-		$mailing->mailConfirm($user); # set mail confirmation content
-		$mailing->setRecipient($_GET['email']);
+		$mailing->mailConfirm($user);
+		$mailing->setRecipient(MAILUSERNAME);
 		$mailing->sendMail();
-
 		header("Location: /lbly-admin/login");
 		
 	}

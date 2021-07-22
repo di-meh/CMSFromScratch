@@ -5,13 +5,3 @@
         </div>
 	</div>
 </section>
-
-
-
-
-
-<!-- <section>
-	<br />
-
-
-</section> -->

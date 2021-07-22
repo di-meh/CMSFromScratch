@@ -21,8 +21,11 @@ class FormBuilder
 			$html .= "<div class='input-group'>";
 
 			if (isset($configInput["label"])) {
-				$html .= "<label for='" . ($configInput["id"] ?? "") . "'>" . ($configInput["label"] ?? "") . " </label>";
+        if(!isset($configInput['hidden']) || (isset($configInput['hidden']) && $configInput['hidden'] == false)){
+				  $html .= "<label for='" . ($configInput["id"] ?? "") . "'>" . ($configInput["label"] ?? "") . " </label>";
+			  }
 			}
+
 			if ($configInput["type"] == "select") {
 				$html .= self::renderSelect($name, $configInput);
 			} elseif ($configInput["type"] == "textarea") {
@@ -34,8 +37,11 @@ class FormBuilder
 			$html .= "</div>";
 		}
 
-		$html .= "<button type='submit' value=\"" . ($form["config"]["submit"] ?? "Valider") . "\" class=\"".($form["config"]["btn_class"] ?? "btn btn-primary") ."\">" . ($form["config"]["submit"] ?? "Valider") . "</button>";
+		if(isset($form["config"]["name"])){
+			$namePost = "name=\"".$form["config"]["name"]."\"";
+		}
 
+		$html .= "<button ".($namePost??'')." type='submit' value=\"" . ($form["config"]["submit"] ?? "Valider") . "\" class='btn btn-primary'>" . ($form["config"]["submit"] ?? "Valider") . "</button>";
 
 		// 	foreach ($form["buttons"] as $name => $configButton) {
 
@@ -49,6 +55,7 @@ class FormBuilder
 		// 	}
 		// }
 
+
 		$html .= "</form>";
 
 		echo $html;
@@ -57,7 +64,8 @@ class FormBuilder
 
 	public static function renderInput($name, $configInput)
 	{
-		return "<input 
+		if(!isset($configInput['hidden']) || (isset($configInput['hidden']) && $configInput['hidden'] == false)){
+			return "<input 
 						name='" . $name . "' 
 						type='" . ($configInput["type"] ?? "text") . "'
 						id='" . ($configInput["id"] ?? "") . "'
@@ -65,9 +73,12 @@ class FormBuilder
 						placeholder='" . ($configInput["placeholder"] ?? "") . "'
 						value='" . ($configInput['value'] ?? '') . "'
 						" . (!empty($configInput["required"]) ? "required='required'" : "") . "
-						" . (isset($configInput["disabled"]) ? 'disabled=disabled' : '') . "'
+						" . (isset($configInput["disabled"]) ? 'disabled=disabled' : '') . "
+						" . (!empty($configInput["checked"]) ? "checked" : "") . "
+
 
 					><br>";
+		}
 	}
 
 

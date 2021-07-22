@@ -28,11 +28,19 @@ class ConstantMaker
 	public function defineUserStatus(){
 
 		# 0 is a non admin non validated user, just a logged client
-		define("USERSUPERADMIN", 1);
-		define("USERADMIN", 2);
-		define("USERVALIDATED", 4);
-		define("USERDELETED", 8);
-		define("USERBANNISHED", 16);
+		define("USERSUPERADMIN", 1); # GOD
+		define("USERADMIN", 2); # access to CRUD admin
+		define("USERVALIDATED", 4); # login, buying, delete account
+		define("USERCONTRIBUTOR", 8); # DELETE EDIT POSTS
+		define("USERAUTHOR", 16); # DELETE EDIT POSTS
+		define("USEREDITOR", 32); # CRUD pages categories articles posts
+		define("USERDELETED", 64);
+		define("USERBANNISHED", 128);
+
+
+		# admin () = editor + contributor + author + validated
+
+
 
 	}
 

@@ -34,9 +34,17 @@
   controller: Security
   action: editProfil
 
-/lbly-admin/superadminview:
-  controller: SuperAdmin
-  action: default
+/lbly-admin/adminview:
+  controller: Security
+  action: getAllUsers
+
+/lbly-admin/changerole:
+  controller: Security
+  action: modifyRole
+
+/deleteuser:
+  controller: Security
+  action: deleteUser
 
 /lbly-admin/uservalidated:
   controller: Security
