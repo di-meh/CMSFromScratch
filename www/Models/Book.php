@@ -230,6 +230,7 @@ class Book extends Singleton
                 "action" => "",
                 "id" => "form_editbook",
                 "class" => "form_builder",
+                "enctype" => "multipart/form-data",
                 "submit" => "Valider"
             ],
             "inputs" => [

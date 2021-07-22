@@ -197,7 +197,6 @@ class BookController
             }
 
             if (isset($_FILES) && !empty($_FILES["image"]["name"])) {
-                unlink($oldimage);
                 $target_dir = "img/";
                 $oldfile = $target_dir . basename($_FILES["image"]["name"]);
                 $imageFileType = pathinfo($oldfile, PATHINFO_EXTENSION);
