@@ -126,7 +126,7 @@ class Article extends Singleton
                     "type" => "text",
                     "label" => "Titre",
                     "minLength" => 2,
-                    "maxLength" => 60,
+                    "maxLength" => 255,
                     "id" => "title",
                     "class" => "form_input",
                     "placeholder" => "Exemple: Premier article",
@@ -137,6 +137,7 @@ class Article extends Singleton
                 "content" => [
                     "type" => "textarea",
                     "label" => "Contenu de l'article",
+                    "minLength" => 1,
                     "cols" => 80,
                     "rows" => 10,
                     "id" => "content",
@@ -168,7 +169,7 @@ class Article extends Singleton
                     "type" => "text",
                     "label" => "Titre",
                     "minLength" => 2,
-                    "maxLength" => 60,
+                    "maxLength" => 255,
                     "id" => "title",
                     "class" => "form_input",
                     "placeholder" => "Exemple: Premier article",
@@ -179,6 +180,7 @@ class Article extends Singleton
                 "content" => [
                     "type" => "textarea",
                     "label" => "Contenu de l'article",
+                    "minLength" => 1,
                     "cols" => 80,
                     "rows" => 10,
                     "id" => "content",

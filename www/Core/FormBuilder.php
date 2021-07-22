@@ -65,8 +65,18 @@ class FormBuilder
 	public static function renderInput($name, $configInput)
 	{
 		if(!isset($configInput['hidden']) || (isset($configInput['hidden']) && $configInput['hidden'] == false)){
-			return "<input 
-						name='" . $name . "' 
+			return sprintf('<input name="%s" type="%s" id="%s" class="%s" placeholder="%s" value="%s"'
+                            . (!empty($configInput["required"]) ? "required='required'" : "")
+                             . (isset($configInput["disabled"]) ? 'disabled=disabled' : '')
+						 . (!empty($configInput["checked"]) ? "checked" : "") . '><br>',
+						$name,
+                        $configInput["type"] ?? "text",
+                        $configInput["id"] ?? "",
+                        $configInput["class"] ?? "",
+                        $configInput["placeholder"] ?? "",
+                        $configInput["value"] ?? "");
+
+						/*name='" . $name . "'
 						type='" . ($configInput["type"] ?? "text") . "'
 						id='" . ($configInput["id"] ?? "") . "'
 						class='input-field " . ($configInput["class"] ?? "") . "'
@@ -77,7 +87,7 @@ class FormBuilder
 						" . (!empty($configInput["checked"]) ? "checked" : "") . "
 
 
-					><br>";
+					><br>');*/
 		}
 	}
 

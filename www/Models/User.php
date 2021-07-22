@@ -910,8 +910,8 @@ class User extends Singleton
         $query = "CREATE TABLE `lbly_article` (
                   `id` int(11) NOT NULL,
                   `author` int(11) NOT NULL DEFAULT '0',
-                  `title` text NOT NULL,
-                  `slug` varchar(200) NOT NULL,
+                  `title` tinytext NOT NULL,
+                  `slug` tinytext NOT NULL,
                   `content` longtext NOT NULL,
                   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
                   `published` datetime DEFAULT NULL,
@@ -925,16 +925,16 @@ class User extends Singleton
     public function createTableBooks(){
         $query = "CREATE TABLE `lbly_books` (
                   `id` int(11) NOT NULL,
-                  `title` varchar(255) COLLATE utf8_bin NOT NULL,
+                  `title` tinytext COLLATE utf8_bin NOT NULL,
                   `description` text COLLATE utf8_bin,
-                  `author` varchar(50) COLLATE utf8_bin NOT NULL,
+                  `author` varchar(310) COLLATE utf8_bin NOT NULL,
                   `publication_date` date NOT NULL,
                   `image` text COLLATE utf8_bin,
-                  `publisher` varchar(255) COLLATE utf8_bin NOT NULL,
+                  `publisher` varchar(55) COLLATE utf8_bin NOT NULL,
                   `price` smallint(6) NOT NULL,
-                  `category` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+                  `category` tinytext COLLATE utf8_bin DEFAULT NULL,
                   `stock_number` int(11) NOT NULL DEFAULT '0',
-                  `slug` text NOT NULL
+                  `slug` tinytext NOT NULL
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin";
         $prepare = $this->getPDO()->prepare($query);
         $prepare->execute();
@@ -943,9 +943,9 @@ class User extends Singleton
     public function createTableCategory(){
         $query = "CREATE TABLE `lbly_category` (
                   `id` int(11) NOT NULL,
-                  `nameCategory` varchar(255) NOT NULL,
+                  `nameCategory` tinytext NOT NULL,
                   `colorCategory` varchar(7),
-                  `slug` varchar(70) NOT NULL
+                  `slug` tinytext NOT NULL
                 ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
         $prepare = $this->getPDO()->prepare($query);
         $prepare->execute();
@@ -954,12 +954,12 @@ class User extends Singleton
     public function createTablePages(){
         $query = "CREATE TABLE `lbly_page` (
                   `id` int(11) NOT NULL,
-                  `title` varchar(60) NOT NULL,
-                  `content` text NOT NULL,
+                  `title` tinytext NOT NULL,
+                  `content` longtext NOT NULL,
                   `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                   `updatedAt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
                   `createdBy` int(11) NOT NULL,
-                  `slug` varchar(70) NOT NULL
+                  `slug` tinytext NOT NULL
                 ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
         $prepare = $this->getPDO()->prepare($query);
         $prepare->execute();

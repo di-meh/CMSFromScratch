@@ -72,7 +72,7 @@ class Router
                 $this->setController("Category");
                 $this->setAction("deleteCategory");
 
-			}elseif (substr($this->uri, 0, 26) === "/lbly-admin/books/edit/" && !empty($book->getAllBySlug(substr($this->uri, 23)))){
+			}elseif (substr($this->uri, 0, 23) === "/lbly-admin/books/edit/" && !empty($book->getAllBySlug(substr($this->uri, 23)))){
                 $this->setController("Book");
                 $this->setAction("editBook");
 

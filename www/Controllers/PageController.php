@@ -98,7 +98,6 @@ class PageController
 						$infos[] = "Le titre a été mis à jour !";
 						$view->assign("infos", $infos);
 					}else{
-						echo $page->getSlug();
 						$view->assign("errors", ["Veuillez changer le titre de votre page"]);
 					}
 				}else{

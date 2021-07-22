@@ -237,7 +237,7 @@ class Book extends Singleton
                     "type" => "text",
                     "label" => "Titre du livre",
                     "minLength" => 1,
-                    "maxLength" => 100,
+                    "maxLength" => 255,
                     "id" => "title",
                     "class" => "form_input",
                     "placeholder" => "Exemple: Harry Potter et La Coupe de Feu",
@@ -249,7 +249,6 @@ class Book extends Singleton
                     "type" => "text",
                     "label" => "Description du livre",
                     "minLength" => 1,
-                    "maxLength" => 255,
                     "id" => "description",
                     "class" => "form_input",
                     "placeholder" => "Un super livre",
@@ -261,7 +260,7 @@ class Book extends Singleton
                     "type" => "text",
                     "label" => "Nom de l'auteur",
                     "minLength" => 1,
-                    "maxLength" => 100,
+                    "maxLength" => 310,
                     "id" => "author",
                     "class" => "form_input",
                     "placeholder" => "Exemple: Sun Tzu",
@@ -286,7 +285,6 @@ class Book extends Singleton
                     "id" => "image",
                     "class" => "form_input",
                     "placeholder" => "",
-                    "value" => $this->image ?? '',
                     "error" => "Le fichier envoyé est incorrect",
                     "required" => false
                 ],
@@ -294,7 +292,7 @@ class Book extends Singleton
                     "type" => "text",
                     "label" => "Maison d'édition",
                     "minLength" => 1,
-                    "maxLength" => 100,
+                    "maxLength" => 55,
                     "id" => "publisher",
                     "class" => "form_input",
                     "placeholder" => "Exemple: Flammarion",
@@ -320,7 +318,7 @@ class Book extends Singleton
                     "type" => "text",
                     "label" => "Catégorie",
                     "minLength" => 1,
-                    "maxLength" => 100,
+                    "maxLength" => 255,
                     "id" => "category",
                     "class" => "form_input",
                     "placeholder" => "Exemple: Science-fiction",
@@ -461,6 +459,7 @@ class Book extends Singleton
         $this->setDescription($res['description']);
         $this->setAuthor($res['author']);
         $this->setImage($res['image']);
+        $this->setPublicationDate($res['publication_date']);
         $this->setPublisher($res['publisher']);
         $this->setPrice($res['price']);
         $this->setCategory($res['category']);

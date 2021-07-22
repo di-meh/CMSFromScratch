@@ -79,7 +79,7 @@ class ArticleController{
 
 				if (!empty($_POST['title'])){
 					$article->setTitle(htmlspecialchars($_POST['title']));
-					$article->setSlug('/articles/' . $article->title2slug($_POST['title']));
+					$article->setSlug($article->title2slug($_POST['title']));
 					if (empty($article->getAllBySlug($article->getSlug()))){
 						$article->save();
 						$form = $article->formEditArticle();
