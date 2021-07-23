@@ -12,7 +12,7 @@ class Page extends Singleton
     protected $content;
     protected $createdBy;
     protected $slug;
-    private $table = DBPREFIX . "page";
+    private $table = "lbly_page";
 
     public function __construct(){
 

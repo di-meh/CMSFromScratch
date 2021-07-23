@@ -19,7 +19,7 @@ class Book extends Singleton
     protected $stock_number = 0;
     protected $slug;
 
-    private $table = DBPREFIX . "books";
+    private $table = "lbly_books";
     public function __construct()
     {
     }
