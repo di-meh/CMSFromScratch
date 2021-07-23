@@ -341,6 +341,54 @@ class Book extends Singleton
         ];
     }
 
+    public function formAddToCart(){
+        return [
+
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "form_addtocart",
+                "class" => "form_builder",
+                "submit" => "Ajouter au panier",
+                "btn_class" => "btn btn-primary"
+            ],
+            "inputs" => [
+                "add_book_to_cart" => [
+                    "type" => "hidden",
+                    "id" => "id",
+                    "class" => "form_input",
+                    "value" => $this->id,
+                    "error" => "id not found",
+                    "required" => true
+                ]
+            ]
+        ];
+    }
+
+    public function formRemoveFromCart(){
+        return [
+
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "form_removefromcart",
+                "class" => "form_builder",
+                "submit" => "Retirer du panier",
+                "btn_class" => "btn btn-danger"
+            ],
+            "inputs" => [
+                "remove_book_from_cart" => [
+                    "type" => "hidden",
+                    "id" => "id",
+                    "class" => "form_input",
+                    "value" => $this->id,
+                    "error" => "id not found",
+                    "required" => true
+                ]
+            ]
+        ];
+    }
+
     // Getters & Setters
     public function getTable()
     {
@@ -448,12 +496,36 @@ class Book extends Singleton
         $req = $this->getPDO()->prepare($query);
         $req->execute();
         $res = $req->fetchAll(PDO::FETCH_ASSOC);
-        return $res;
+        return $res[0];
+    }
+
+    public function getAllById($id){
+        $query = "SELECT * FROM " . $this->getTable() . " WHERE id = '".$id."'";
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
+        $res = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $res[0];
+    }
+
+    public function setAllById($id){
+        $res = $this->getAllById($id);
+        $res = $res;
+        $this->setId($res['id']);
+        $this->setTitle($res['title']);
+        $this->setDescription($res['description']);
+        $this->setAuthor($res['author']);
+        $this->setImage($res['image']);
+        $this->setPublicationDate($res['publication_date']);
+        $this->setPublisher($res['publisher']);
+        $this->setPrice($res['price']);
+        $this->setCategory($res['category']);
+        $this->setStockNumber($res['stock_number']);
+        $this->setSlug($res['slug']);
     }
 
     public function setAllBySlug($slug){
         $res = $this->getAllBySlug($slug);
-        $res = $res[0];
+        $res = $res;
         $this->setId($res['id']);
         $this->setTitle($res['title']);
         $this->setDescription($res['description']);

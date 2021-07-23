@@ -105,3 +105,11 @@
 /installer:
   controller: Installer
   action: default
+
+/cart:
+  controller: Cart
+  action: default
+
+/books:
+  controller: Book
+  action: seeAllBooks

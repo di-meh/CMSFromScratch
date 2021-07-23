@@ -6,6 +6,8 @@ use App\Core\FormValidator;
 use App\Core\View;
 use App\Core\Security;
 use App\Models\Book;
+use App\Models\Cart;
+use App\Models\CartSession;
 
 class BookController
 {
@@ -259,5 +261,33 @@ class BookController
         }
         #if (isset($infos)) header("Location:/lbly-admin/books/edit/".$book->getSlug());
         $view->assign("form", $form);
+    }
+
+    public function seeAllBooksAction(){
+        
+        $user = Security::getConnectedUser();
+		if(is_null($user)) header("Location:/lbly-admin/login");
+
+        $book = new Book();
+        $view = new View("seeAllBooks","front");
+        $books = $book->all();
+        $view->assign("books", $books);
+        foreach ($books as $book) {
+            $bookObject = new Book();
+            $bookObject->setAllById($book["id"]);
+            $forms[$bookObject->getId()] = $bookObject->formAddToCart();
+        }
+        $view->assign("forms", $forms);
+
+        // Ajout au panier
+        if (!empty($_POST)) {
+
+            $id = $_POST['add_book_to_cart'];
+            $book = new Book();
+            $book = $book->getAllById($id);
+            Cart::addToCart($book);
+
+            header("Location:/books");
+        }
     }
 }

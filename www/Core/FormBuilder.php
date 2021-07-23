@@ -41,7 +41,7 @@ class FormBuilder
 			$namePost = "name=\"".$form["config"]["name"]."\"";
 		}
 
-		$html .= "<button ".($namePost??'')." type='submit' value=\"" . ($form["config"]["submit"] ?? "Valider") . "\" class='btn btn-primary'>" . ($form["config"]["submit"] ?? "Valider") . "</button>";
+		$html .= "<button ".($namePost??'')." type='submit' value=\"" . ($form["config"]["submit"] ?? "Valider") . "\" class='". ($form["config"]["btn_class"] ?? "btn btn-primary") ."'>" . ($form["config"]["submit"] ?? "Valider") . "</button>";
 
 		// 	foreach ($form["buttons"] as $name => $configButton) {
 
@@ -68,26 +68,13 @@ class FormBuilder
 			return sprintf('<input name="%s" type="%s" id="%s" class="%s" placeholder="%s" value="%s"'
                             . (!empty($configInput["required"]) ? "required='required'" : "")
                              . (isset($configInput["disabled"]) ? 'disabled=disabled' : '')
-						 . (!empty($configInput["checked"]) ? "checked" : "") . '><br>',
+						 . (!empty($configInput["checked"]) ? "checked" : "") . '>',
 						$name,
                         $configInput["type"] ?? "text",
                         $configInput["id"] ?? "",
                         $configInput["class"] ?? "",
                         $configInput["placeholder"] ?? "",
                         $configInput["value"] ?? "");
-
-						/*name='" . $name . "'
-						type='" . ($configInput["type"] ?? "text") . "'
-						id='" . ($configInput["id"] ?? "") . "'
-						class='input-field " . ($configInput["class"] ?? "") . "'
-						placeholder='" . ($configInput["placeholder"] ?? "") . "'
-						value='" . ($configInput['value'] ?? '') . "'
-						" . (!empty($configInput["required"]) ? "required='required'" : "") . "
-						" . (isset($configInput["disabled"]) ? 'disabled=disabled' : '') . "
-						" . (!empty($configInput["checked"]) ? "checked" : "") . "
-
-
-					><br>');*/
 		}
 	}
 
