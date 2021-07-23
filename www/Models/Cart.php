@@ -32,7 +32,7 @@ class Cart
     public static function removeFromCart($book){
         if (CartSession::existCart()) {
             $cart = CartSession::getCart();
-            if($cart->books[$book["id"]]["qty"] <= 0){
+            if($cart->books[$book["id"]]["qty"] <= 1){
                 unset($cart->books[$book["id"]]);
             } else {
                 $cart->books[$book["id"]]["qty"]--;
