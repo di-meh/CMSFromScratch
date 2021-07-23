@@ -18,7 +18,7 @@ class CartController
         $books = get_object_vars($cart)["books"];
         
         $view->assign("books", $books);
-        
+        $forms = null;
         foreach ($books as $book) {
             $bookObject = new Book();
             $bookObject->setAllById($book["id"]);

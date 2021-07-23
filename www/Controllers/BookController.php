@@ -272,6 +272,7 @@ class BookController
         $view = new View("seeAllBooks","front");
         $books = $book->all();
         $view->assign("books", $books);
+        $forms = null;
         foreach ($books as $book) {
             $bookObject = new Book();
             $bookObject->setAllById($book["id"]);
