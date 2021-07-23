@@ -62,10 +62,11 @@ class Mailing{
 	# prepare mail to confirm user account
 	public function mailConfirm($user){
 
-		$this->setSubject('Veuillez confirmer votre compte Libly !');
+		$this->setSubject(utf8_decode('Un nouvel utilisateur a été créé'));
 		$id = $user->getId();
 		$token = $user->getToken();
-		$content = "Validez votre compte en cliquant sur ce lien : <a href='http://localhost/lbly-admin/uservalidated?id=$id&token=$token'>Confirmer mon compte !</a>";
+		$content = utf8_decode("Un compte avec le mail ". $user->getEmail()." a été créé. ");
+		$content .= "Validez le en cliquant sur ce lien : <a href='http://localhost/lbly-admin/uservalidated?id=$id&token=$token'>Confirmer le compte</a>";
 		$this->setContent($content);
 								
 		# set template, set subject, set content
@@ -84,49 +85,29 @@ class Mailing{
 	}
 
 	public function sendMail(){
-		/*
-			if(empty($this->content))
-				return;
-			$this->setTemplate();
 
-		*/
 		try {
 		    //Server settings
-		    #$this->mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-		    $this->mail->isSMTP();                                            //Send using SMTP
-		    $this->mail->Host       = 'smtp.office365.com';                     //Set the SMTP server to send through
-		    $this->mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-		    $this->mail->Username   = MAILUSERNAME;                     //SMTP username
-		    $this->mail->Password   = MAILPWD;                               //SMTP password
-		    $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-		    $this->mail->Port       = MAILPORT;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+		    # $this->mail->SMTPDebug = SMTP::DEBUG_SERVER;                      
+		    $this->mail->isSMTP();                                            
+		    $this->mail->Host       = MAILHOST;
+		    $this->mail->SMTPAuth   = MAILSMTPAUTH;                                   
+		    $this->mail->Username   = MAILSENDER;                  
+		    $this->mail->Password   = MAILPWD;                               
+		    $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+		    $this->mail->Port       = MAILPORT;                                  
 
 		    //Recipients
-		    $this->mail->setFrom(MAILUSERNAME, 'LIBLY');
-		    $this->mail->addAddress($this->recipient);     //Add a recipient
-		    # $this->mail->addAddress($this->recipient, 'User');     //Add a recipient
+		    $this->mail->setFrom('libly@outlook.fr', 'LIBLY');
+		    $this->mail->addAddress($this->recipient);
 
-		    # $mail->addAddress('ellen@example.com');               //Name is optional
-		    # $mail->addReplyTo('info@example.com', 'Information');
-		    # $mail->addCC('cc@example.com');
-		    # $mail->addBCC('bcc@example.com');
-
-		    //Attachments
-		    # $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
-		    # $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
-
-		    //Content
-		    $this->mail->isHTML(true);                                  //Set email format to HTML
-		    $this->mail->Subject = $this->subject;#'Here is the subject';
-
-		    # $this->mail->Subject = $this->subject;
-		    # $this->mail->Body = $this->content;
+		    $this->mail->isHTML(true);
+		    $this->mail->Subject = $this->subject;
 
 		    $this->mail->Body    = $this->content; # 'This is the HTML message body <b>in bold!</b>';
-		    #$this->mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
 		    $this->mail->send();
-		    #echo 'Message has been sent';
+		    $this->mail->clearAllRecipients();
 		} catch (Exception $e) {
 		    echo "Message could not be sent. Mailer Error: {$this->mail->ErrorInfo}";
 		}	

@@ -19,7 +19,13 @@ class FormBuilder
 		foreach ($form["inputs"] as $name => $configInput) {
 
 			$html .= "<div class='input-group'>";
-			$html .= "<label for='" . ($configInput["id"] ?? "") . "'>" . ($configInput["label"] ?? "") . " </label>";
+
+			if (isset($configInput["label"])) {
+        if(!isset($configInput['hidden']) || (isset($configInput['hidden']) && $configInput['hidden'] == false)){
+				  $html .= "<label for='" . ($configInput["id"] ?? "") . "'>" . ($configInput["label"] ?? "") . " </label>";
+			  }
+			}
+
 			if ($configInput["type"] == "select") {
 				$html .= self::renderSelect($name, $configInput);
 			} elseif ($configInput["type"] == "textarea") {
@@ -31,7 +37,24 @@ class FormBuilder
 			$html .= "</div>";
 		}
 
-		$html .= "<button type='submit' value=\"" . ($form["config"]["submit"] ?? "Valider") . "\" class='btn btn-primary'>" . ($form["config"]["submit"] ?? "Valider") . "</button>";
+		if(isset($form["config"]["name"])){
+			$namePost = "name=\"".$form["config"]["name"]."\"";
+		}
+
+		$html .= "<button ".($namePost??'')." type='submit' value=\"" . ($form["config"]["submit"] ?? "Valider") . "\" class='btn btn-primary'>" . ($form["config"]["submit"] ?? "Valider") . "</button>";
+
+		// 	foreach ($form["buttons"] as $name => $configButton) {
+
+
+		// 		$html .= "<a id='" . ($configButton["id"] ?? "") . "' class='" . ($configButton["class"] ?? "") . "' ";
+		// 		if (isset($configButton["href"])) {
+		// 			$html .= "href='" . ($configButton["href"] ?? "") . "'><button class='" . ($configButton["btn_class"] ?? "") . "'>" . ($configButton["text"] ?? "");
+		// 		}
+	
+		// 		$html .= "</button></a>";
+		// 	}
+		// }
+
 
 		$html .= "</form>";
 
@@ -41,17 +64,31 @@ class FormBuilder
 
 	public static function renderInput($name, $configInput)
 	{
-		return "<input 
-						name='" . $name . "' 
+		if(!isset($configInput['hidden']) || (isset($configInput['hidden']) && $configInput['hidden'] == false)){
+			return sprintf('<input name="%s" type="%s" id="%s" class="%s" placeholder="%s" value="%s"'
+                            . (!empty($configInput["required"]) ? "required='required'" : "")
+                             . (isset($configInput["disabled"]) ? 'disabled=disabled' : '')
+						 . (!empty($configInput["checked"]) ? "checked" : "") . '><br>',
+						$name,
+                        $configInput["type"] ?? "text",
+                        $configInput["id"] ?? "",
+                        $configInput["class"] ?? "",
+                        $configInput["placeholder"] ?? "",
+                        $configInput["value"] ?? "");
+
+						/*name='" . $name . "'
 						type='" . ($configInput["type"] ?? "text") . "'
 						id='" . ($configInput["id"] ?? "") . "'
 						class='input-field " . ($configInput["class"] ?? "") . "'
 						placeholder='" . ($configInput["placeholder"] ?? "") . "'
 						value='" . ($configInput['value'] ?? '') . "'
 						" . (!empty($configInput["required"]) ? "required='required'" : "") . "
-						" . (isset($configInput["disabled"]) ? 'disabled=disabled' : '') . "'
+						" . (isset($configInput["disabled"]) ? 'disabled=disabled' : '') . "
+						" . (!empty($configInput["checked"]) ? "checked" : "") . "
 
-					><br>";
+
+					><br>');*/
+		}
 	}
 
 

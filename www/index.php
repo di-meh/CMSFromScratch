@@ -15,8 +15,9 @@ require "Autoload.php";
 
 Autoload::register();
 
-
-new ConstantMaker();
+if(file_exists('./.env')){
+	new ConstantMaker();
+}
 
 
 
@@ -43,7 +44,6 @@ $a = $router->getAction();
 
 
 if (file_exists("./Controllers/" . $c . ".php")) {
-
 	include "./Controllers/" . $c . ".php";
 	// SecurityController =>  App\Controller\SecurityController
 

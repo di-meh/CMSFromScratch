@@ -34,9 +34,17 @@
   controller: Security
   action: editProfil
 
-/lbly-admin/superadminview:
-  controller: SuperAdmin
-  action: default
+/lbly-admin/adminview:
+  controller: Security
+  action: getAllUsers
+
+/lbly-admin/changerole:
+  controller: Security
+  action: modifyRole
+
+/deleteuser:
+  controller: Security
+  action: deleteUser
 
 /lbly-admin/uservalidated:
   controller: Security
@@ -56,11 +64,19 @@
 
 /lbly-admin/category:
   controller: Category
-  action: index
+  action: default
+
+/lbly-admin/category/add:
+  controller: Category
+  action: addCategory
 
 /lbly-admin/books:
   controller: Book
-  action: index
+  action: default
+
+/lbly-admin/books/add:
+  controller: Book
+  action: addBook
 
 /lbly-admin/articles:
   controller: Article
@@ -74,6 +90,10 @@
   controller: Article
   action: editArticle
 
+/lbly-admin/books/edit:
+  controller: Book
+  action: editBook
+
 /forgetpwd:
   controller: Security
   action: forgetPwd
@@ -81,3 +101,7 @@
 /resetpwd:
   controller: Security
   action: resetPwd
+
+/installer:
+  controller: Installer
+  action: default

@@ -145,7 +145,7 @@ class Page extends Singleton
                     "type" => "text",
                     "label" => "Titre : ",
                     "minLength" => 2,
-                    "maxLength" => 60,
+                    "maxLength" => 255,
                     "id" => "title",
                     "class" => "title",
                     "placeholder" => "Titre de votre page",
@@ -156,6 +156,7 @@ class Page extends Singleton
                 "editor" => [
                     "type" => "textarea",
                     "label" => "Contenu de la page",
+                    "minLength" => 1,
                     "cols" => 80,
                     "rows" => 10,
                     "id" => "editor",
@@ -167,6 +168,73 @@ class Page extends Singleton
         ];
 	}
 
+
+    public function formEditPage(){
+        return [
+
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "form_editpage",
+                "class" => "form_builder",
+                "submit" => "Modifier"
+            ],
+            "inputs" => [
+                "title" => [
+                    "type" => "text",
+                    "label" => "Editez le titre",
+                    "minLength" => 1,
+                    "maxLength" => 255,
+                    "id" => "title",
+                    "class" => "form_input",
+                    "placeholder" => "Exemple: Premier article",
+                    "value" => htmlspecialchars($this->title),
+                    "error" => "Votre titre doit faire entre 2 et 155 caractères",
+                    "required" => true
+                ],
+                "content" => [
+                    "type" => "textarea",
+                    "label" => "Contenu de la page",
+                    "minLength" => 1,
+                    "cols" => 80,
+                    "rows" => 10,
+                    "id" => "content",
+                    "name" => "content",
+                    "class" => "ckeditor",
+                    "placeholder" => "",
+                    "value" => $this->content,
+                    "error" => "probleme enregistrement base de données",
+                    "required" => true
+                ],
+            ]
+        ];
+    }
+
+    public function formDeletePage(){
+        return [
+
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "form_deletepage",
+                "class" => "form_builder",
+                "submit" => "Supprimer",
+                "btn_class" => "btn btn-danger"
+            ],
+            "inputs" => [
+                "delete" => [
+                    "type" => "hidden",
+                    "label" => "Voulez vous supprimez cette page : ".$this->title." ?",
+                    "id" => "title",
+                    "class" => "form_input",
+                    "value" => $this->slug,
+                    "error" => "id not found",
+                    "required" => true
+                ]
+            ]
+        ];
+    }
+
     public function getAllBySlug($slug){
         $query = "SELECT * FROM " . $this->getTable() . " WHERE slug = '".$slug."'";
         $req = $this->getPDO()->prepare($query);
@@ -175,4 +243,27 @@ class Page extends Singleton
         return $res;
     }
 
+    public function getAllById($id){
+        $query = "SELECT * FROM " . $this->getTable() . " WHERE id = '".$id."'";
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
+        $res = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $res;
+    }
+
+    public function setAllBySlug($slug){
+        $res = $this->getAllBySlug($slug);
+        $res = $res[0];
+        $this->setId($res['id']);
+        $this->setTitle($res['title']);
+        $this->setContent($res['content']);
+        $this->setCreatedBy($res['createdBy']);
+        $this->setSlug($res['slug']);
+    }
+
+    public function deleteBySlug($slug){
+        $query = "DELETE FROM " . $this->getTable() . " WHERE slug = '" . $slug ."'";
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
+    }
 }
