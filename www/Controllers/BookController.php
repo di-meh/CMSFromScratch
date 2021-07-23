@@ -265,7 +265,7 @@ class BookController
 
         $book = new Book();
 
-        $view = new View("seeBook");
+        $view = new View("seeBook", "front");
 
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
 

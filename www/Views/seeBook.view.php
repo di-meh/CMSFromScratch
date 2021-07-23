@@ -1,6 +1,14 @@
 <section>
-    <?php
-    echo $book["title"];
-    ?>
+    <h2>Titre : <?php echo $book["title"];?></h2>
+    <img src="<?php echo "/". $book["image"];?>" height=200 width=300>
+    <h3>Prix : <?php echo $book["price"];?> € </h3>
+    <h4>Catégorie : <?php echo $book["category"];?></h4>
+    <p>Date de publication : <?php echo $book["publication_date"];?></p>
+    <p>Description : <?php echo $book["description"];?></p>
+    <h3>Auteur : <?php echo $book["author"];?></h3>
+    <h3>Maison d'édition : <?php echo $book["publisher"];?></h3>
+    <h3>En stock : <?php  echo $string = ($book["stock_number"] != 0) ? "OUI": "NON";?></h3>
+    <!--<img src="/img/uno-uno-uno.png">-->
+
 
 </section>

@@ -157,7 +157,7 @@ class PageController
 
         $page = new Page();
 
-        $view = new View("seePage");
+        $view = new View("seePage", "front");
 
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
 
