@@ -57,9 +57,9 @@ class BookController
                     $target_file = $target_dir . basename($book->getSlug()) .".". $imageFileType;
                     $uploadOk = 1;
                     if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                        echo "The file " . basename($_FILES["image"]["name"]) . " has been uploaded.";
+                        echo "Le fichier " . basename($_FILES["image"]["name"]) . " a été téléchargé.";
                     } else {
-                        echo "Sorry, there was an error uploading your file.";
+                        echo "Désolé, une erreur s'est produite lors du téléchargement de votre fichier.";
                     }
                     $image = basename($book->getSlug().".".$imageFileType);
                     $book->setImage($target_dir.$image);
@@ -202,11 +202,11 @@ class BookController
                 $imageFileType = pathinfo($oldfile, PATHINFO_EXTENSION);
                 $target_file = $target_dir . basename($book->getSlug()) .".". $imageFileType;
                 if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                    $infos[] = "The file " . basename($_FILES["image"]["name"]) . " has been uploaded.";
+                    $infos[] = "Le fichier " . basename($_FILES["image"]["name"]) . " a été téléchargé.";
                 } else {
-                    $infos[] = "Sorry, there was an error uploading your file.";
+                    $infos[] = "Désolé, une erreur s'est produite lors du téléchargement de votre fichier.";
                 }
-                $image = basename($book->getSlug().$imageFileType);
+                $image = basename($book->getSlug().".".$imageFileType);
                 $book->setImage($target_dir.$image);
                 $book->save();
                 $view->assign("infos",$infos);

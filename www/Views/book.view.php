@@ -27,14 +27,19 @@
                             <table class="table">
                             <thead>
                             <tr>
+                                <th>Image</th>
                                 <th>titre</th>
                                 <th>Auteur</th>
+                                <th>Stock</th>
+                                <th><span class="material-icons-outlined">delete</span></th>
+                                <th>Stock</th>
                                 <th>Stock</th>
                             </tr>
                             </thead>
                             <tbody>
                             <?php foreach ($books as $book) { ?>
                                 <tr>
+                                    <td><img src="../<?=$book["image"]?>" height="28px"></td> 
                                     <td><?php echo $book["title"];?></td>
                                     <td><?php echo $book["author"];?></td>
                                     <td><?php echo $book["stock_number"];?></td>

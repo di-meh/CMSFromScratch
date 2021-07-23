@@ -138,7 +138,7 @@ class Book extends Singleton
                 "image" => [
                     "type" => "file",
                     "label" => "Image de couverture du livre",
-                    "accept" => "image/*",
+                    "accept" => "image/png, image/jpeg",
                     "id" => "image",
                     "class" => "form_input",
                     "placeholder" => "",
@@ -282,7 +282,7 @@ class Book extends Singleton
                 "image" => [
                     "type" => "file",
                     "label" => "Image de couverture du livre",
-                    "accept" => "image/*",
+                    "accept" => "image/png, image/jpeg",
                     "id" => "image",
                     "class" => "form_input",
                     "placeholder" => "",
