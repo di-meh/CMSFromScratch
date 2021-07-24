@@ -238,7 +238,12 @@ class BookController
 
             if ($_POST['category'] != $book->getCategory()){
                 if (!empty($_POST['category'])){
-                    $book->setCategory(htmlspecialchars($_POST['category']));
+                    $categories = "";
+                    foreach ($_POST['category'] as $item) {
+                        $categories .= $item . ",";
+                    }
+                    $categories = substr($categories,0,-1);
+                    $book->setCategory(htmlspecialchars($categories ));
                     $book->save();
                     $form = $book->formEditBook();
                     $infos[] = "La catgeorie a été mis a jour";

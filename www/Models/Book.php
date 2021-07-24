@@ -177,7 +177,7 @@ class Book extends Singleton
                     "maxLength" => 30,
                     "id" => "category",
                     "class" => "form_input",
-                    "error" => "La catégorie doit faire entre 1 et 100 caractères",
+                    "error" => "Veuillez choisir au minimum 1 catégorie",
                     "required" => true
                 ],
                 "stock_number" => [
@@ -238,19 +238,19 @@ class Book extends Singleton
                     "type" => "text",
                     "label" => "Titre du livre",
                     "minLength" => 1,
-                    "maxLength" => 100,
+                    "maxLength" => 255,
                     "id" => "title",
                     "class" => "form_input",
                     "placeholder" => "Exemple: Harry Potter et La Coupe de Feu",
                     "value" => $this->title ?? "",
-                    "error" => "Le titre doit faire entre 1 et 100 caractères ",
+                    "error" => "Le titre doit faire entre 1 et 255 caractères ",
                     "required" => true
                 ],
                 "description" => [
                     "type" => "text",
                     "label" => "Description du livre",
                     "minLength" => 1,
-                    "maxLength" => 255,
+                    "maxLength" => 65535,
                     "id" => "description",
                     "class" => "form_input",
                     "placeholder" => "Un super livre",
@@ -314,16 +314,15 @@ class Book extends Singleton
                     "error" => "Le prix doit être au moins supérieur à 1€",
                     "required" => true
                 ],
-                "category" => [
+                "category[]" => [
                     "type" => "select",
                     "label" => "Catégorie",
                     "multiple" => "multiple",
+                    "options" => $this->getCreatedCategory(),
                     "minLength" => 1,
                     "maxLength" => 30,
                     "id" => "category",
                     "class" => "form_input",
-                    "placeholder" => "Exemple: Science-fiction",
-                    "options" => $this->getCreatedCategory(),
                     "error" => "Veuillez choisir au minimum 1 catégorie",
                     "required" => true
                 ],

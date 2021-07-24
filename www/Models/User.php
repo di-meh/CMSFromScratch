@@ -925,8 +925,8 @@ class User extends Singleton
     public function createTableBooks(){
         $query = "CREATE TABLE `lbly_books` (
                   `id` int(11) NOT NULL,
-                  `title` varchar(100) COLLATE utf8_bin NOT NULL,
-                  `description` varchar(255) COLLATE utf8_bin,
+                  `title` tinytext COLLATE utf8_bin NOT NULL,
+                  `description` text COLLATE utf8_bin,
                   `author` varchar(310) COLLATE utf8_bin NOT NULL,
                   `publication_date` date NOT NULL,
                   `image` text COLLATE utf8_bin,
@@ -934,7 +934,7 @@ class User extends Singleton
                   `price` smallint(6) NOT NULL,
                   `category` varchar(30) COLLATE utf8_bin DEFAULT NULL,
                   `stock_number` int(11) NOT NULL DEFAULT '0',
-                  `slug` tinytext NOT NULL
+                  `slug` text NOT NULL
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin";
         $prepare = $this->getPDO()->prepare($query);
         $prepare->execute();
