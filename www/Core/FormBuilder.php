@@ -96,10 +96,14 @@ class FormBuilder
 
 	public static function renderSelect($name, $configInput)
 	{
-		$html = "<select name='" . $name . "' id='" . ($configInput["id"] ?? "") . "'
-						class='input-field " . ($configInput["class"] ?? "") . "'>";
+		$html = "<select name='" . $name . "' id='" . ($configInput["id"] ?? "")
+                ."'	class='input-field " . ($configInput["class"] ?? "");
+        $html .= ($configInput["multiple"] == "multiple") ? "'multiple='".$configInput["multiple"]. "'>":"'>";
+
+
+        #$html .="'>";
 		foreach ($configInput["options"] as $key => $value) {
-			$html .= "<option value='" . $key . "'>" . $value . "</option>";
+			$html .= "<option value='" . $value . "'>" . $value . "</option>";
 		}
 
 		$html .= "</select><br>";

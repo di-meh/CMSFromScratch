@@ -33,7 +33,6 @@ class BookController
         $form = $book->formAddBook();
 
         if(!empty($_POST)) {
-
             if (isset($_FILES) && !empty($_FILES["image"]["name"])) {
                 $_POST["image"] = $_FILES["image"]["name"];
             }else{
@@ -47,7 +46,12 @@ class BookController
                 $book->setPublicationDate($_POST['publication_date']);
                 $book->setPublisher(htmlspecialchars($_POST['publisher']));
                 $book->setPrice(htmlspecialchars($_POST['price']));
-                $book->setCategory(htmlspecialchars($_POST['category']));
+                $categories = "";
+                foreach ($_POST['category'] as $item) {
+                    $categories .= $item . ",";
+                }
+                $categories = substr($categories,0,-1);
+                $book->setCategory(htmlspecialchars($categories ));
                 $book->setStockNumber(htmlspecialchars($_POST['stock_number']));
                 $book->setSlug($book->book2slug($_POST['title'] . "-" . $_POST['author'] . "-" . $_POST['publisher']));
                 if (isset($_FILES) && !empty($_FILES["image"]["name"])) {
@@ -66,7 +70,7 @@ class BookController
                 }
                 if (empty($book->getAllBySlug($book->getSlug()))) {
                     $book->save();
-                     header("Location:/lbly-admin/books");
+                     #header("Location:/lbly-admin/books");
                 } else {
                     echo $book->getSlug();
                     $view->assign("errors", ["Veuillez changer le titre de votre page"]);
