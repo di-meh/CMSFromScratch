@@ -14,6 +14,7 @@ class Article extends Singleton
     protected $author;
     protected $slug;
     protected $content;
+    protected $category;
     protected $created;
     protected $published;
     protected $modified;
@@ -109,6 +110,22 @@ class Article extends Singleton
         $this->status = $status;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param mixed $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+    }
+
     public function formAddArticle()
     {
 
@@ -132,6 +149,18 @@ class Article extends Singleton
                     "placeholder" => "Exemple: Premier article",
                     "value" => $this->title ?? "",
                     "error" => "Votre titre doit faire entre 2 et 155 caractères",
+                    "required" => true
+                ],
+                "category[]" => [
+                    "type" => "select",
+                    "label" => "Catégorie",
+                    "multiple" => "multiple",
+                    "options" => $this->getCreatedCategory(),
+                    "minLength" => 1,
+                    "maxLength" => 30,
+                    "id" => "category",
+                    "class" => "form_input",
+                    "error" => "La catégorie doit faire entre 1 et 100 caractères",
                     "required" => true
                 ],
                 "content" => [
@@ -175,6 +204,18 @@ class Article extends Singleton
                     "placeholder" => "Exemple: Premier article",
                     "value" => $this->title ?? "",
                     "error" => "Votre titre doit faire entre 2 et 155 caractères",
+                    "required" => true
+                ],
+                "category[]" => [
+                    "type" => "select",
+                    "label" => "Catégorie",
+                    "multiple" => "multiple",
+                    "options" => $this->getCreatedCategory(),
+                    "minLength" => 1,
+                    "maxLength" => 30,
+                    "id" => "category",
+                    "class" => "form_input",
+                    "error" => "La catégorie doit faire entre 1 et 100 caractères",
                     "required" => true
                 ],
                 "content" => [
@@ -294,5 +335,17 @@ class Article extends Singleton
         $query = "DELETE FROM " . $this->getTable() . " WHERE slug  = '" . $slug ."'";
         $req = $this->getPDO()->prepare($query);
         $req->execute();
+    }
+
+    public function getCreatedCategory(){
+        $array = [];
+        $query = "SELECT nameCategory FROM lbly_category ORDER BY nameCategory ASC";
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
+        $res = $req->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($res as $re) {
+            array_push($array,$re["nameCategory"]);
+        }
+        return $array;
     }
 }

@@ -37,6 +37,12 @@ class ArticleController{
 		    if (empty($errors)){
 				$article->setTitle(htmlspecialchars($_POST['title']));
 				$article->setAuthor($user->getID());
+                $categories = "";
+                foreach ($_POST['category'] as $item) {
+                    $categories .= $item . ",";
+                }
+                $categories = substr($categories,0,-1);
+                $article->setCategory(htmlspecialchars($categories ));
 				$article->setContent($_POST['content']);
 				if (empty($_POST['content'])){
 					$view->assign("errors", ["Veuillez remplir tous les champs"]);
@@ -93,6 +99,23 @@ class ArticleController{
 					$view->assign("errors", ["Veuillez remplir tous les champs"]);
 				}
 			}
+            $categories = "";
+            foreach ($_POST['category'] as $item) {
+                $categories .= $item . ",";
+            }
+            $categories = substr($categories,0,-1);
+
+            if ($categories != $article->getCategory()){
+                if (!empty($categories)){
+                    $article->setCategory($categories);
+                    $article->save();
+                    $form = $article->formEditArticle();
+                    $infos[] = "Le contenu a été mis à jour !";
+                    $view->assign("infos", $infos);
+                }else{
+                    $view->assign("errors", ["Veuillez choisir une categorie"]);
+                }
+            }
 
 			if($_POST['content'] != $article->getContent()){ # changer le nom
 
