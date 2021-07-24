@@ -134,7 +134,7 @@ class PageController
         $uri = substr($uriExploded[0], 19);
 
         $page->setAllBySlug($uri);
-        $pagecontent = $page->getAllBySlug($uri)[0];
+        $pagecontent = $page->getAllBySlug($uri);
 
 		if (!empty($_POST["delete"])){
             $page->deleteBySlug($uri);
@@ -163,8 +163,8 @@ class PageController
 
         $uri = substr($uriExploded[0], 1);
 
-        $page = $page->getAllBySlug($uri);
-        $view->assign("page", $page[0]);
+        $pagecontent = $page->getAllBySlug($uri);
+        $view->assign("page", $pagecontent);
 
     }
 

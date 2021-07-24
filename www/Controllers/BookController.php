@@ -93,7 +93,7 @@ class BookController
         $uri = substr($uriExploded[0], 25);
 
         $book->setAllBySlug($uri);
-        $bookcontent = $book->getAllBySlug($uri)[0];
+        $bookcontent = $book->getAllBySlug($uri);
 
         if (!empty($_POST["delete"])){
             unlink($book->getImage());
@@ -304,7 +304,7 @@ class BookController
 
         $uri = substr($uriExploded[0], 7);
 
-        $book = $book->getAllBySlug($uri);
-        $view->assign("book", $book[0]);
+        $bookcontent = $book->getAllBySlug($uri);
+        $view->assign("book", $bookcontent);
     }
 }

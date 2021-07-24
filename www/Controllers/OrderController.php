@@ -123,7 +123,7 @@ class OrderController{
         $uri = substr($uriExploded[0], 28);
 
         $article->setAllBySlug($uri);
-        $articlecontent = $article->getAllBySlug($uri)[0];
+        $articlecontent = $article->getAllBySlug($uri);
 
 		if (!empty($_POST["delete"])){
             $article->deleteBySlug($uri);

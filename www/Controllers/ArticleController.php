@@ -123,7 +123,7 @@ class ArticleController{
         $uri = substr($uriExploded[0], 28);
 
         $article->setAllBySlug($uri);
-        $articlecontent = $article->getAllBySlug($uri)[0];
+        $articlecontent = $article->getAllBySlug($uri);
 
 		if (!empty($_POST["delete"])){
             $article->deleteBySlug($uri);
@@ -154,8 +154,8 @@ class ArticleController{
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
 
         $uri = substr($uriExploded[0], 10);
-        $articles = $article->getAllBySlug($uri);
-        $view->assign("article", $articles[0]);
+        $articlecontent = $article->getAllBySlug($uri);
+        $view->assign("article", $articlecontent);
 
     }
 

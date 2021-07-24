@@ -249,7 +249,7 @@ class Article extends Singleton
         $req = $this->getPDO()->prepare($query);
         $req->execute();
         $res = $req->fetchAll(PDO::FETCH_ASSOC);
-        return $res;
+        return $res ? $res[0] : null;
     }
 
     public function getAllById($id){
@@ -257,13 +257,12 @@ class Article extends Singleton
         $req = $this->getPDO()->prepare($query);
         $req->execute();
         $res = $req->fetchAll(PDO::FETCH_ASSOC);
-        return $res;
+        return $res ? $res[0] : null;
     }
 
     public function setAllById($id)
     {
         $res = $this->getAllById($id);
-        $res = $res[0];
         $this->setId($res['id']);
         $this->setAuthor($res['author']);
         $this->setTitle($res['title']);
@@ -278,7 +277,6 @@ class Article extends Singleton
     public function setAllBySlug($slug)
     {
         $res = $this->getAllBySlug($slug);
-        $res = $res[0];
         $this->setId($res['id']);
         $this->setAuthor($res['author']);
         $this->setTitle($res['title']);
