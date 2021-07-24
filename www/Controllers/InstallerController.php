@@ -21,16 +21,17 @@ class InstallerController{
             header("Location:/lbly-admin");
         }
         $install = new User();
-        $view = new View("installer","front");
+        $view = new View("installer","empty");
         $form = $install->formInstall();
         $errors = FormValidator::check($form, $_POST);
 
         if (!empty($_POST)){
                 if (empty($errors)){
                     if ($_POST['pwd'] == $_POST['pwdConfirm']) {
-                        $content = "DBDRIVER=" . htmlspecialchars($_POST["dbdriver"]) . "\n"
-                            . "DBPREFIX=lbly_\n" . "DBHOST=" . htmlspecialchars($_POST["dbhost"]) . "\n"
-                            . "DBNAME=" . htmlspecialchars($_POST["dbname"]) . "\n"
+                        $content ="SITENAME=" . htmlspecialchars($_POST["site"]) . "\n"
+                            ."DBDRIVER=mysql\n" ."DBPREFIX=lbly_\n" 
+                            ."DBHOST=" . htmlspecialchars($_POST["dbhost"]) . "\n"
+                            ."DBNAME=" . htmlspecialchars($_POST["dbname"]) . "\n"
                             ."DBUSER=" . htmlspecialchars($_POST["dbusername"]) . "\n"
                             ."DBPWD=" . $_POST["dbpwd"] . "\n"
                             ."DBPORT=" . htmlspecialchars($_POST["dbport"]) . "\n"
