@@ -3,7 +3,7 @@
         <div class="col-full">
             <?php if (isset($deletemodal)) :?>
                 <div class="card">
-                    <h6 class="card-title">Delete Modal</h6>
+                    <h6 class="card-title">Supprimer</h6>
                     <div class="card-content">
                         <?php if (isset($formdelete)) : ?>
                             <?php App\Core\FormBuilder::render($formdelete); ?>
@@ -31,9 +31,9 @@
                                 <th>titre</th>
                                 <th>Auteur</th>
                                 <th>Stock</th>
-                                <th><span class="material-icons-outlined">delete</span></th>
-                                <th>Stock</th>
-                                <th>Stock</th>
+                                <th> </th>
+                                <th> </th>
+                                <th> </th>
                             </tr>
                             </thead>
                             <tbody>
