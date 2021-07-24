@@ -27,19 +27,29 @@ class CartController
                 $forms[$bookObject->getId()] = $bookObject->formRemoveFromCart();
             }
             $forms["reset_cart"] = Cart::formResetCart();
+            $forms["confirm_cart"] = Cart::formConfirmCart();
             $view->assign("forms", $forms);
     
-            // Retirer du panier
             if (!empty($_POST)) {
+
+                // Retirer du panier
                 if(isset($_POST['remove_book_from_cart'])){
                     $id = $_POST['remove_book_from_cart'];
                     $book = new Book();
                     $book = $book->getAllById($id);
                     Cart::removeFromCart($book);
+                    header('Location:/cart');
                 }
+
                 // Vider le panier
                 if(isset($_POST['reset_cart'])){
                     Cart::resetCart();
+                    header('Location:/cart');
+                }
+
+                // Confirmer le panier
+                if(isset($_POST['confirm_cart'])){
+                    // Cart::resetCart();
                     header('Location:/cart');
                 }
             }

@@ -29,8 +29,9 @@
                                 ?>
                                 </tbody>
                             </table>
-                            
-                    <?php  App\Core\FormBuilder::render($forms["reset_cart"]);
+                        <?php  
+                        App\Core\FormBuilder::render($forms["reset_cart"]);
+                        App\Core\FormBuilder::render($forms["confirm_cart"]);
                 
                     endif; ?>
                 </div>

@@ -94,6 +94,10 @@
   controller: Book
   action: editBook
 
+/lbly-admin/orders:
+  controller: Order
+  action: default
+
 /forgetpwd:
   controller: Security
   action: forgetPwd

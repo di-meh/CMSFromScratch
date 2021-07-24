@@ -3,14 +3,24 @@
 namespace App\Models;
 
 use App\Models\CartSession;
+use App\Core\Singleton;
 
-class Cart
+class Order extends Singleton
 
 {
-    public $books;
+    private $table = "lbly_article";
+    private $id = null;
+    protected $cart;
+    protected $price;
+    protected $status;
+    protected $user;
      
     public function __construct(){
-        $this->books = [];
+    }
+
+    public function getTable()
+    {
+        return $this->table;
     }
 
     public static function addToCart($book){
@@ -35,7 +45,6 @@ class Cart
     public static function removeFromCart($book){
         if (CartSession::existCartSession()) {
             $cart = CartSession::getCartSession();
-            var_dump($cart);
             if($cart->books[$book["id"]]["qty"] <= 1){
                 unset($cart->books[$book["id"]]);
             } else {
@@ -61,28 +70,6 @@ class Cart
             ],
             "inputs" => [
                 "reset_cart" => [
-                    "type" => "hidden",
-                    "id" => "id",
-                    "class" => "form_input",
-                    "error" => "id not found",
-                    "required" => true
-                ]
-            ]
-        ];
-    }
-    public static function formConfirmCart(){
-        return [
-
-            "config" => [
-                "method" => "POST",
-                "action" => "",
-                "id" => "form_confirm_cart",
-                "class" => "form_builder",
-                "submit" => "Passer la commande",
-                "btn_class" => "btn btn-primary"
-            ],
-            "inputs" => [
-                "confirm_cart" => [
                     "type" => "hidden",
                     "id" => "id",
                     "class" => "form_input",
