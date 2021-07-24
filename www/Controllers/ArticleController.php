@@ -149,7 +149,7 @@ class ArticleController{
 
         $article = new Article();
 
-        $view = new View("seeArticle");
+        $view = new View("seeArticle", "front");
 
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
 

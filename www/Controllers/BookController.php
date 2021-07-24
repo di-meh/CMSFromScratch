@@ -199,7 +199,6 @@ class BookController
             }
 
             if (isset($_FILES) && !empty($_FILES["image"]["name"])) {
-                unlink($oldimage);
                 $target_dir = "img/";
                 $oldfile = $target_dir . basename($_FILES["image"]["name"]);
                 $imageFileType = pathinfo($oldfile, PATHINFO_EXTENSION);
@@ -292,5 +291,20 @@ class BookController
             die();
         }
         // var_dump($_SESSION);
+    }
+    
+    public function seeBookAction(){
+        session_start();
+
+        $book = new Book();
+
+        $view = new View("seeBook", "front");
+
+        $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
+
+        $uri = substr($uriExploded[0], 7);
+
+        $book = $book->getAllBySlug($uri);
+        $view->assign("book", $book[0]);
     }
 }

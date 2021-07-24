@@ -4,7 +4,6 @@
         <div class="col-full">
             <div class="card">
                 <div class="card-title">
-                    <button class='btn btn-light' onclick='history.go(-1)'><span class='material-icons'>undo</span></button>
                     <h6>Modification du profil</h6>
                 </div>
                 <div class="card-content">
