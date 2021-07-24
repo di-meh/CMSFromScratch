@@ -14,35 +14,36 @@ class CartController
     public function defaultAction () {
         $view = new View("cart","front");
 
-        $cart = CartSession::getCart();
-        $books = get_object_vars($cart)["books"];
+        $cart = CartSession::getCartSession();
+        if(!empty($cart)){
+
+            $books = get_object_vars($cart)["books"];
         
-        $view->assign("books", $books);
-        $forms = null;
-        foreach ($books as $book) {
-            $bookObject = new Book();
-            $bookObject->setAllById($book["id"]);
-            $forms[$bookObject->getId()] = $bookObject->formRemoveFromCart();
+            $view->assign("books", $books);
+            $forms = null;
+            foreach ($books as $book) {
+                $bookObject = new Book();
+                $bookObject->setAllById($book["id"]);
+                $forms[$bookObject->getId()] = $bookObject->formRemoveFromCart();
+            }
+            $forms["reset_cart"] = Cart::formResetCart();
+            $view->assign("forms", $forms);
+    
+            // Retirer du panier
+            if (!empty($_POST)) {
+                if(isset($_POST['remove_book_from_cart'])){
+                    $id = $_POST['remove_book_from_cart'];
+                    $book = new Book();
+                    $book = $book->getAllById($id);
+                    Cart::removeFromCart($book);
+                }
+                // Vider le panier
+                if(isset($_POST['reset_cart'])){
+                    Cart::resetCart();
+                    header('Location:/cart');
+                }
+            }
         }
-        $view->assign("forms", $forms);
-
-        // Retirer du panier
-        if (!empty($_POST)) {
-            $id = $_POST['remove_book_from_cart'];
-            $book = new Book();
-            $book = $book->getAllById($id);
-            Cart::removeFromCart($book);
-            header('Location:/cart');
-        }
-    }
-
-    public function emptyAction () {
-        CartSession::resetCart();
-        // header('');
-    }
-
-    public function removeArticleAction () {
-        
     }
     
     public function checkoutAction () {
@@ -64,7 +65,7 @@ class CartController
                 );
                 $sale->Create();
             }
-            parent::RedirectToController('cart', 'Empty'); // Succesful, redirect to sale history
+            // parent::RedirectToController('cart', 'Empty'); // Succesful, redirect to sale history
         } else {
             header("Location:/books");
         }

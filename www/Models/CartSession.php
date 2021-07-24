@@ -7,19 +7,10 @@ class CartSession
 {
     const cartKey = 'CART';
 
-    public static function loadCart(){
-        if (!isset($_SESSION)) { session_start(); }
-        $_SESSION["total"] = 0;
-        for ($i=0; $i< count($products); $i++) {
-            $_SESSION["qty"][$i] = 0;
-            $_SESSION["amounts"][$i] = 0;
-        }
-    }
-
-    public static function resetCart(){
-        if (CartSession::existCart()) {
+    public static function resetCartSession(){
+        if (CartSession::existCartSession()) {
             if (!isset($_SESSION)) { session_start(); }
-            if (CartSession::existCart()) {
+            if (CartSession::existCartSession()) {
                 if (isset($_SESSION[CartSession::cartKey])) {
                     unset($_SESSION[CartSession::cartKey]);
                 }
@@ -27,18 +18,18 @@ class CartSession
         }
     }
 
-    public static function storeCart($shoppingCart){
+    public static function storeCartInSession($shoppingCart){
         if (!isset($_SESSION)) { session_start(); }
         $_SESSION[CartSession::cartKey] = $shoppingCart;
     }
 
-    public static function existCart () {
+    public static function existCartSession() {
         if (!isset($_SESSION)) { session_start(); }
         return isset($_SESSION[CartSession::cartKey]);
     }
 
-    public static function getCart(){
-        if (CartSession::existCart()) {
+    public static function getCartSession(){
+        if (CartSession::existCartSession()) {
             if (!isset($_SESSION)) { session_start(); }
             return $_SESSION[CartSession::cartKey];
         } else {

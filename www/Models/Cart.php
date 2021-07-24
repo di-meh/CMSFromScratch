@@ -14,8 +14,10 @@ class Cart
     }
 
     public static function addToCart($book){
-        if (CartSession::existCart()) {
-            $cart = CartSession::getCart();
+        $cart = null;
+        if (CartSession::existCartSession()) {
+            $cart = CartSession::getCartSession();
+            var_dump($cart);
             if($cart->books[$book["id"]]){
                 $cart->books[$book["id"]]["qty"]++;
             } else {
@@ -23,20 +25,48 @@ class Cart
                 $cart->books[$book["id"]]["qty"] = 1;
             }
         } else {
-            $cart = new Cart();
+            $cart = new CartSession();
             $cart->books[$book["id"]] = $book;
             $cart->books[$book["id"]]["qty"] = 1;
         }
+        CartSession::storeCartInSession($cart);
     }
 
     public static function removeFromCart($book){
-        if (CartSession::existCart()) {
-            $cart = CartSession::getCart();
+        if (CartSession::existCartSession()) {
+            $cart = CartSession::getCartSession();
             if($cart->books[$book["id"]]["qty"] <= 1){
                 unset($cart->books[$book["id"]]);
             } else {
                 $cart->books[$book["id"]]["qty"]--;
             }
         }
+    }
+
+    public static function resetCart(){
+        CartSession::resetCartSession();
+    }
+
+    public static function formResetCart(){
+        return [
+
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "form_reset_cart",
+                "class" => "form_builder",
+                "submit" => "Vider le panier",
+                "btn_class" => "btn btn-danger"
+            ],
+            "inputs" => [
+                "reset_cart" => [
+                    "type" => "hidden",
+                    "id" => "id",
+                    "class" => "form_input",
+                    "error" => "id not found",
+                    "required" => true
+                ]
+            ]
+        ];
     }
 }

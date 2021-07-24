@@ -285,10 +285,12 @@ class BookController
 
             $id = $_POST['add_book_to_cart'];
             $book = new Book();
+            $cart = new Cart();
             $book = $book->getAllById($id);
-            Cart::addToCart($book);
-
-            header("Location:/books");
+            $cart->addToCart($book);
+            header('location:/books');
+            die();
         }
+        // var_dump($_SESSION);
     }
 }

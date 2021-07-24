@@ -29,7 +29,10 @@
                                 ?>
                                 </tbody>
                             </table>
-                    <?php  endif; ?>
+                            
+                    <?php  App\Core\FormBuilder::render($forms["reset_cart"]);
+                
+                    endif; ?>
                 </div>
             </div>
         </div>
