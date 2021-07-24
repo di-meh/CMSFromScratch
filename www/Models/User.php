@@ -909,8 +909,8 @@ class User extends Singleton
         $query = "CREATE TABLE `lbly_article` (
                   `id` int(11) NOT NULL,
                   `author` int(11) NOT NULL DEFAULT '0',
-                  `title` varchar(255) NOT NULL,
-                  `slug` tinytext NOT NULL,
+                  `title` tinytext NOT NULL,
+                  `slug` varchar(300) NOT NULL,
                   `content` longtext NOT NULL,
                   `category` varchar(30) NOT NULL,
                   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
