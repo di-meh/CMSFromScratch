@@ -50,7 +50,7 @@ class ArticleController{
 					$article->setSlug($article->title2slug($_POST['title']));
 					if (empty($article->getAllBySlug($article->getSlug()))){
 						$article->save();
-						#header("Location:/lbly-admin/articles");
+						header("Location:/lbly-admin/articles");
 					}else{
 						$view->assign("errors", ["Veuillez changer le titre de votre article"]);
 					}
