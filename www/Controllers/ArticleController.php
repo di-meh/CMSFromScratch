@@ -37,6 +37,12 @@ class ArticleController{
 		    if (empty($errors)){
 				$article->setTitle(htmlspecialchars($_POST['title']));
 				$article->setAuthor($user->getID());
+                $categories = "";
+                foreach ($_POST['category'] as $item) {
+                    $categories .= $item . ",";
+                }
+                $categories = substr($categories,0,-1);
+                $article->setCategory(htmlspecialchars($categories));
 				$article->setContent($_POST['content']);
 				if (empty($_POST['content'])){
 					$view->assign("errors", ["Veuillez remplir tous les champs"]);
@@ -44,9 +50,8 @@ class ArticleController{
 					$article->setSlug($article->title2slug($_POST['title']));
 					if (empty($article->getAllBySlug($article->getSlug()))){
 						$article->save();
-						header("Location:/lbly-admin/articles");
+						#header("Location:/lbly-admin/articles");
 					}else{
-						echo $article->getSlug();
 						$view->assign("errors", ["Veuillez changer le titre de votre article"]);
 					}
 				}
@@ -93,6 +98,28 @@ class ArticleController{
 					$view->assign("errors", ["Veuillez remplir tous les champs"]);
 				}
 			}
+            $categories = "";
+            foreach ($_POST['category'] as $item) {
+                $categories .= $item . ",";
+            }
+            $categories = substr($categories,0,-1);
+
+            if (!empty($categories)){
+                if ($categories != $article->getCategory()){
+                    $categories = "";
+                    foreach ($_POST['category'] as $item) {
+                        $categories .= $item . ",";
+                    }
+                    $categories = substr($categories,0,-1);
+                    $article->setCategory(htmlspecialchars($categories ));
+                    $article->save();
+                    $form = $article->formEditArticle();
+                    $infos[] = "Le contenu a été mis à jour !";
+                    $view->assign("infos", $infos);
+                }
+            }else{
+                $view->assign("errors", ["Veuillez choisir une categorie"]);
+            }
 
 			if($_POST['content'] != $article->getContent()){ # changer le nom
 

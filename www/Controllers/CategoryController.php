@@ -86,6 +86,7 @@ class CategoryController {
 						$form = $category->formEditCategory();
 						$infos[] = "Le nom a été mis à jour !";
 						$view->assign("infos", $infos);
+                        header("Location:/lbly-admin/category");
 					}else{
 						echo $category->getSlug();
 						$view->assign("errors", ["Veuillez changer le nom de votre catégorie"]);
@@ -127,14 +128,23 @@ class CategoryController {
         $categorycontent = $category->getAllBySlug($uri)[0];
 
 		if (!empty($_POST["delete"])){
-		    $to_update = $category->getDeletedBookCategory($category->getSlug());
-		    $new_category = "";
-            foreach ($to_update as $key => $value) {
-                $new_category = str_replace($category->getSlug(),"",$value['category']);
-                $new_category = trim($new_category, ",");
-                $new_category = implode(",",array_filter(explode(",",$new_category)));
-                $category->updateBookCategory($new_category,$value['category']);
-		    }
+		    $to_update_book = $category->getDeletedBookCategory($category->getSlug());
+            $to_update_article = $category->getDeletedArticleCategory($category->getSlug());
+
+            foreach ($to_update_book as $key => $value) {
+                $new_category_book = str_replace($category->getSlug(),"",$value['category']);
+                $new_category_book = trim($new_category_book, ",");
+                $new_category_book = implode(",",array_filter(explode(",",$new_category_book)));
+
+                $category->updateBookCategory($new_category_book,$value['category']);
+            }
+            foreach ($to_update_article as $key => $value){
+                $new_category_article = str_replace($category->getSlug(),"",$value['category']);
+                $new_category_article = trim($new_category_article, ",");
+                $new_category_article = implode(",",array_filter(explode(",",$new_category_article)));
+
+                $category->updateArticleCategory($new_category_article,$value['category']);
+            }
             $category->deleteBySlug($uri);
             header("Location:/lbly-admin/category");
         }
