@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title><?= SITENAME ?></title>
+	<title>Libly</title>
 	<meta name="description" content="ceci est la description de ma page">
 	<link rel="stylesheet" href="/framework/dist/style.css">
 	<script src="/framework/dist/main.js"></script>
@@ -11,19 +11,7 @@
 
 <body>
 	<div class="page-wrapper with-navbar " id="app">
-		<!-- mettre with-sidebar si jamais -->
-		<nav class="navbar">
-			<a href="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]" ?>"><h5 class="navbar-title"><?= SITENAME ?></h5></a>
-            <?php if(isset($_SESSION['id'])) : ?>		
-			    <div class="navbar-right">
-                    <div class='right-link'><a id'' href='/lbly-admin'>Dashboard</a></div>
-                    <div class="right-link"><a href="/lbly-admin/editprofil"><span class="material-icons">face</span></a></div>
-				    <div class="right-link"><a href="/lbly-admin/logout"><span class="material-icons">power_settings_new</span></a></div>
-			    </div>
-            <?php endif; ?>
-		</nav>
-
-		<div class="content-wrapper">
+		<div class="content-wrapper" style="top: 0 !important;">
 
             <?php if (isset($errors)) : ?>
                 <?php foreach ($errors as $error) : ?>

@@ -12,7 +12,7 @@
 <body>
 	<div class="page-wrapper with-navbar with-sidebar" id="app">
 		<nav class="navbar">
-			<h5 class="navbar-title">Template du back</h5>
+			<a href="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]" ?>"><h5 class="navbar-title"><?= SITENAME ?></h5></a>
 			<div class="navbar-right">
 				<!-- Page profil mais accueil pour l'instant -->
 				<div class="right-link"><a href="/lbly-admin/editprofil"><span class="material-icons">face</span></a></div>
