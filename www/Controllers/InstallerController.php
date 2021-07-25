@@ -53,8 +53,8 @@ class InstallerController{
                         $install->setCountry($_POST["country"]);
                         $install->addStatus(USERSUPERADMIN);
 
-                        $token = substr(md5(uniqid(true)), 0, 10); # cut length to 10, no prefix, entropy => for more unicity
-                        $install->setToken($token);
+                        $install->setToken(App\Core\Helpers::createToken());
+
                         $install->dropTables();
                         $install->createTableArticle();
                         $install->createTableBooks();

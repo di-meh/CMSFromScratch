@@ -548,8 +548,7 @@ class SecurityController
 					# verify status USERVALIDATED : 2 else no login allowed
 					}else if($user->isValidated() && !$user->isDeleted()){
 
-						$token = substr(md5(uniqid(true)), 0, 10); # cut length to 10, no prefix, entropy => for more unicity
-						$user->setToken($token);
+						$user->setToken(Helpers::createToken());
 
 						$_SESSION['id'] = $user->getId();
 						$_SESSION['email'] = $user->getEmail(); # email unique donc ca devrait etre bon
