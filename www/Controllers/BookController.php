@@ -287,4 +287,19 @@ class BookController
         #if (isset($infos)) header("Location:/lbly-admin/books/edit/".$book->getSlug());
         $view->assign("form", $form);
     }
+
+    public function seeBookAction(){
+        session_start();
+
+        $book = new Book();
+
+        $view = new View("seeBook", "front");
+
+        $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
+
+        $uri = substr($uriExploded[0], 7);
+
+        $book = $book->getAllBySlug($uri);
+        $view->assign("book", $book[0]);
+    }
 }

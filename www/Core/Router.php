@@ -48,6 +48,10 @@ class Router
                 $this->setController("Article");
                 $this->setAction("seeArticle");
 
+            }elseif (substr($this->uri, 0, 7) == "/books/" && !empty($book->getAllBySlug(substr($this->uri, 7)))){
+                $this->setController("Book");
+                $this->setAction("seeBook");
+
             }elseif (substr($this->uri, 0, 26) === "/lbly-admin/articles/edit/" && !empty($article->getAllBySlug(substr($this->uri, 26)))){
                 $this->setController("Article");
                 $this->setAction("editArticle");
