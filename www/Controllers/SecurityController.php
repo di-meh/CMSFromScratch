@@ -268,7 +268,7 @@ class SecurityController
 
 			$view->assign("infos", [$message]);
 
-		}else if(!$userDelete->isSuperAdmin()){
+		}else if(!$userDelete->isSuperAdmin() && !$userDelete->isDeleted()){
 			$message = "Voulez vous vraiment supprimer ".$userDelete->getEmail()." ?";
         	$view->assign("deleteUser", true);
 
@@ -276,6 +276,8 @@ class SecurityController
 
 			$view->assign("infos", [$message]);
 
+		}else if($userDelete->isDeleted()){
+			$view->assign("errors", ["Cet utilisateur a déjà été supprimé."]);
 		}
 
 
