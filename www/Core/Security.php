@@ -37,6 +37,16 @@ class Security
 		return false;
 	}
 
+	public static function isSuperAdmin(){
+		$user = new User();
+		if(isset($_SESSION['id'])){
+			if($user->setAllFromId($_SESSION['id']))
+				return $user->isSuperAdmin();
+		}
+		
+		return false;
+	}
+
 	public static function readStatus($status){
 
         if($status & USERSUPERADMIN) return "SUPERADMIN";

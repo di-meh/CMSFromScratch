@@ -35,7 +35,7 @@
 				<?php if(App\Core\Security::isAdmin()): ?>
 					<li class="list-item"><a href="/lbly-admin/adminview"><span class="material-icons">people</span><span class="item-title">Utilisateurs</span></a></li>
 				<?php endif; ?>
-				<?php if(App\Core\Security::isAdmin()): ?>
+				<?php if(App\Core\Security::isSuperAdmin()): ?>
 					<li class="list-item"><a href="/lbly-admin/settings"><span class="material-icons">settings</span><span class="item-title">Paramètres</span></a></li>
 				<?php endif; ?>
 

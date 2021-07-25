@@ -9,6 +9,8 @@ use App\Core\ConstantMaker;
 use App\Core\Singleton;
 
 use App\Core\Security;
+use App\Core\Helpers;
+
 
 use App\Models\Installer;
 use App\Models\User;
@@ -28,7 +30,7 @@ class InstallerController{
         if (!empty($_POST)){
                 if (empty($errors)){
                     if ($_POST['pwd'] == $_POST['pwdConfirm']) {
-                        $content = "DBDRIVER=" . htmlspecialchars($_POST["dbdriver"]) . "\n"
+                        $content = "SITENAME=".$_POST['site']."\nDBDRIVER=" . htmlspecialchars($_POST["dbdriver"]) . "\n"
                             . "DBPREFIX=lbly_\n" . "DBHOST=" . htmlspecialchars($_POST["dbhost"]) . "\n"
                             . "DBNAME=" . htmlspecialchars($_POST["dbname"]) . "\n"
                             ."DBUSER=" . htmlspecialchars($_POST["dbusername"]) . "\n"
@@ -53,7 +55,7 @@ class InstallerController{
                         $install->setCountry($_POST["country"]);
                         $install->addStatus(USERSUPERADMIN);
 
-                        $install->setToken(App\Core\Helpers::createToken());
+                        $install->setToken(Helpers::createToken());
 
                         $install->dropTables();
                         $install->createTableArticle();

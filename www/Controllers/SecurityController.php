@@ -48,7 +48,7 @@ class SecurityController
 		$user = Secu::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
-		$view = new View("changeRole", "back");
+		$view = new View("admin", "back");
 
 		if($user->isAdmin()){
 
@@ -59,106 +59,116 @@ class SecurityController
 
 					$userModified->setAllFromId($_GET['userid']);
 
-					if($userModified->isSuperAdmin() && !$user->isSuperAdmin()){
-						header("Location: /lbly-admin/adminview");
-					}else if($user->getId() == $userModified->getId()){
-						header("Location: /lbly-admin/editProfil");
-					}
-
 					$form = $userModified->formRoles();
 
 					$infos = [];
 
-					if(!$userModified->isValidated() && !$userModified->isSuperAdmin()){
-
-						$infos[0] =  "Un Administrateur doit valider cet utilisateur</br>";
-						$view->assign("infos", $infos);
-
-					}else{
-
-						if($userModified->isAdmin()){
-							isset($infos[0])? $infos[0].= "Administrateur</br>":$infos[0] = "Administrateur</br>";
-							$view->assign("infos", $infos);
-						}
-						if($userModified->isContributor()){
-							isset($infos[0])? $infos[0].= " Contributeur</br>":$infos[0] = "Contributeur</br>";
-							$view->assign("infos", $infos);
-
-						}
-						if($userModified->isAuthor()){
-							isset($infos[0])? $infos[0].= " Auteur</br>":$infos[0] = "Auteur</br>";
-
-							$view->assign("infos", $infos);
-
-						}
-						if($userModified->isEditor()){
-							isset($infos[0])? $infos[0].= " Editeur</br>":$infos[0] = "Editeur</br>";
-
-							$view->assign("infos", $infos);
-
-						}
-					}
-
-
 					if(!empty($_POST)){
 						$infos = [];
-					}					
+					}		
 
+					if($user->getId() == $userModified->getId()){
+							$view->assign("errors", ["Vous ne pouvez pas modifier vos propres droits."]);
 
-					if(isset($_POST['admin'])){
-						$userModified->addStatus(USERADMIN);
-						$infos[] = $userModified->getEmail()." est devenu Administrateur.";
+					}else if($userModified->isSuperAdmin()){
+						$view->assign("errors", ["Vous n'êtes pas autorisé à modifier cet utilisateur."]);
 
-					}else if(isset($_POST['valider'])){
-						if($userModified->isAdmin()){
-							$infos[] = $userModified->getEmail()." n'est plus Administrateur.";
+					}else if($userModified->isDeleted()){
+						$view->assign("errors", ["Cet utilisateur a été supprimé."]);
+
+					}else{			
+
+						if(!$userModified->isValidated() && !$userModified->isSuperAdmin()){
+
+							$infos[0] =  "Un Administrateur doit valider cet utilisateur</br>";
+							$view->assign("infos", $infos);
+
+						}else{
+
+							if($userModified->isAdmin()){
+								isset($infos[0])? $infos[0].= "Administrateur</br>":$infos[0] = "Administrateur</br>";
+								$view->assign("infos", $infos);
+							}
+							if($userModified->isContributor()){
+								isset($infos[0])? $infos[0].= " Contributeur</br>":$infos[0] = "Contributeur</br>";
+								$view->assign("infos", $infos);
+
+							}
+							if($userModified->isAuthor()){
+								isset($infos[0])? $infos[0].= " Auteur</br>":$infos[0] = "Auteur</br>";
+
+								$view->assign("infos", $infos);
+
+							}
+							if($userModified->isEditor()){
+								isset($infos[0])? $infos[0].= " Editeur</br>":$infos[0] = "Editeur</br>";
+
+								$view->assign("infos", $infos);
+
+							}
+
 						}
-						$userModified->unflagStatus(USERADMIN);
 
-					}
+						if(isset($_POST['admin'])){
+							$userModified->addStatus(USERADMIN);
+							$infos[] = $userModified->getEmail()." est devenu Administrateur.";
 
-					if(isset($_POST['contributor'])){
-						$userModified->addStatus(USERCONTRIBUTOR);
-						$infos[] = $userModified->getEmail()." est devenu Contributeur.";
-
-					}else if(isset($_POST['valider'])){
-						if($userModified->isAuthor()){
-							$infos[] = $userModified->getEmail()." n'est plus Contributeur.";
-						}
-						$userModified->unflagStatus(USERCONTRIBUTOR);
-
-					}
-
-					if(isset($_POST['author'])){
-						$userModified->addStatus(USERAUTHOR);
-						$infos[] = $userModified->getEmail()." est devenu Auteur.";
-
-
-					}else if(isset($_POST['valider'])){
-						if($userModified->isAuthor()){
-							$infos[] = $userModified->getEmail()." n'est plus Auteur.";
+						}else if(isset($_POST['valider'])){
+							if($userModified->isAdmin()){
+								$infos[] = $userModified->getEmail()." n'est plus Administrateur.";
+							}
+							$userModified->unflagStatus(USERADMIN);
 
 						}
-							$userModified->unflagStatus(USERAUTHOR);
 
-					}
+						if(isset($_POST['contributor'])){
+							$userModified->addStatus(USERCONTRIBUTOR);
+							$infos[] = $userModified->getEmail()." est devenu Contributeur.";
 
-					if(isset($_POST['editor'])){
+						}else if(isset($_POST['valider'])){
+							if($userModified->isAuthor()){
+								$infos[] = $userModified->getEmail()." n'est plus Contributeur.";
+							}
+							$userModified->unflagStatus(USERCONTRIBUTOR);
 
-						$infos[] = $userModified->getEmail()." est devenu Editeur.";
-						$userModified->addStatus(USEREDITOR);
-
-					}else if(isset($_POST['valider'])){
-						if($userModified->isEditor()){
-							$infos[] = $userModified->getEmail()." n'est plus Editeur.";
 						}
-						$userModified->unflagStatus(USEREDITOR);
 
-					}
+						if(isset($_POST['author'])){
+							$userModified->addStatus(USERAUTHOR);
+							$infos[] = $userModified->getEmail()." est devenu Auteur.";
 
-					if(isset($_POST['validated'])){
-						$userModified->addStatus(USERVALIDATED);
-						$infos[] = $userModified->getEmail()." a été validé.";
+
+						}else if(isset($_POST['valider'])){
+							if($userModified->isAuthor()){
+								$infos[] = $userModified->getEmail()." n'est plus Auteur.";
+
+							}
+								$userModified->unflagStatus(USERAUTHOR);
+
+						}
+
+						if(isset($_POST['editor'])){
+
+							$infos[] = $userModified->getEmail()." est devenu Editeur.";
+							$userModified->addStatus(USEREDITOR);
+
+						}else if(isset($_POST['valider'])){
+							if($userModified->isEditor()){
+								$infos[] = $userModified->getEmail()." n'est plus Editeur.";
+							}
+							$userModified->unflagStatus(USEREDITOR);
+
+						}
+
+						if(isset($_POST['validated'])){
+							$userModified->addStatus(USERVALIDATED);
+							$infos[] = $userModified->getEmail()." a été validé.";
+
+
+						}
+
+						$view->assign("changeRole", true);
+						$view->assign("formRoles",$form);
 
 
 					}
@@ -171,6 +181,8 @@ class SecurityController
 					}
 
 					$userModified->save();
+
+					$view->assign("users", $user->all());					
 
 				}else{
 					header("Location: /");
@@ -186,8 +198,6 @@ class SecurityController
 		 	$view = new View('403');
 
 		}
-
-					$view->assign("form",$form);
 
 	}
 
@@ -242,6 +252,7 @@ class SecurityController
 				$userDelete->addStatus(USERDELETED);
 				$userDelete->save();
 				$view->assign("infos", ["Le compte ".$userDelete->getEmail()." a bien été supprimé.</br>Vous allez être redirigé."]);
+				$deleted = true;
 
 				if($self)
 					header("Refresh:4; url=/lbly-admin/logout", true, 303); 
@@ -260,13 +271,16 @@ class SecurityController
 			
 		$view->assign("users", $users);
 
-		if($user->getId() == $userDelete->getId()){
+		if($user->getId() == $userDelete->getId() && !$user->isSuperAdmin()){
 			$message = "Voulez vraiment supprimer votre compte ?";
         	$view->assign("deleteUser", true);
 
 			$view->assign("formDelete", $formDelete);
 
 			$view->assign("infos", [$message]);
+
+		}else if($user->getId() == $userDelete->getId() && $user->isSuperAdmin()){
+			$view->assign("errors", ["Vous ne pouvez supprimer votre compte SuperAdmin."]);
 
 		}else if(!$userDelete->isSuperAdmin() && !$userDelete->isDeleted()){
 			$message = "Voulez vous vraiment supprimer ".$userDelete->getEmail()." ?";
@@ -276,7 +290,7 @@ class SecurityController
 
 			$view->assign("infos", [$message]);
 
-		}else if($userDelete->isDeleted()){
+		}else if($userDelete->isDeleted() && !isset($deleted)){
 			$view->assign("errors", ["Cet utilisateur a déjà été supprimé."]);
 		}
 
