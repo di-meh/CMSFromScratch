@@ -50,21 +50,39 @@ class BookController
                 $book->setCategory(htmlspecialchars($_POST['category']));
                 $book->setStockNumber(htmlspecialchars($_POST['stock_number']));
                 $book->setSlug($book->book2slug($_POST['title'] . "-" . $_POST['author'] . "-" . $_POST['publisher']));
+                $maxsize = 2097152;
                 if (isset($_FILES) && !empty($_FILES["image"]["name"])) {
-                    $target_dir = "img/";
-                    $oldfile = $target_dir . basename($_FILES["image"]["name"]);
-                    $imageFileType = pathinfo($oldfile, PATHINFO_EXTENSION);
-                    $target_file = $target_dir . basename($book->getSlug()) .".". $imageFileType;
-                    $uploadOk = 1;
-                    if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                        echo "Le fichier " . basename($_FILES["image"]["name"]) . " a été téléchargé.";
-                    } else {
-                        echo "Désolé, une erreur s'est produite lors du téléchargement de votre fichier.";
+                    if ($_FILES["image"]["size"] < $maxsize && $_FILES["image"]["size"] != 0){
+                        $acceptable = array('application/pdf','image/jpeg','image/jpg','image/png', 'image/JPG', 'image/JPEG', 'image/PNG');
+                        if (in_array($_FILES["image"]["type"],$acceptable)){
+                            $target_dir = "img/";
+                            $oldfile = $target_dir . basename($_FILES["image"]["name"]);
+                            $imageFileType = $_FILES["image"]["type"];
+                            $imageFileType = explode("/", $_FILES["image"]["type"]);
+                            #$imageFileType = pathinfo($oldfile, PATHINFO_EXTENSION);
+                            $target_file = $target_dir . basename($book->getSlug()) .".". $imageFileType[1];
+                            $uploadOk = 1;
+                            if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                                echo "Le fichier " . basename($_FILES["image"]["name"]) . " a été téléchargé.";
+                            } else {
+                                echo "Désolé, une erreur s'est produite lors du téléchargement de votre fichier.";
+                            }
+                            $image = basename($book->getSlug().".".$imageFileType[1]);
+                            $book->setImage($target_dir.$image);
+                            if (empty($book->getAllBySlug($book->getSlug()))) {
+                                $book->save();
+                                header("Location:/lbly-admin/books");
+                            } else {
+                                echo $book->getSlug();
+                                $view->assign("errors", ["Veuillez changer le titre de votre page"]);
+                            }
+                        }else{
+                            $view->assign("errors", ["Veuillez changer le format de votre image"]);
+                        }
+                    }else{
+                        $view->assign("errors", ["Votre fichier est trop lourd. Il doit faire moins de 2MB."]);
                     }
-                    $image = basename($book->getSlug().".".$imageFileType);
-                    $book->setImage($target_dir.$image);
-                }
-                if (empty($book->getAllBySlug($book->getSlug()))) {
+                }elseif (empty($book->getAllBySlug($book->getSlug()))) {
                     $book->save();
                      header("Location:/lbly-admin/books");
                 } else {
@@ -197,19 +215,29 @@ class BookController
             }
 
             if (isset($_FILES) && !empty($_FILES["image"]["name"])) {
-                $target_dir = "img/";
-                $oldfile = $target_dir . basename($_FILES["image"]["name"]);
-                $imageFileType = pathinfo($oldfile, PATHINFO_EXTENSION);
-                $target_file = $target_dir . basename($book->getSlug()) .".". $imageFileType;
-                if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                    $infos[] = "Le fichier " . basename($_FILES["image"]["name"]) . " a été téléchargé.";
-                } else {
-                    $infos[] = "Désolé, une erreur s'est produite lors du téléchargement de votre fichier.";
+                $maxsize = 2097152;
+                if ($_FILES["image"]["size"] < $maxsize && $_FILES["image"]["size"] != 0) {
+                    $acceptable = array('application/pdf', 'image/jpeg', 'image/jpg', 'image/png', 'image/JPG', 'image/JPEG', 'image/PNG');
+                    if (in_array($_FILES["image"]["type"], $acceptable)) {
+                        $target_dir = "img/";
+                        $oldfile = $target_dir . basename($_FILES["image"]["name"]);
+                        $imageFileType = pathinfo($oldfile, PATHINFO_EXTENSION);
+                        $target_file = $target_dir . basename($book->getSlug()) .".". $imageFileType;
+                        if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                            $infos[] = "Le fichier " . basename($_FILES["image"]["name"]) . " a été téléchargé.";
+                        } else {
+                            $infos[] = "Désolé, une erreur s'est produite lors du téléchargement de votre fichier.";
+                        }
+                        $image = basename($book->getSlug().".".$imageFileType);
+                        $book->setImage($target_dir.$image);
+                        $book->save();
+                        $view->assign("infos",$infos);
+                    }else{
+                        $view->assign("errors", ["Veuillez changer le format de votre image"]);
+                    }
+                }else{
+                    $view->assign("errors", ["Votre fichier est trop lourd. Il doit faire moins de 2MB."]);
                 }
-                $image = basename($book->getSlug().".".$imageFileType);
-                $book->setImage($target_dir.$image);
-                $book->save();
-                $view->assign("infos",$infos);
             }else{
                 $target_dir = "img/";
                 $imageFileType = pathinfo($book->getImage(), PATHINFO_EXTENSION);
