@@ -136,7 +136,6 @@ class SettingsController{
 		$view = new View("settings", "back");
 		$form = $this->form();
 
-
 		if($user->isSuperAdmin()){
 
 			if(file_exists(".env")){
@@ -225,10 +224,19 @@ class SettingsController{
 
 				}
 			}
+
+			if(!empty($infos)){
+				$view->assign("infos",["Mise à jour des paramètres réussie !"]);
+				header("Refresh:3;");
+			}
+
+			$view->assign("form",$form);
+
+		}else{
+			$view->assign("errors", ["Vous n'avez pas accès à cette page."]);
+
 		}
-		isset($data)?$view->assign("infos",[$data]):'';
-		#!empty($infos)?$view->assign("infos", [$infos]):'';
-		$view->assign("form",$form);
+
 
 	}
 

@@ -22,16 +22,17 @@ class SecurityController
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
 
+
 		if($user->isAdmin()){
 			$view = new View("admin","back");
 
 			$users = $user->all();
-
 			$view->assign("users", $users);
 
 		}else{
 			header("HTTP/1.0 403 Forbidden");
 		 	$view = new View('403');
+		 	#$view->assign("errors", ["Vous n'avez pas accès à cette page."]);
 		}
 
 
@@ -404,6 +405,8 @@ class SecurityController
 		$view = new View("editProfil", 'back'); # appelle View/editProfil.view.php
 
 		$form = $user->formEditProfil(); # recupere les config et inputs de ce formulaire
+		if($user->getStatus() > 0 && ($user->getStatus() & ~ USERVALIDATED))
+			$view->assign("infos", [Secu::readStatus($user->getStatus())]);
 
 		if (!empty($_POST)) {
 

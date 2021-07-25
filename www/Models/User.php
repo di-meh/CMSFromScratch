@@ -22,8 +22,6 @@ class User extends Singleton
     public function __construct()
     {
 
-        #Singleton::setPDO(); # set une unique fois !
-
     }
 
     /*
