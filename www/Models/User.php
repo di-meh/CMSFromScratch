@@ -926,7 +926,7 @@ class User extends Singleton
                   `id` int(11) NOT NULL,
                   `title` tinytext COLLATE utf8_bin NOT NULL,
                   `description` text COLLATE utf8_bin,
-                  `author` varchar(310) COLLATE utf8_bin NOT NULL,
+                  `author` varchar(350) COLLATE utf8_bin NOT NULL,
                   `publication_date` date NOT NULL,
                   `image` text COLLATE utf8_bin,
                   `publisher` varchar(55) COLLATE utf8_bin NOT NULL,

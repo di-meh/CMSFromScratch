@@ -107,8 +107,9 @@ class FormBuilder
                 $html .= "<option value='" . $item . "'>" . $item . "</option>";
             }
         }else{
+		    $is_selected = array_intersect($configInput["options"], $configInput["value"]);
 		    $not_selected = array_diff($configInput['options'],$configInput['value']);
-            foreach ($configInput["value"] as $item => $value) {
+            foreach ($is_selected as $item => $value) {
                 $html .= "<option value='" . $value . "' selected>" . $value . "</option>";
             }
             foreach ($not_selected as $key => $option) {
