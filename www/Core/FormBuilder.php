@@ -68,7 +68,7 @@ class FormBuilder
 			return sprintf('<input name="%s" type="%s" id="%s" class="%s" placeholder="%s" value="%s"'
                             . (!empty($configInput["required"]) ? "required='required'" : "")
                              . (isset($configInput["disabled"]) ? 'disabled=disabled' : '')
-						 . (!empty($configInput["checked"]) ? "checked" : "") . '><br>',
+						 . (isset($configInput["checked"]) && $configInput["checked"]==true ? "checked" : "") . '><br>',
 						$name,
                         $configInput["type"] ?? "text",
                         $configInput["id"] ?? "",

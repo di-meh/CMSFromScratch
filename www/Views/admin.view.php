@@ -14,7 +14,7 @@
                 </div>
                 <br/>
             <?php endif; ?>
-            <?php if (isset($changeRole)) :?>
+            <?php if (isset($changeRole) && $changeRole == true) :?>
                 <div class="card">
                     <h6 class="card-title">Changer les droits</h6>
                     <div class="card-content">
