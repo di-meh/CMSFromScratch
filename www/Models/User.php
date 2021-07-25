@@ -24,56 +24,6 @@ class User extends Singleton
 
     }
 
-    /*
-    *   set all properties from database from the email
-    *   from id idealement mais flm
-    *   pcq il faut recup id a partir de email puis tout a partir de id
-    */
-    public function setAllFromEmail(string $email)
-    {
-
-        $email = htmlspecialchars($email);
-        $query = "SELECT * FROM " . $this->table . " WHERE email = '" . $email . "'";
-        $prepare = $this->getPDO()->prepare($query);
-        $prepare->execute();
-        $res = $prepare->fetch(PDO::FETCH_ASSOC);
-        $this->setId($res['id']);
-        $this->setFirstname($res['firstname']);
-        $this->setLastname($res['lastname']);
-        $this->setEmail($email);
-        $this->setCountry($res['country']??'');
-        $this->setStatus($res['status']);
-        $this->setToken($res['token'] ?? '');
-
-        $this->setPwd($res['pwd']); # un peu dangereux non ? même si hashé
-
-    }
-    
-
-    # set all properties from id
-    public function setAllFromId($id)
-    {
-
-        $query = "SELECT * FROM " . $this->table . " WHERE id = '" . $id . "'";
-        $prepare = $this->getPDO()->prepare($query);
-        $prepare->execute();
-        $res = $prepare->fetch(PDO::FETCH_ASSOC);
-        if($res){
-            $this->setId($id);
-            $this->setFirstname($res['firstname']);
-            $this->setLastname($res['lastname']);
-            $this->setEmail($res['email']);
-            $this->setCountry($res['country']);
-            $this->setStatus($res['status']);
-            $this->setToken($res['token'] ?? '');
-    
-            $this->setPwd($res['pwd']); # un peu dangereux non ? même si hashé
-
-            return true;
-        }
-        return false;
-    }
-
     # cherche cet id en base
     public function verifyId($id){
 

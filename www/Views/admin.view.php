@@ -30,7 +30,7 @@
             <div class="card">
                 <h6 class="card-title">Les Utilisateurs</h6>
                 <div class="card-content">
-                    <a id="" href="/lbly-admin/register"><button class="btn btn-primary">Ajouter un user</button></a>
+                    <a id="" href="/lbly-admin/register"><button class="btn btn-primary">Ajouter un Utilisateur</button></a>
                     </br></br>
                     <?php if (isset($users)) :?>
                         <?php if (empty($users)) :?>

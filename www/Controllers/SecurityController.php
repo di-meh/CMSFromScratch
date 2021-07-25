@@ -57,7 +57,7 @@ class SecurityController
 				$userModified = new User();
 				if($userModified->verifyId($_GET['userid']) == 1){
 
-					$userModified->setAllFromId($_GET['userid']);
+					$userModified->setAllFromData(["id" => $_GET['userid']]);
 
 					$form = $userModified->formRoles();	
 
@@ -210,7 +210,7 @@ class SecurityController
 				$self = true;
 			
 			if($userDelete->verifyId($_GET['userid']) == 1){
-				$userDelete->setAllFromId($_GET['userid']);
+				$userDelete->setAllFromData(["id" => $_GET['userid']]);
 					if($userDelete->isSuperAdmin() && !$user->isSuperAdmin()){
 						$view->assign("errors", ['Vous ne pouvez pas supprimer ce compte.']);
 
@@ -302,7 +302,7 @@ class SecurityController
 
 			if($mailExists == 1){ # mail found in db
 
-				$user->setAllFromEmail($email);
+				$user->setAllFromData(["email" => $email]);
 
 				if($user->isValidated()){ # only superadmin validates
 
@@ -347,7 +347,7 @@ class SecurityController
 		
 		if($user->verifyUser($id,$token) == 1){ # check user in db with its id and token couple
 
-			$user->setAllFromId($id);
+			$user->setAllFromData(["id" => $id]);
 
 			$user->setToken(Helpers::createToken());
 
@@ -400,7 +400,7 @@ class SecurityController
 		
 		if($user->verifyUser($id,$token) == 1){ # check user in db with this id and token couple
 
-			$user->setAllFromId($id);
+			$user->setAllFromData(["id" => $id]);
 			$user->addStatus(USERVALIDATED);
 
 			$user->setToken(Helpers::createToken());
@@ -417,15 +417,9 @@ class SecurityController
 
 	public function editProfilAction(){
 
-		session_start();
+		$user = Secu::getConnectedUser();
+		if(is_null($user)) header("Location:/"); # si user non connecté => redirection
 
-		if (!isset($_SESSION['id'])) header("Location:/"); # si user non connecté => redirection
-
-		$user = new User();
-		$user->setAllFromId($_SESSION['id']); # recuperer objet depuis session
-		#var_dump($user);
-		# CHERCHER LES INFOS USER EN BASE A PARTIR DE SON ID
-		# A PARTIR DE SON EMAIL UNIQUE A CHACUN CEST BON AUSSI JPENSE
 
 		$view = new View("editProfil", 'back'); # appelle View/editProfil.view.php
 
@@ -444,7 +438,6 @@ class SecurityController
 						$user->setFirstname(htmlspecialchars($_POST['firstname']));
 						# $_SESSION['user'] = $user; # update de session
 						$user->save();
-						#header("Refresh:0");
 						$form = $user->formEditProfil(); # reaffichage du formulaire mis a jour
 						$infos[] = "Votre prénom a été mis à jour !";
 						$view->assign("infos", $infos);
@@ -455,7 +448,6 @@ class SecurityController
 						$user->setLastname(htmlspecialchars($_POST['lastname']));
 						# $_SESSION['user'] = $user; # update de session
 						$user->save();
-						#header("Refresh:0");
 						$form = $user->formEditProfil();
 						$infos[] = "Votre nom a été mis à jour !";
 						$view->assign("infos", $infos);
@@ -538,7 +530,8 @@ class SecurityController
 				# cherche le mdp correspond a ce mail en base
 				if (password_verify($_POST['pwd'], $pwd)) {
 
-					$user->setAllFromEmail($_POST['email']);
+					$user->setAllFromData(["email" => $_POST['email']]);
+
 					# set tous les attributs depuis la base
 					# à partir du mail
 
@@ -553,11 +546,12 @@ class SecurityController
 
 						$_SESSION['id'] = $user->getId();
 						$_SESSION['email'] = $user->getEmail(); # email unique donc ca devrait etre bon
-						# $_SESSION['pwd'] = $user->getPwd(); # ??
-						$_SESSION['token'] = $token; # not sure
+						$_SESSION['token'] = $user->getToken(); # not sure
+
+						$user->save();
 
 						header("Location:/lbly-admin"); # temporairement
-						# $user->deleteAll(); # pour delete immediatement en 
+
 					}else{
                         $email = $_POST['email'];
 					    $html = "Votre compte n'a pas été validé.";
@@ -589,11 +583,7 @@ class SecurityController
 	public function registerAction()
 	{
 
-		session_start();
-		if(isset($_SESSION['id'])){
-			$user = new User();
-			$user->setAllFromId($_SESSION['id']);
-		}
+		$user = Secu::getConnectedUser();
 
 
 		$userRegister = new User();
@@ -670,7 +660,7 @@ class SecurityController
 		if(is_null($_GET['email']) || empty($_GET['email']))
 			header("Location: /");
 
-		$user->setAllFromEmail($_GET['email']);
+		$user->setAllFromData(["email" => $_GET['email']]);
 
 		$mailing = Mailing::getMailing();
 		$mailing->mailConfirm($user);

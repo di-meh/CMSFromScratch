@@ -15,13 +15,15 @@ class Security
 	}
 
 	public static function getConnectedUser(){
-		
+
 		if(self::isConnected()){
 			$user = new User();
-			if($user->setAllFromId($_SESSION['id'])){
+			if($user->setAllFromData(["id" => $_SESSION['id']])){
 				if($user->isDeleted())
 					return null;
 				return $user;
+			}else{
+				return ($user->setAllFromData(["id" => $_SESSION['id']]));
 			}
 		}
 		return null;
@@ -30,7 +32,7 @@ class Security
 	public static function isAdmin(){
 		$user = new User();
 		if(isset($_SESSION['id'])){
-			if($user->setAllFromId($_SESSION['id']))
+			if($user->setAllFromData(["id" => $_SESSION['id']]))
 				return $user->isAdmin();
 		}
 		
@@ -40,7 +42,7 @@ class Security
 	public static function isSuperAdmin(){
 		$user = new User();
 		if(isset($_SESSION['id'])){
-			if($user->setAllFromId($_SESSION['id']))
+			if($user->setAllFromData(["id" => $_SESSION['id']]))
 				return $user->isSuperAdmin();
 		}
 		
@@ -53,10 +55,10 @@ class Security
         if($status & USERDELETED) return "DELETED";
         if($status == 0) return "NON VALIDATED USER";
         if(!($status & USERVALIDATED)) return "NON VALIDATED USER";
+        if($status & USERADMIN) return "ADMIN";
 
 		$readStatus = "";
 
-        if($status & USERADMIN) $readStatus .= "ADMIN</br>";
         if($status & USERCONTRIBUTOR) $readStatus .= "CONTRIBUTOR</br>";
         if($status & USERAUTHOR) $readStatus .= "AUTHOR</br>";
         if($status & USEREDITOR) $readStatus .= "EDITOR</br>";
