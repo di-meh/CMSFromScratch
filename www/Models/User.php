@@ -321,6 +321,14 @@ class User extends Singleton
                     "submit" => "Valider"
                 ],
             "inputs" => [
+                "user" => [
+                    "type" => "input",
+                    "label" => "Utilisateur",
+                    "id" => "username",
+                    "class" => "form_input",
+                    "disabled" => true,
+                    "value" => $this->getEmail()
+                ],
                 "admin" => [
                     "type" => "checkbox",
                     "label" => "Administrateur",
