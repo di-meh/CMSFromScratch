@@ -33,7 +33,6 @@ class BookController
         $form = $book->formAddBook();
 
         if(!empty($_POST)) {
-
             if (isset($_FILES) && !empty($_FILES["image"]["name"])) {
                 $_POST["image"] = $_FILES["image"]["name"];
             }else{
@@ -47,7 +46,12 @@ class BookController
                 $book->setPublicationDate($_POST['publication_date']);
                 $book->setPublisher(htmlspecialchars($_POST['publisher']));
                 $book->setPrice(htmlspecialchars($_POST['price']));
-                $book->setCategory(htmlspecialchars($_POST['category']));
+                $categories = "";
+                foreach ($_POST['category'] as $item) {
+                    $categories .= $item . ",";
+                }
+                $categories = substr($categories,0,-1);
+                $book->setCategory(htmlspecialchars($categories ));
                 $book->setStockNumber(htmlspecialchars($_POST['stock_number']));
                 $book->setSlug($book->book2slug($_POST['title'] . "-" . $_POST['author'] . "-" . $_POST['publisher']));
                 $maxsize = 2097152;
@@ -86,10 +90,9 @@ class BookController
                     $book->save();
                      header("Location:/lbly-admin/books");
                 } else {
-                    echo $book->getSlug();
                     $view->assign("errors", ["Veuillez changer le titre de votre page"]);
                 }
-            } else {
+            }else{
                 $view->assign("errors", $errors);
             }
         }
@@ -139,8 +142,8 @@ class BookController
         $form = $book->formEditBook();
         if (!empty($_POST)){
             $oldimage = $book->getImage();
-            if ($_POST['title'] != $book->getTitle()){
-                if (!empty($_POST['title'])){
+            if (!empty($_POST['title'])){
+                if ($_POST['title'] != $book->getTitle()){
                     $book->setTitle(htmlspecialchars($_POST['title']));
                     $book->setSlug($book->book2slug($_POST['title']. "-" . $book->getAuthor(). "-" . $book->getPublisher()));
                     if (empty($book->getAllBySlug($book->getSlug()))){
@@ -151,25 +154,25 @@ class BookController
                     }else{
                         $view->assign("errors", ["Veuillez changer le titre de votre livre"]);
                     }
-                }else{
-                    $view->assign("errors", ["Veuillez remplir tous les champs"]);
                 }
+            }else{
+                $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
-            if ($_POST['description'] != $book->getDescription()){
                 if (!empty($_POST['description'])){
-                    $book->setDescription(htmlspecialchars($_POST['description']));
-                    $book->save();
-                    $form = $book->formEditBook();
-                    $infos[] = "La description a été mis a jour";
-                    $view->assign("infos", $infos);
+                    if ($_POST['description'] != $book->getDescription()){
+                        $book->setDescription(htmlspecialchars($_POST['description']));
+                        $book->save();
+                        $form = $book->formEditBook();
+                        $infos[] = "La description a été mis a jour";
+                        $view->assign("infos", $infos);
+                    }
                 }else{
                     $view->assign("errors", ["Veuillez remplir tous les champs"]);
                 }
-            }
 
-            if ($_POST['author'] != $book->getAuthor()){
-                if (!empty($_POST['author'])){
+            if (!empty($_POST['author'])){
+                if ($_POST['author'] != $book->getAuthor()){
                     $book->setAuthor(htmlspecialchars($_POST['author']));
                     $book->setSlug($book->book2slug($book->getTitle(). "-" . $_POST['author']. "-" . $book->getPublisher()));
                     if (empty($book->getAllBySlug($book->getSlug()))){
@@ -180,25 +183,25 @@ class BookController
                     }else{
                         $view->assign("errors", ["Veuillez changer le titre de l'auteur"]);
                     }
-                }else{
-                    $view->assign("errors", ["Veuillez remplir tous les champs"]);
                 }
+            }else{
+                $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
-            if ($_POST['publication_date'] != $book->getPublicationDate()){
-                if (!empty($_POST['publication_date'])){
+            if (!empty($_POST['publication_date'])){
+                if ($_POST['publication_date'] != $book->getPublicationDate()){
                     $book->setPublicationDate($_POST['publication_date']);
                     $book->save();
                     $form = $book->formEditBook();
                     $infos[] = "La date de publication a été mis a jour";
                     $view->assign("infos", $infos);
-                }else{
-                    $view->assign("errors", ["Veuillez remplir tous les champs"]);
                 }
+            }else{
+                $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
-            if ($_POST['publisher'] != $book->getPublisher()){
-                if (!empty($_POST['publisher'])){
+            if (!empty($_POST['publisher'])){
+                if ($_POST['publisher'] != $book->getPublisher()){
                     $book->setPublisher(htmlspecialchars($_POST['publisher']));
                     $book->setSlug($book->book2slug($book->getTitle(). "-" . $book->getAuthor(). "-" . $_POST['publisher']));
                     if (empty($book->getAllBySlug($book->getSlug()))){
@@ -209,9 +212,9 @@ class BookController
                     }else{
                         $view->assign("errors", ["Veuillez changer le titre de l'auteur"]);
                     }
-                }else{
-                    $view->assign("errors", ["Veuillez remplir tous les champs"]);
                 }
+            }else{
+                    $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
             if (isset($_FILES) && !empty($_FILES["image"]["name"])) {
@@ -248,43 +251,48 @@ class BookController
                 $book->save();
             }
 
-            if ($_POST['price'] != $book->getPrice()){
-                if (!empty($_POST['price'])){
+            if (!empty($_POST['price'])){
+                if ($_POST['price'] != $book->getPrice()){
                     $book->setPrice(htmlspecialchars($_POST['price']));
                     $book->save();
                     $form = $book->formEditBook();
                     $infos[] = "La prix a été mis a jour";
                     $view->assign("infos", $infos);
-                }else{
-                    $view->assign("errors", ["Veuillez remplir tous les champs"]);
                 }
+            }else{
+                $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
-            if ($_POST['category'] != $book->getCategory()){
-                if (!empty($_POST['category'])){
-                    $book->setCategory(htmlspecialchars($_POST['category']));
+            if (isset($_POST['category'])){
+                if ($_POST['category'] != $book->getCategory()){
+                    $categories = "";
+                    foreach ($_POST['category'] as $item) {
+                        $categories .= $item . ",";
+                    }
+                    $categories = substr($categories,0,-1);
+                    $book->setCategory(htmlspecialchars($categories ));
                     $book->save();
                     $form = $book->formEditBook();
                     $infos[] = "La catgeorie a été mis a jour";
                     $view->assign("infos", $infos);
-                }else{
-                    $view->assign("errors", ["Veuillez remplir tous les champs"]);
                 }
+            }else{
+                $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
-            if ($_POST['stock_number'] != $book->getStockNumber()){
-                if (!empty($_POST['stock_number'])){
+            if (!empty($_POST['stock_number'])){
+                if ($_POST['stock_number'] != $book->getStockNumber()){
                     $book->setStockNumber(htmlspecialchars($_POST['stock_number']));
                     $book->save();
                     $form = $book->formEditBook();
                     $infos[] = "Le nombre de stock a été mis a jour";
                     $view->assign("infos", $infos);
-                }else{
-                    $view->assign("errors", ["Veuillez remplir tous les champs"]);
                 }
+            }else{
+                $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
         }
-        #if (isset($infos)) header("Location:/lbly-admin/books/edit/".$book->getSlug());
+        if (isset($infos)) header("Location:/lbly-admin/books/edit/".$book->getSlug());
         $view->assign("form", $form);
     }
 

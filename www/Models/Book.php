@@ -94,7 +94,7 @@ class Book extends Singleton
                     "type" => "text",
                     "label" => "Titre du livre",
                     "minLength" => 1,
-                    "maxLength" => 100,
+                    "maxLength" => 255,
                     "id" => "title",
                     "class" => "form_input",
                     "placeholder" => "Exemple: Harry Potter et La Coupe de Feu",
@@ -106,7 +106,7 @@ class Book extends Singleton
                     "type" => "text",
                     "label" => "Description du livre",
                     "minLength" => 1,
-                    "maxLength" => 255,
+                    "maxLength" => 65535,
                     "id" => "description",
                     "class" => "form_input",
                     "placeholder" => "Un super livre",
@@ -118,7 +118,7 @@ class Book extends Singleton
                     "type" => "text",
                     "label" => "Nom de l'auteur",
                     "minLength" => 1,
-                    "maxLength" => 100,
+                    "maxLength" => 310,
                     "id" => "author",
                     "class" => "form_input",
                     "placeholder" => "Exemple: Sun Tzu",
@@ -149,7 +149,7 @@ class Book extends Singleton
                     "type" => "text",
                     "label" => "Maison d'édition",
                     "minLength" => 1,
-                    "maxLength" => 100,
+                    "maxLength" => 55,
                     "id" => "publisher",
                     "class" => "form_input",
                     "placeholder" => "Exemple: Flammarion",
@@ -167,17 +167,15 @@ class Book extends Singleton
                     "error" => "Le prix doit être au moins supérieur à 1€",
                     "required" => true
                 ],
-                //category g pas encore fait, faudra faire un options
-                // Pour l'instant on a un input type text
-                "category" => [
-                    "type" => "text",
+
+                "category[]" => [
+                    "type" => "select",
                     "label" => "Catégorie",
-                    "minLength" => 1,
-                    "maxLength" => 100,
+                    "multiple" => "multiple",
+                    "options" => $this->getCreatedCategory(),
                     "id" => "category",
                     "class" => "form_input",
-                    "placeholder" => "Exemple: Science-fiction",
-                    "error" => "La catégorie doit faire entre 1 et 100 caractères",
+                    "error" => "Veuillez choisir au minimum 1 catégorie",
                     "required" => true
                 ],
                 "stock_number" => [
@@ -243,13 +241,14 @@ class Book extends Singleton
                     "class" => "form_input",
                     "placeholder" => "Exemple: Harry Potter et La Coupe de Feu",
                     "value" => $this->title ?? "",
-                    "error" => "Le titre doit faire entre 1 et 100 caractères ",
+                    "error" => "Le titre doit faire entre 1 et 255 caractères ",
                     "required" => true
                 ],
                 "description" => [
                     "type" => "text",
                     "label" => "Description du livre",
                     "minLength" => 1,
+                    "maxLength" => 65535,
                     "id" => "description",
                     "class" => "form_input",
                     "placeholder" => "Un super livre",
@@ -313,18 +312,15 @@ class Book extends Singleton
                     "error" => "Le prix doit être au moins supérieur à 1€",
                     "required" => true
                 ],
-                //category g pas encore fait, faudra faire un options
-                // Pour l'instant on a un input type text
-                "category" => [
-                    "type" => "text",
+                "category[]" => [
+                    "type" => "select",
                     "label" => "Catégorie",
-                    "minLength" => 1,
-                    "maxLength" => 255,
+                    "multiple" => "multiple",
+                    "options" => $this->getCreatedCategory(),
+                    "value" => explode(",",$this->getCategory()),
                     "id" => "category",
                     "class" => "form_input",
-                    "placeholder" => "Exemple: Science-fiction",
-                    "value" => $this->category ?? '',
-                    "error" => "La catégorie doit faire entre 1 et 100 caractères",
+                    "error" => "Veuillez réessayer svp",
                     "required" => true
                 ],
                 "stock_number" => [
@@ -472,5 +468,17 @@ class Book extends Singleton
         $query = "DELETE FROM " . $this->getTable() . " WHERE slug = '" . $slug ."'";
         $req = $this->getPDO()->prepare($query);
         $req->execute();
+    }
+
+    public function getCreatedCategory(){
+        $array = [];
+        $query = "SELECT nameCategory FROM lbly_category ORDER BY nameCategory ASC";
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
+        $res = $req->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($res as $re) {
+            array_push($array,$re["nameCategory"]);
+        }
+        return $array;
     }
 }

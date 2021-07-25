@@ -96,12 +96,26 @@ class FormBuilder
 
 	public static function renderSelect($name, $configInput)
 	{
-		$html = "<select name='" . $name . "' id='" . ($configInput["id"] ?? "") . "'
-						class='input-field " . ($configInput["class"] ?? "") . "'>";
-		foreach ($configInput["options"] as $key => $value) {
-			$html .= "<option value='" . $key . "'>" . $value . "</option>";
-		}
+        $html = "<select name='" . $name . "' id='" . ($configInput["id"] ?? "") . "'
+						class='input-field " . ($configInput["class"] ?? "") . "' ";
+        $html .= (!empty($configInput["required"])) ? "required='required' " : "";
+        $html .= (!empty($configInput["multiple"])) ? "multiple='multiple'" : "";
+        $html .= ">";
 
+		if (empty($configInput["value"])){
+		    foreach ($configInput["options"] as $key => $item){
+                $html .= "<option value='" . $item . "'>" . $item . "</option>";
+            }
+        }else{
+		    $is_selected = array_intersect($configInput["options"], $configInput["value"]);
+		    $not_selected = array_diff($configInput['options'],$configInput['value']);
+            foreach ($is_selected as $item => $value) {
+                $html .= "<option value='" . $value . "' selected>" . $value . "</option>";
+            }
+            foreach ($not_selected as $key => $option) {
+                $html .= "<option value='" . $option . "'>" . $option . "</option>";
+            }
+        }
 		$html .= "</select><br>";
 
 		return $html;

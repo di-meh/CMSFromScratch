@@ -750,7 +750,6 @@ class User extends Singleton
                         "pl" => "Pologne",
                     ],
                     "minLength" => 2,
-                    "maxLength" => 2,
                     "id" => "country",
                     "class" => "form_input",
                     "placeholder" => "Exemple: fr",
@@ -927,14 +926,14 @@ class User extends Singleton
                   `id` int(11) NOT NULL,
                   `title` tinytext COLLATE utf8_bin NOT NULL,
                   `description` text COLLATE utf8_bin,
-                  `author` varchar(310) COLLATE utf8_bin NOT NULL,
+                  `author` varchar(350) COLLATE utf8_bin NOT NULL,
                   `publication_date` date NOT NULL,
                   `image` text COLLATE utf8_bin,
                   `publisher` varchar(55) COLLATE utf8_bin NOT NULL,
                   `price` smallint(6) NOT NULL,
-                  `category` tinytext COLLATE utf8_bin DEFAULT NULL,
+                  `category` varchar(30) COLLATE utf8_bin DEFAULT NULL,
                   `stock_number` int(11) NOT NULL DEFAULT '0',
-                  `slug` tinytext NOT NULL
+                  `slug` text NOT NULL
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin";
         $prepare = $this->getPDO()->prepare($query);
         $prepare->execute();
@@ -972,7 +971,7 @@ class User extends Singleton
                   `lastname` varchar(255) NOT NULL,
                   `email` varchar(320) NOT NULL,
                   `pwd` varchar(255) NOT NULL,
-                  `country` char(2) NOT NULL DEFAULT 'fr',
+                  `country` varchar(56) NOT NULL DEFAULT 'fr',
                   `status` int NOT NULL DEFAULT '0',
                   `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                   `updatedAt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
