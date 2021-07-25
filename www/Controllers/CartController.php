@@ -27,7 +27,6 @@ class CartController
                 $forms[$bookObject->getId()] = $bookObject->formRemoveFromCart();
             }
             $forms["reset_cart"] = Cart::formResetCart();
-            $forms["confirm_cart"] = Cart::formConfirmCart();
             $view->assign("forms", $forms);
     
             if (!empty($_POST)) {
@@ -46,38 +45,7 @@ class CartController
                     Cart::resetCart();
                     header('Location:/cart');
                 }
-
-                // Confirmer le panier
-                if(isset($_POST['confirm_cart'])){
-                    // Cart::resetCart();
-                    header('Location:/cart');
-                }
             }
-        }
-    }
-    
-    public function checkoutAction () {
-        $cart = Cart::GetShoppingCart();
-        $model = $cart->books;
-    }
-
-    public function confirmCheckoutAction () {
-        if (Cart::ShoppingCartExists()) {
-            $cart = Cart::GetShoppingCart();
-            $cart->articles;
-            foreach ($cart->articles as $article) {
-                $user = Security::GetLoggedUser();
-                $sale = new Sale(
-                    $user->getId(),
-                    $article->getId(),
-                    $invoiceNumber = (Setting::GetLastInvoiceNumber() + 1),
-                    $saleDate = (new DateTime())->format('Y-m-d H:i:s')
-                );
-                $sale->Create();
-            }
-            // parent::RedirectToController('cart', 'Empty'); // Succesful, redirect to sale history
-        } else {
-            header("Location:/books");
         }
     }
 }

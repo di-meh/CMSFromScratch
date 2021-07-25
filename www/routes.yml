@@ -114,6 +114,14 @@
   controller: Cart
   action: default
 
+/cart/confirm:
+  controller: Order
+  action: confirmCart
+  
+/payment-success:
+  controller: Order
+  action: success
+
 /books:
   controller: Book
   action: seeAllBooks

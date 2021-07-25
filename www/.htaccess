@@ -4,7 +4,7 @@ RewriteRule ^sitemap.xml/?$ sitemap.php [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-RewriteRule . /index.php [L,QSA]
+RewriteRule . /index.php [QSA]
 RewriteCond %{REQUEST_URI} (.+)/$
 RewriteRule ^ %1 [R=301,L]
 

@@ -13,27 +13,42 @@
                                     <th>titre</th>
                                     <th>Auteur</th>
                                     <th>Quantité</th>
+                                    <th>Prix unitaire</th>
+                                    <th>Prix total</th>
                                     <th>Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php foreach ($books as $book) { ?>
+                                <?php 
+                                $totalprice = 0;
+                                $totalqty = 0;
+                                foreach ($books as $book) { ?>
                                     <tr>
                                         <td><?php echo $book["title"];?></td>
                                         <td><?php echo $book["author"];?></td>
                                         <td><?php echo $book["qty"];?></td>
+                                        <td><?php echo $book["price"];?> €</td>
+                                        <td><?php echo $book["qty"]*$book["price"];?> €</td>
                                         <td><?php App\Core\FormBuilder::render($forms[$book["id"]]); ?></td>
                                     </tr>
                                     <?php
+                                    $totalprice += $book["qty"]*$book["price"];
+                                    $totalqty += $book["qty"];
                                 }
                                 ?>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="2"></th>
+                                        <th><?php echo $totalqty;?></th>
+                                        <th></th>
+                                        <th><?php echo $totalprice;?> €</th>
+                                        <th><?php  App\Core\FormBuilder::render($forms["reset_cart"]); ?></th>
+                                    </tr>
+                                </tfoot>
                             </table>
-                        <?php  
-                        App\Core\FormBuilder::render($forms["reset_cart"]);
-                        App\Core\FormBuilder::render($forms["confirm_cart"]);
-                
-                    endif; ?>
+                        <a href="/cart/confirm" style="display: table; margin: 1.25rem 0 0 auto;"><button class="btn btn-primary">Confirmer le panier</button></a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

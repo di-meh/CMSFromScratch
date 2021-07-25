@@ -29,7 +29,7 @@
 			<div class="navbar-right">	
                 <div class="right-link"><a href="/cart"><span class="material-icons">shopping_basket</span><span class="number"><?=$total?></span></a></div>
                 <?php if(isset($_SESSION['id'])) : ?>	
-                    |
+                    <div class="right-link">|</div>
                     <div class='right-link'><a id'' href='/lbly-admin'>Dashboard</a></div>
                     <div class="right-link"><a href="/lbly-admin/editprofil"><span class="material-icons">face</span></a></div>
                     <div class="right-link"><a href="/lbly-admin/logout"><span class="material-icons">power_settings_new</span></a></div>

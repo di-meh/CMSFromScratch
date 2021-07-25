@@ -188,7 +188,7 @@ class Page extends Singleton
                     "id" => "title",
                     "class" => "form_input",
                     "placeholder" => "Exemple: Premier article",
-                    "value" => htmlspecialchars($this->title),
+                    "value" => $this->title,
                     "error" => "Votre titre doit faire entre 2 et 155 caractères",
                     "required" => true
                 ],

@@ -30,6 +30,9 @@
                                 <th>titre</th>
                                 <th>Auteur</th>
                                 <th>Stock</th>
+                                <th>Voir</th>
+                                <th>Modifier</th>
+                                <th>Supprimer</th>
                             </tr>
                             </thead>
                             <tbody>

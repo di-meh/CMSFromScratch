@@ -71,25 +71,35 @@ class Cart
         ];
     }
     public static function formConfirmCart(){
-        return [
-
-            "config" => [
-                "method" => "POST",
-                "action" => "",
-                "id" => "form_confirm_cart",
-                "class" => "form_builder",
-                "submit" => "Passer la commande",
-                "btn_class" => "btn btn-primary"
-            ],
-            "inputs" => [
-                "confirm_cart" => [
-                    "type" => "hidden",
-                    "id" => "id",
-                    "class" => "form_input",
-                    "error" => "id not found",
-                    "required" => true
+        $totalprice = 0;
+        if (CartSession::existCartSession()) {
+            $cart = CartSession::getCartSession();
+            foreach($cart->books as $book){
+                $totalprice += $book['qty']*$book['price'];
+            }
+            
+            return [
+                "config" => [
+                    "method" => "POST",
+                    "action" => "",
+                    "id" => "form_confirm_cart",
+                    "class" => "form_builder",
+                    "submit" => "Passer la commande",
+                    "btn_class" => "btn btn-primary"
+                ],
+                "inputs" => [
+                    "price" => [
+                        "type" => "hidden",
+                        "id" => "price",
+                        "class" => "form_input",
+                        "value" => $totalprice ?? "Error",
+                        "error" => "id not found",
+                        "required" => true
+                    ]
                 ]
-            ]
-        ];
+            ];
+        } else {
+            return null;
+        }
     }
 }
