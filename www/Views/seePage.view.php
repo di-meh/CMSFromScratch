@@ -3,10 +3,10 @@
         <div class="col-full">
             <div class="card">
                 <div class="card-title">
-                    <h6><?php echo $article["title"]; ?></h6>
+                    <h6><?php echo $page["title"]; ?></h6>
                 </div>
                 <div class="card-content">
-                    <?php echo $article["content"];?>
+                    <?php echo $page["content"];?>
                 </div>
              </div>
         </div>
