@@ -86,6 +86,7 @@ class CategoryController {
 						$form = $category->formEditCategory();
 						$infos[] = "Le nom a été mis à jour !";
 						$view->assign("infos", $infos);
+                        header("Location:/lbly-admin/category");
 					}else{
 						echo $category->getSlug();
 						$view->assign("errors", ["Veuillez changer le nom de votre catégorie"]);
@@ -127,6 +128,14 @@ class CategoryController {
         $categorycontent = $category->getAllBySlug($uri)[0];
 
 		if (!empty($_POST["delete"])){
+            $to_update = $category->getDeletedArticleCategory($category->getSlug());
+            $new_category = "";
+            foreach ($to_update as $key => $value) {
+                $new_category = str_replace($category->getSlug(),"",$value['category']);
+                $new_category = trim($new_category, ",");
+                $new_category = implode(",",array_filter(explode(",",$new_category)));
+                $category->updateArticleCategory($new_category,$value['category']);
+            }
             $category->deleteBySlug($uri);
             header("Location:/lbly-admin/category");
         }
