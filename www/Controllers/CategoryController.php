@@ -127,7 +127,7 @@ class CategoryController {
         $categorycontent = $category->getAllBySlug($uri)[0];
 
 		if (!empty($_POST["delete"])){
-		    $to_update = $category->category2update($category->getSlug());
+		    $to_update = $category->getDeletedBookCategory($category->getSlug());
 		    $new_category = "";
             foreach ($to_update as $key => $value) {
                 $new_category = str_replace($category->getSlug(),"",$value['category']);

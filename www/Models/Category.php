@@ -274,7 +274,7 @@ class Category extends Singleton
         $req->execute();
     }
 
-    public function category2update($deleted_category){
+    public function getDeletedBookCategory($deleted_category){
         $query = "SELECT category FROM lbly_books WHERE category LIKE '%".$deleted_category."%'";
         $req = $this->getPDO()->prepare($query);
         $req->execute();
