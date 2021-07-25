@@ -40,7 +40,9 @@ class InstallerController{
                             ."MAILSUPERADMIN=" . htmlspecialchars($_POST["email"]) . "\n"
                             ."MAILPWD=" . $_POST["mailpwd"] . "\n"
                             ."MAILPORT=" . htmlspecialchars($_POST["mailport"]) . "\n"
-                            ."MAILSMTPAUTH=true\n";
+                            ."MAILSMTPAUTH=true\n"
+                            ."STRIPE_PRIVATE_KEY=" . htmlspecialchars($_POST["stripe_public_key"]) . "\n"
+                            ."VITE_STRIPE_PUBLIC_KEY=" . htmlspecialchars($_POST["stripe_private_key"]) . "\n";
                         $handle = fopen("./.env", "w+");
                         fwrite($handle, $content);
                         new ConstantMaker();

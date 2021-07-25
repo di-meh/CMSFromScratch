@@ -864,6 +864,26 @@ class User extends Singleton
                     "value" => '',
                     "required" => true
                 ],
+                "stripe_public_key" =>[
+                    "type" => "text",
+                    "label" => "Clé publique Stripe : ",
+                    "minLength" => 8,
+                    "id" => "stripe_public_key",
+                    "class" => "form_input",
+                    "placeholder" => "",
+                    "value" => '',
+                    "required" => true
+                ],
+                "stripe_private_key" =>[
+                    "type" => "text",
+                    "label" => "Clé privée Stripe : ",
+                    "minLength" => 8,
+                    "id" => "stripe_private_key",
+                    "class" => "form_input",
+                    "placeholder" => "",
+                    "value" => '',
+                    "required" => true
+                ],
             ]
         ];
     }
