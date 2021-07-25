@@ -44,6 +44,10 @@
                                 <th>Mail</th>
                                 <th>Pays</th>
                                 <th>Roles</th>
+                                <th>Date de création</th>                                
+                                <th>Modifier</th>
+                                <th>Supprimer</th>
+
 
                             </tr>
                             </thead>
@@ -55,6 +59,8 @@
                                     <td><?= $user["email"];?></td>
                                     <td><?= $user["country"];?></td>
                                     <td><?= App\Core\Security::readStatus($user["status"]);?></td>
+                                    <td><?= $user["createdAt"];?></td>
+
                                     <td><a href="/lbly-admin/changerole?userid=<?=$user["id"]?>"><button class="btn btn-primary">Modifier droits</button></a></td> 
                                     <td><a href="/deleteuser?userid=<?=$user["id"]?>"><button class="btn btn-danger">Supprimer</button></a></td> 
                                         
