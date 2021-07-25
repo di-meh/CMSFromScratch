@@ -39,7 +39,11 @@
                             <tbody>
                             <?php foreach ($books as $book) { ?>
                                 <tr>
-                                    <td><img src="../<?=$book["image"]?>" height="28px"></td> 
+                                    <?php if (isset($book["image"])) :?>
+                                    <td><img src="../<?=$book["image"]?>" height="28px"></td>
+                                    <?php else:?>
+                                    <td><img src="/img/defaultImage.jpg" height="28px"></td>
+                                    <?php endif;?>
                                     <td><?php echo $book["title"];?></td>
                                     <td><?php echo $book["author"];?></td>
                                     <td><?php echo $book["stock_number"];?></td>
