@@ -42,7 +42,7 @@ class ArticleController{
                     $categories .= $item . ",";
                 }
                 $categories = substr($categories,0,-1);
-                $article->setCategory(htmlspecialchars($categories ));
+                $article->setCategory(htmlspecialchars($categories));
 				$article->setContent($_POST['content']);
 				if (empty($_POST['content'])){
 					$view->assign("errors", ["Veuillez remplir tous les champs"]);
@@ -50,9 +50,8 @@ class ArticleController{
 					$article->setSlug($article->title2slug($_POST['title']));
 					if (empty($article->getAllBySlug($article->getSlug()))){
 						$article->save();
-						header("Location:/lbly-admin/articles");
+						#header("Location:/lbly-admin/articles");
 					}else{
-						echo $article->getSlug();
 						$view->assign("errors", ["Veuillez changer le titre de votre article"]);
 					}
 				}
@@ -105,16 +104,21 @@ class ArticleController{
             }
             $categories = substr($categories,0,-1);
 
-            if ($categories != $article->getCategory()){
-                if (!empty($categories)){
-                    $article->setCategory($categories);
+            if (!empty($categories)){
+                if ($categories != $article->getCategory()){
+                    $categories = "";
+                    foreach ($_POST['category'] as $item) {
+                        $categories .= $item . ",";
+                    }
+                    $categories = substr($categories,0,-1);
+                    $article->setCategory(htmlspecialchars($categories ));
                     $article->save();
                     $form = $article->formEditArticle();
                     $infos[] = "Le contenu a été mis à jour !";
                     $view->assign("infos", $infos);
-                }else{
-                    $view->assign("errors", ["Veuillez choisir une categorie"]);
                 }
+            }else{
+                $view->assign("errors", ["Veuillez choisir une categorie"]);
             }
 
 			if($_POST['content'] != $article->getContent()){ # changer le nom

@@ -156,8 +156,6 @@ class Article extends Singleton
                     "label" => "Catégorie",
                     "multiple" => "multiple",
                     "options" => $this->getCreatedCategory(),
-                    "minLength" => 1,
-                    "maxLength" => 30,
                     "id" => "category",
                     "class" => "form_input",
                     "error" => "La catégorie doit faire entre 1 et 100 caractères",
@@ -211,8 +209,7 @@ class Article extends Singleton
                     "label" => "Catégorie",
                     "multiple" => "multiple",
                     "options" => $this->getCreatedCategory(),
-                    "minLength" => 1,
-                    "maxLength" => 30,
+                    "value" => explode(",",$this->getCategory()),
                     "id" => "category",
                     "class" => "form_input",
                     "error" => "La catégorie doit faire entre 1 et 100 caractères",
@@ -325,6 +322,7 @@ class Article extends Singleton
         $this->setTitle($res['title']);
         $this->setSlug($res['slug']);
         $this->setContent($res['content']);
+        $this->setCategory($res['category']);
         $this->setCreated($res['created']);
         $this->setPublished($res['published']);
         $this->setModified($res['modified']);
