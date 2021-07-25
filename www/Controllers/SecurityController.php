@@ -48,6 +48,8 @@ class SecurityController
 		$user = Secu::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
+		$view = new View("changeRole", "back");
+
 		if($user->isAdmin()){
 
 			if(isset($_GET['userid'])){
@@ -57,10 +59,12 @@ class SecurityController
 
 					$userModified->setAllFromId($_GET['userid']);
 
-					if($userModified->isSuperAdmin())
+					if($userModified->isSuperAdmin() && !$user->isSuperAdmin()){
 						header("Location: /lbly-admin/adminview");
+					}else if($user->getId() == $userModified->getId()){
+						header("Location: /lbly-admin/editProfil");
+					}
 
-					$view = new View("changeRole", "back");
 					$form = $userModified->formRoles();
 
 					$infos = [];
@@ -169,9 +173,7 @@ class SecurityController
 					$userModified->save();
 
 				}else{
-
-					$view->assign("errors", ["Id inexistant.</br>Redirection..."]);
-					header("Refresh:3; url=/", true, 303);
+					header("Location: /");
 				}
 
 
@@ -195,9 +197,10 @@ class SecurityController
 		$user = Secu::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
-		$view = new View("deleteuser", "back");
+		$view = new View("admin", "back");
 
-		$form = $user->formDelete(); # confirm pwd of the user or the admin
+		$users = $user->all();
+		$formDelete = $user->formDelete();
 
 		$userDelete = new User();
 
@@ -211,6 +214,10 @@ class SecurityController
 			
 			if($userDelete->verifyId($_GET['userid']) == 1){
 				$userDelete->setAllFromId($_GET['userid']);
+					if($userDelete->isSuperAdmin() && !$user->isSuperAdmin()){
+						$view->assign("errors", ['Vous ne pouvez pas supprimer ce compte.']);
+
+					}
 
 			}else{
 				# id does not exist
@@ -227,10 +234,6 @@ class SecurityController
 		}else{ 
 			$userDelete = $user;
 			$self = true;
-		}
-
-		if($userDelete->isDeleted() || $userDelete->isSuperAdmin()){
-			header("Location: /lbly-admin/adminview");
 		}
 
 		if(isset($_POST['pwdConfirm'])){
@@ -255,7 +258,26 @@ class SecurityController
 		}
 
 			
-		$view->assign("form", $form);
+		$view->assign("users", $users);
+
+		if($user->getId() == $userDelete->getId()){
+			$message = "Voulez vraiment supprimer votre compte ?";
+        	$view->assign("deleteUser", true);
+
+			$view->assign("formDelete", $formDelete);
+
+			$view->assign("infos", [$message]);
+
+		}else if(!$userDelete->isSuperAdmin()){
+			$message = "Voulez vous vraiment supprimer ".$userDelete->getEmail()." ?";
+        	$view->assign("deleteUser", true);
+
+			$view->assign("formDelete", $formDelete);
+
+			$view->assign("infos", [$message]);
+
+		}
+
 
 
 	}

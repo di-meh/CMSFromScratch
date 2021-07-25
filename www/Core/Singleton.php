@@ -34,7 +34,6 @@ class Singleton
 		return self::$pdo;
 	}
 
-
 	# DELETE ALL DATA IN CHILD TABLE !
 	public function deleteAll()
 	{

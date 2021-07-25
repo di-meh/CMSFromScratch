@@ -1,6 +1,19 @@
 <section class="container-fluid">
     <div class="row">
         <div class="col-full">
+            <?php if (isset($deleteUser)) :?>
+                <div class="card">
+                    <h6 class="card-title">Confirmation de suppression</h6>
+                    <div class="card-content">
+                        <?php if (isset($formDelete)) : ?>
+                            <?php App\Core\FormBuilder::render($formDelete); ?>
+                        <?php endif; ?>
+                        <br/>
+                        <a id="" href="/lbly-admin/adminview"><button class="btn btn-danger">Annuler</button></a>
+                    </div>
+                </div>
+                <br/>
+            <?php endif; ?>
             <div class="card">
                 <h6 class="card-title">Les Utilisateurs</h6>
                 <div class="card-content">
