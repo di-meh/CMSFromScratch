@@ -52,20 +52,32 @@ class OrderController{
 
 		$cart = CartSession::getCartSession();
 		$totalprice = 0;
-        if(!empty($cart)){
+		$totalqty = 0;
+        if(!empty($cart) && !empty($_POST) && !empty($_POST["email"])){
 			foreach($cart->books as $book){
                 $totalprice += $book['qty']*$book['price'];
+                $totalqty += $book['qty'];
             }
 
 			$view = new View("successPayment","front");
 			// Nous instancions Stripe en indiquand la clé privée, pour prouver que nous sommes bien à l'origine de cette demande
 			// \Stripe\Stripe::setApiKey(STRIPE_PRIVATE_KEY);
-			if(!empty($_POST)){
-				var_dump($_POST);
-				$order = new Order();
-			}
-			// var_dump($intent);
-			$view->assign("intent", $intent);
+			// var_dump($_POST);
+			$order = new Order();
+
+			$order->setEmail($_POST["email"]);
+			$order->setName($_POST["cardholder-name"]);
+			$order->setCart(json_encode($cart->books));
+			$order->setItemNumber($totalqty);
+			$order->setAmount($totalprice);
+			$order->setCurrency('eur');
+			$order->setPaymentStatus("succeeded");
+			// $order->setCreatedAt();
+
+			$order->save();
+
+			// Vider le panier
+            Cart::resetCart();
 
 		} else {
 			header("Location:/cart");

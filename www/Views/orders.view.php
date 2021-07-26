@@ -24,23 +24,23 @@
                             <table class="table">
                             <thead>
                             <tr>
-                                <th>Titre</th>
-                                <th>Date de création</th>
-                                <th>Status</th>
-                                <th>Status</th>
-                                <th>Status</th>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>Date</th>
+                                <th>Quantité</th>
+                                <th>Montant</th>
                                 <th>Status</th>
                             </tr>
                             </thead>
                             <tbody>
                             <?php foreach ($orders as $order) { ?>
                                 <tr>
-                                    <td><?=$order["title"];?></td>
-                                    <td><?=$order["created"];?></td>
-                                    <td><?=$order["status"];?></td>
-                                    <td><a href="/articles/<?=$order["slug"]?>"><button class="btn btn-primary">Voir</button></a></td>
-                                    <td><a href="/lbly-admin/articles/edit/<?=$order["slug"]?>"><button class="btn btn-primary">Modifier</button></a></td>
-                                    <td><a href="/lbly-admin/articles/delete/<?=$order["slug"]?>"><button class="btn btn-danger">Supprimer</button></a></td>
+                                    <td><?=$order["name"];?></td>
+                                    <td><?=$order["email"];?></td>
+                                    <td><?=$order["create_at"];?></td>
+                                    <td><?=$order["item_number"];?></td>
+                                    <td><?=$order["amount"];?> €</td>
+                                    <td><?=$order["payment_status"];?></td>
                                 </tr>
                                 <?php
                             }
