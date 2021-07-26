@@ -3,8 +3,8 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title><?= $title ?></title>
-	<meta name="description" content="<?= $metadescription ?>">
+	<title><?= isset($title) ? $title : SITENAME ?></title>
+	<meta name="description" content="<?= isset($metadescription) ? $metadescription : '' ?>">
 	<link rel="stylesheet" href="/framework/dist/style.css">
 	<script src="/framework/dist/main.js"></script>
     <?php if(isset($breadcrumbs)) { ?>

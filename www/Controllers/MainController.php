@@ -15,14 +15,25 @@ class MainController{
 		$page = new Page();
 		$pagecontent = $page->getAllBySlug('home');
 
+		$uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
+		$uri = substr($uriExploded[0], 1);
+
 		if(isset($pagecontent) && !empty($pagecontent)){
 
-			$view = new View("seePage", "front");
-	
-			$view->assign("page", $pagecontent);
+			$page->setAllBySlug($uri);
+			if($page->getStatus() == "publish"){
+				$view = new View("seePage", "front");
+
+				$view->assign("page", $pagecontent);
+				$view->assign("metadescription", $pagecontent['metadescription']);
+				$view->assign("title", $pagecontent['title']);
+			} else {
+				$view = new View("home");
+			}
 		} else {
 
 			$view = new View("home");
+			
 		}
 
 
