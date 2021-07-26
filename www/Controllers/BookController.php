@@ -159,17 +159,17 @@ class BookController
                 $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
-                if (!empty($_POST['description'])){
-                    if ($_POST['description'] != $book->getDescription()){
-                        $book->setDescription(htmlspecialchars($_POST['description']));
-                        $book->save();
-                        $form = $book->formEditBook();
-                        $infos[] = "La description a été mis a jour";
-                        $view->assign("infos", $infos);
-                    }
-                }else{
-                    $view->assign("errors", ["Veuillez remplir tous les champs"]);
+            if (!empty($_POST['description'])){
+                if ($_POST['description'] != $book->getDescription()){
+                    $book->setDescription(htmlspecialchars($_POST['description']));
+                    $book->save();
+                    $form = $book->formEditBook();
+                    $infos[] = "La description a été mis a jour";
+                    $view->assign("infos", $infos);
                 }
+            }else{
+                $view->assign("errors", ["Veuillez remplir tous les champs"]);
+            }
 
             if (!empty($_POST['author'])){
                 if ($_POST['author'] != $book->getAuthor()){
@@ -241,15 +241,16 @@ class BookController
                 }else{
                     $view->assign("errors", ["Votre fichier est trop lourd. Il doit faire moins de 2MB."]);
                 }
-            }else{
+            }elseif (substr($book->getImage(),-1) == ".") {
                 $target_dir = "img/";
                 $imageFileType = pathinfo($book->getImage(), PATHINFO_EXTENSION);
                 $image = basename($book->getSlug().".".$imageFileType);
                 $target_file = $target_dir . basename($book->getSlug()) .".". $imageFileType;
-
                 rename($oldimage, $target_file);
                 $book->setImage($target_dir.$image);
                 $book->save();
+            }else{
+
             }
 
             if (!empty($_POST['price'])){
@@ -264,18 +265,18 @@ class BookController
                 $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
-            if (isset($_POST['category'])){
+            if (!empty($_POST['category'])){
                 if ($_POST['category'] != $book->getCategory()){
                     $categories = "";
                     foreach ($_POST['category'] as $item) {
                         $categories .= $item . ",";
-                    }
                     $categories = substr($categories,0,-1);
                     $book->setCategory(htmlspecialchars($categories ));
                     $book->save();
                     $form = $book->formEditBook();
                     $infos[] = "La catgeorie a été mis a jour";
                     $view->assign("infos", $infos);
+                    }
                 }
             }else{
                 $view->assign("errors", ["Veuillez remplir tous les champs"]);

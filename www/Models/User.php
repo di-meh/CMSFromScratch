@@ -900,6 +900,7 @@ class User extends Singleton
                   `author` int(11) NOT NULL DEFAULT '0',
                   `title` tinytext NOT NULL,
                   `slug` varchar(300) NOT NULL,
+                  `metadescription` varchar(200) NOT NULL,
                   `content` longtext NOT NULL,
                   `category` varchar(30) NOT NULL,
                   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -915,7 +916,7 @@ class User extends Singleton
         $query = "CREATE TABLE `lbly_books` (
                   `id` int(11) NOT NULL,
                   `title` tinytext COLLATE utf8_bin NOT NULL,
-                  `description` text COLLATE utf8_bin,
+                  `description` varchar(200) COLLATE utf8_bin NOT NULL,
                   `author` varchar(350) COLLATE utf8_bin NOT NULL,
                   `publication_date` date NOT NULL,
                   `image` text COLLATE utf8_bin,
@@ -944,6 +945,7 @@ class User extends Singleton
         $query = "CREATE TABLE `lbly_page` (
                   `id` int(11) NOT NULL,
                   `title` tinytext NOT NULL,
+                  `metadescription` varchar(200) NOT NULL,
                   `content` longtext NOT NULL,
                   `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                   `updatedAt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,

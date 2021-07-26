@@ -9,6 +9,7 @@ class Page extends Singleton
 {
 	private $id = null;
     protected $title;
+    protected $metadescription;
     protected $content;
     protected $createdBy;
     protected $slug;
@@ -103,6 +104,22 @@ class Page extends Singleton
         $this->slug = $slug;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getMetadescription()
+    {
+        return $this->metadescription;
+    }
+
+    /**
+     * @param mixed $metadescription
+     */
+    public function setMetadescription($metadescription)
+    {
+        $this->metadescription = $metadescription;
+    }
+
 
     public function title2slug($title){
         $title = preg_replace('~[^\pL\d]+~u', '-', $title);
@@ -153,6 +170,18 @@ class Page extends Singleton
                     "error" => "Votre titre doit faire entre 2 et 60 caractères",
                     "required" => true
                 ],
+                "metadescription" => [
+                    "type" => "textarea",
+                    "label" => "Metadescription",
+                    "minLength" => 1,
+                    "maxLength" => 200,
+                    "id" => "metadescription",
+                    "class" => "form_input",
+                    "placeholder" => "Une desription de la page",
+                    "value" => "",
+                    "error" => "Votre description doit faire entre 1 et 200 caractères",
+                    "required" => true
+                ],
                 "editor" => [
                     "type" => "textarea",
                     "label" => "Contenu de la page",
@@ -190,6 +219,18 @@ class Page extends Singleton
                     "placeholder" => "Exemple: Premier article",
                     "value" => $this->title,
                     "error" => "Votre titre doit faire entre 2 et 155 caractères",
+                    "required" => true
+                ],
+                "metadescription" => [
+                    "type" => "textarea",
+                    "label" => "Metadescription",
+                    "minLength" => 1,
+                    "maxLength" => 200,
+                    "id" => "metadescription",
+                    "class" => "form_input",
+                    "placeholder" => "Une desription de la page",
+                    "value" => $this->getMetadescription() ?? "",
+                    "error" => "Votre description doit faire entre 1 et 200 caractères",
                     "required" => true
                 ],
                 "content" => [
@@ -256,6 +297,7 @@ class Page extends Singleton
         $res = $res[0];
         $this->setId($res['id']);
         $this->setTitle($res['title']);
+        $this->setMetadescription($res['metadescription']);
         $this->setContent($res['content']);
         $this->setCreatedBy($res['createdBy']);
         $this->setSlug($res['slug']);

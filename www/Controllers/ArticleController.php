@@ -36,6 +36,7 @@ class ArticleController{
 			
 		    if (empty($errors)){
 				$article->setTitle(htmlspecialchars($_POST['title']));
+				$article->setMetadescription(htmlspecialchars($_POST['metadescription']));
 				$article->setAuthor($user->getID());
                 $categories = "";
                 foreach ($_POST['category'] as $item) {
@@ -98,6 +99,19 @@ class ArticleController{
 					$view->assign("errors", ["Veuillez remplir tous les champs"]);
 				}
 			}
+
+            if($_POST['metadescription'] != $article->getMetadescription()){
+                if (!empty($_POST['metadescription'])){
+                    $article->setMetadescription(htmlspecialchars($_POST['metadescription']));
+                    $article->save();
+                    $form = $article->formEditArticle();
+                    $infos[] = "La description a été mis à jour !";
+                    $view->assign("infos", $infos);
+                }else{
+                    $view->assign("errors", ["Veuillez remplir tous les champs"]);
+                }
+            }
+
             $categories = "";
             foreach ($_POST['category'] as $item) {
                 $categories .= $item . ",";
@@ -114,7 +128,7 @@ class ArticleController{
                     $article->setCategory(htmlspecialchars($categories ));
                     $article->save();
                     $form = $article->formEditArticle();
-                    $infos[] = "Le contenu a été mis à jour !";
+                    $infos[] = "La catégorie a été mis à jour !";
                     $view->assign("infos", $infos);
                 }
             }else{

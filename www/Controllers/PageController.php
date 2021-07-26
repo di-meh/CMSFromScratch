@@ -48,6 +48,7 @@ class PageController
 		    if (empty($errors)){
 
                 $page->setTitle(htmlspecialchars($_POST['title']));
+                $page->setMetadescription(htmlspecialchars($_POST['metadescription']));
                 $page->setContent($_POST['editor']);
                 $page->setCreatedBy($user->getID());
                 if (empty($_POST['editor'])){
@@ -66,8 +67,6 @@ class PageController
             }else{
                 $view->assign("errors", $errors);
             }
-
-
 	    }
 		$view->assign("form", $form);
 	}
@@ -104,6 +103,18 @@ class PageController
 					$view->assign("errors", ["Veuillez remplir tous les champs"]);
 				}
 			}
+
+            if($_POST['metadescription'] != $page->getMetadescription()){
+                if (!empty($_POST['metadescription'])){
+                    $page->setMetadescription(htmlspecialchars($_POST['metadescription']));
+                    $page->save();
+                    $form = $page->formEditPage();
+                    $infos[] = "La metadescription a été mis à jour !";
+                    $view->assign("infos", $infos);
+                }else{
+                    $view->assign("errors", ["Veuillez remplir tous les champs"]);
+                }
+            }
 
 			if($_POST['content'] != $page->getContent()){ # changer le nom
 
