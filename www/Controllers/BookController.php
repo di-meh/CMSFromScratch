@@ -246,6 +246,7 @@ class BookController
                 $imageFileType = pathinfo($book->getImage(), PATHINFO_EXTENSION);
                 $image = basename($book->getSlug().".".$imageFileType);
                 $target_file = $target_dir . basename($book->getSlug()) .".". $imageFileType;
+
                 rename($oldimage, $target_file);
                 $book->setImage($target_dir.$image);
                 $book->save();
@@ -292,7 +293,6 @@ class BookController
                 $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
         }
-        if (isset($infos)) header("Location:/lbly-admin/books/edit/".$book->getSlug());
         $view->assign("form", $form);
     }
 
