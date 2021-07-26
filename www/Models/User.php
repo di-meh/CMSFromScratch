@@ -1025,18 +1025,21 @@ class User extends Singleton
         $query3 = "DROP TABLE IF EXISTS `lbly_category`";
         $query4 = "DROP TABLE IF EXISTS `lbly_page`";
         $query5 = "DROP TABLE IF EXISTS `lbly_user`";
+        $query6 = "DROP TABLE IF EXISTS `lbly_order`";
 
         $prepare1 = $this->getPDO()->prepare($query1);
         $prepare2 = $this->getPDO()->prepare($query2);
         $prepare3 = $this->getPDO()->prepare($query3);
         $prepare4 = $this->getPDO()->prepare($query4);
         $prepare5 = $this->getPDO()->prepare($query5);
+        $prepare6 = $this->getPDO()->prepare($query6);
 
         $prepare1->execute();
         $prepare2->execute();
         $prepare3->execute();
         $prepare4->execute();
         $prepare5->execute();
+        $prepare6->execute();
     }
 
     public function createTableArticle(){
@@ -1067,7 +1070,8 @@ class User extends Singleton
                   `price` smallint(6) NOT NULL,
                   `category` varchar(30) COLLATE utf8_bin DEFAULT NULL,
                   `stock_number` int(11) NOT NULL DEFAULT '0',
-                  `slug` text NOT NULL
+                  `slug` text NOT NULL,
+                  `status` varchar(20) NOT NULL DEFAULT 'publish'
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin";
         $prepare = $this->getPDO()->prepare($query);
         $prepare->execute();
