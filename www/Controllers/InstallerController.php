@@ -42,34 +42,39 @@ class InstallerController{
                             ."MAILSUPERADMIN=" . htmlspecialchars($_POST["email"]) . "\n"
                             ."MAILPWD=" . $_POST["mailpwd"] . "\n"
                             ."MAILPORT=" . htmlspecialchars($_POST["mailport"]) . "\n"
-                            ."MAILSMTPAUTH=true\n";
+                            ."MAILSMTPAUTH=true\n"
+                            ."STRIPE_PRIVATE_KEY=" . htmlspecialchars($_POST["stripe_public_key"]) . "\n"
+                            ."VITE_STRIPE_PUBLIC_KEY=" . htmlspecialchars($_POST["stripe_private_key"]) . "\n";
                         $handle = fopen("./.env", "w+");
                         fwrite($handle, $content);
-                        new ConstantMaker();
+                        if (file_exists("./.env")){
+                            new ConstantMaker();
 
-                        $pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
+                            $pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
 
-                        $install->setFirstname(htmlspecialchars($_POST["firstname"]));
-                        $install->setLastname(htmlspecialchars($_POST["lastname"]));
-                        $install->setEmail(htmlspecialchars($_POST["email"]));
-                        $install->setPwd($pwd);
-                        $install->setCountry($_POST["country"]);
-                        $install->addStatus(USERSUPERADMIN);
+                            $install->setFirstname(htmlspecialchars($_POST["firstname"]));
+                            $install->setLastname(htmlspecialchars($_POST["lastname"]));
+                            $install->setEmail(htmlspecialchars($_POST["email"]));
+                            $install->setPwd($pwd);
+                            $install->setCountry($_POST["country"]);
+                            $install->addStatus(USERSUPERADMIN);
 
-                        $install->setToken(Helpers::createToken());
+                            $install->setToken(Helpers::createToken());
 
-                        $install->dropTables();
-                        $install->createTableArticle();
-                        $install->createTableBooks();
-                        $install->createTableCategory();
-                        $install->createTablePages();
-                        $install->createTableUser();
-                        $install->alterTables();
+                            $install->dropTables();
+                            $install->createTableArticle();
+                            $install->createTableBooks();
+                            $install->createTableCategory();
+                            $install->createTablePages();
+                            $install->createTableUser();
+                            $install->createTableOrder();
+                            $install->alterTables();
 
-                        $install->save();
+                            $install->save();
 
-                        $email = $_POST['email'];
-                        header("Location: lbly-admin/userconfirm?email=$email");
+                            $email = $_POST['email'];
+                            header("Location: lbly-admin/userconfirm?email=$email");
+                        }
                     }else{
                         $view->assign("errors", ["Vos mots de passe sont différents."]);
                     }

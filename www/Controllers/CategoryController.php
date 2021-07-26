@@ -125,7 +125,7 @@ class CategoryController {
         $uri = substr($uriExploded[0], 28);
 
         $category->setAllBySlug($uri);
-        $categorycontent = $category->getAllBySlug($uri)[0];
+        $categorycontent = $category->getAllBySlug($uri);
 
 		if (!empty($_POST["delete"])){
 		    $to_update_book = $category->getDeletedBookCategory($category->getSlug());
