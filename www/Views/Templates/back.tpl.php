@@ -1,3 +1,6 @@
+<?php 
+use App\Core\Security;
+?>
 <!DOCTYPE html>
 <html lang="FR">
 
@@ -26,16 +29,29 @@
 				<li class="list-item"><a href="/lbly-admin"><span class="material-icons">home</span>
 						<span class="item-title">Tableau de
 							bord</span></a></li>
-				<li class="list-item"><a href="/lbly-admin"><span class="material-icons">receipt_long</span><span class="item-title">Commandes</span></a></li>
-				<li class="list-item"><a href="/lbly-admin/books"><span class="material-icons">menu_book</span><span class="item-title">Livres</span></a>
-				</li>
-				<li class="list-item"><a href="/lbly-admin/category"><span class="material-icons">category</span><span class="item-title">Catégorie</span></a></li>
-				<li class="list-item"><a href="/lbly-admin/pages"><span class="material-icons">article</span><span class="item-title">Pages</span></a></li>
-				<li class="list-item"><a href="/lbly-admin/articles"><span class="material-icons">article</span><span class="item-title">Articles</span></a></li>
-				<?php if(App\Core\Security::isAdmin()): ?>
+				<?php if(Security::isSuperAdmin() || Security::isAdmin()): ?>		
+					<li class="list-item"><a href="/lbly-admin"><span class="material-icons">receipt_long</span><span class="item-title">Commandes</span></a></li>
+				<?php endif; ?>
+
+				<?php if(Security::canCreate()): ?>
+					<li class="list-item"><a href="/lbly-admin/books"><span class="material-icons">menu_book</span><span class="item-title">Livres</span></a></li>
+				<?php endif; ?>
+				
+				<li class="list-item"><a href="/lbly-admin/category"><span class="material-icons">category</span><span class="item-title">Catégories</span></a></li>
+
+				<?php if(Security::canCreate()): ?>
+					<li class="list-item"><a href="/lbly-admin/pages"><span class="material-icons">article</span><span class="item-title">Pages</span></a></li>
+				<?php endif; ?>
+
+				<?php if(!Security::noRoles()): ?>
+					<li class="list-item"><a href="/lbly-admin/articles"><span class="material-icons">article</span><span class="item-title">Articles</span></a></li>
+				<?php endif; ?>
+
+				<?php if(Security::isAdmin()): ?>
 					<li class="list-item"><a href="/lbly-admin/adminview"><span class="material-icons">people</span><span class="item-title">Utilisateurs</span></a></li>
 				<?php endif; ?>
-				<?php if(App\Core\Security::isSuperAdmin()): ?>
+
+				<?php if(Security::isSuperAdmin()): ?>
 					<li class="list-item"><a href="/lbly-admin/settings"><span class="material-icons">settings</span><span class="item-title">Paramètres</span></a></li>
 				<?php endif; ?>
 

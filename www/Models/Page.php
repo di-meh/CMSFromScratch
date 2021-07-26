@@ -12,6 +12,8 @@ class Page extends Singleton
     protected $content;
     protected $createdBy;
     protected $slug;
+    protected $status;
+
     private $table = "lbly_page";
 
     public function __construct(){
@@ -103,6 +105,29 @@ class Page extends Singleton
         $this->slug = $slug;
     }
 
+    public function getStatus()
+    {
+        return $this->status;
+    }
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    public function setAll($id)
+    {
+        $res = $this->getAllById($id);
+        $res = $res[0];
+        $this->setId($res['id']);
+        $this->setTitle($res['title']);
+        $this->setSlug($res['slug']);
+        $this->setContent($res['content']);
+        $this->setStatus($res['status']);
+        $this->setCreatedBy($res['createdBy']);
+
+
+    }
+
 
     public function title2slug($title){
         $title = preg_replace('~[^\pL\d]+~u', '-', $title);
@@ -162,7 +187,7 @@ class Page extends Singleton
                     "id" => "editor",
                     "name" => "editor",
                     "value" => '',
-                    "error" => "probleme enregistrement base de données"
+                    "error" => "Veuillez ajouter du contenu à votre page"
                 ]
             ]
         ];

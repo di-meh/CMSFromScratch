@@ -22,11 +22,72 @@ class Security
 				if($user->isDeleted())
 					return null;
 				return $user;
-			}else{
-				return ($user->setAllFromData(["id" => $_SESSION['id']]));
 			}
 		}
 		return null;
+	}
+
+	public static function getName($userid){
+		$user = new User();
+		if($user->setAllFromData(["id" => $userid])){
+			return $user->getFirstname(). " ". $user->getLastname();
+		}
+		
+		return null;
+
+	}
+
+	/*	isEditor, Admin or / and SuperAdmin	*/
+	public static function canCreate(){
+		$user = new User();
+		if(isset($_SESSION['id'])){
+			if($user->setAllFromData(["id" => $_SESSION['id']])){
+				return ($user->isSuperAdmin() || $user->isAdmin() || $user->isEditor());
+			}
+
+		}
+	}
+
+	public static function noRoles(){
+		$user = new User();
+		if(isset($_SESSION['id'])){
+			if($user->setAllFromData(["id" => $_SESSION['id']])){
+				return ($user->getStatus() == USERVALIDATED);
+			}
+
+		}
+	}
+
+	public static function isOnlyAuthor(){
+		$user = new User();
+		if(isset($_SESSION['id'])){
+			if($user->setAllFromData(["id" => $_SESSION['id']])){
+				return ($user->getStatus() == (USERAUTHOR + USERVALIDATED));
+			}
+
+		}
+	}
+
+	public static function isOnlyContributor(){
+		$user = new User();
+		if(isset($_SESSION['id'])){
+			if($user->setAllFromData(["id" => $_SESSION['id']])){
+				return ($user->getStatus() == (USERCONTRIBUTOR + USERVALIDATED));
+			}
+
+		}
+	}
+
+	/*
+		EVERY ROLES EXCEPT CONTRIBUTOR
+	*/
+	public static function hasAuthorization(){
+		$user = new User();
+		if(isset($_SESSION['id'])){
+			if($user->setAllFromData(["id" => $_SESSION['id']]))
+			return ($user->isSuperAdmin() || $user->isAdmin() || $user->isEditor() || $user->isContributor());
+		}
+		return false;
 	}
 
 	public static function isAdmin(){

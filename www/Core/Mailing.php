@@ -74,11 +74,11 @@ class Mailing{
 	}
 
 	public function mailForgetPwd($user){
-		$this->setSubject("Renouvellement de mot de passe");
+		$this->setSubject("test");
 		$id = $user->getId();
 		$token = $user->getToken();
 		$content = "Choisissez un nouveau mot de passe en cliquant sur ce lien : <a href='http://localhost/resetPwd?id=$id&token=$token'>Choisir un nouveau mot de passe</a>";
-		$this->setContent($content);
+		$this->setContent("test");
 
 		# set template, set subject, set content
 
@@ -98,7 +98,7 @@ class Mailing{
 		    $this->mail->Port       = MAILPORT;                                  
 
 		    //Recipients
-		    $this->mail->setFrom('libly@outlook.fr', 'LIBLY');
+		    $this->mail->setFrom(MAILSENDER);
 		    $this->mail->addAddress($this->recipient);
 
 		    $this->mail->isHTML(true);

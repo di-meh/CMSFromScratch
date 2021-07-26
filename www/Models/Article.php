@@ -18,6 +18,8 @@ class Article extends Singleton
     protected $created;
     protected $published;
     protected $modified;
+    protected $status;
+
     
     public function __construct()
     {
@@ -311,6 +313,8 @@ class Article extends Singleton
         $this->setPublished($res['published']);
         $this->setModified($res['modified']);
         $this->setStatus($res['status']);
+        $this->setCategory($res['category']);
+
     }
 
     public function setAllBySlug($slug)

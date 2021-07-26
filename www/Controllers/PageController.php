@@ -23,6 +23,24 @@ class PageController
         $page = new Page();
         $view = new View("pages","back");
 
+        if(isset($_GET['pageid'])){
+        	$page->setAll($_GET['pageid']);
+
+        	if(isset($_GET['publish'])){
+        		$page->setStatus("publish");
+        		$page->save();
+        		$view->assign("infos", ["Page publiée."]);
+
+        	}
+
+        	if(isset($_GET['withdraw'])){
+        		$page->setStatus("withdraw");
+        		$page->save();
+        		$view->assign("infos", ["Page retirée."]);
+        		
+        	}
+        }
+
         $pages = $page->all();
         $view->assign("pages", $pages);
 	}
@@ -50,6 +68,8 @@ class PageController
                 $page->setTitle(htmlspecialchars($_POST['title']));
                 $page->setContent($_POST['editor']);
                 $page->setCreatedBy($user->getID());
+                $page->setStatus("withdraw");
+
                 if (empty($_POST['editor'])){
                     $view->assign("errors", ["Veuillez remplir tous les champs"]);
                 }else{

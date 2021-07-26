@@ -1,3 +1,6 @@
+<?php
+use App\Core\Security;
+?>
 <section class="container-fluid">
     <div class="row">
         <div class="col-full">
@@ -27,11 +30,15 @@
                             <table class="table">
                             <thead>
                             <tr>
-                                <th>titre</th>
-                                <th>date de création</th>
-                                <th>Options</th>
-                                <th>Options</th>
-                                <th>Options</th>
+                                <th>Titre</th>
+                                <th>Date de création</th>
+                                <th>Status</th>
+                                <th>Voir</th>
+                                <th>Modifier</th>
+
+                                <th>Publier</th>
+
+                                <th>Supprimer</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -39,8 +46,19 @@
                                 <tr>
                                     <td><?php echo $page["title"];?></td>
                                     <td><?php echo $page["createdAt"];?></td>
-                                    <td><a href="/<?=$page["slug"]?>"><button class="btn btn-primary">Voir</button></a></td>
+                                    <td><?php echo $page["status"];?></td>
+                                    <td><a href="/pages/<?=$page["slug"]?>"><button class="btn btn-primary">Voir</button></a></td>
                                     <td><a href="/lbly-admin/edit/<?=$page["slug"]?>"><button class="btn btn-primary">Modifier</button></a></td>
+                                    <?php if($page["status"] == 'publish'):?>
+
+                                            <td><a href="/lbly-admin/pages?withdraw=true&pageid=<?=$page["id"]?>"><button class="btn btn-primary">Retirer</button></a></td>
+
+                                    <?php else :?>
+
+                                            <td><a href="/lbly-admin/pages?publish=true&pageid=<?=$page["id"]?>"><button class="btn btn-primary">Publier</button></a></td>
+
+                                    <?php endif; ?>
+
                                     <td><a href="/lbly-admin/delete/<?=$page["slug"]?>"><button class="btn btn-danger">Supprimer</button></a></td>
                                 </tr>
                                 <?php

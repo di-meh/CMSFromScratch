@@ -16,10 +16,31 @@ class ArticleController{
 
 		$view = new View("articles","back");
 		$article = new Article();
-		$articles = $article->all();
+
+
+        if(isset($_GET['articleid'])){
+        	$article->setAllById(htmlspecialchars($_GET['articleid']));
+
+        	if(isset($_GET['publish'])){
+        		$article->setStatus("publish");
+        		$article->save();
+        		$view->assign("infos", ["Article publié."]);
+
+        	}
+
+        	if(isset($_GET['withdraw'])){
+        		$article->setStatus("withdraw");
+        		$article->save();
+        		$view->assign("infos", ["Article retiré."]);
+        		
+        	}
+        }
+
+        $articles = $article->all();
         $view->assign("articles", $articles);
 
 	}
+
 
 	public function addArticleAction(){
 		$user = Security::getConnectedUser();
@@ -49,6 +70,7 @@ class ArticleController{
 				}else{
 					$article->setSlug($article->title2slug($_POST['title']));
 					if (empty($article->getAllBySlug($article->getSlug()))){
+						$article->setStatus("withdraw");
 						$article->save();
 						header("Location:/lbly-admin/articles");
 					}else{
@@ -181,8 +203,14 @@ class ArticleController{
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
 
         $uri = substr($uriExploded[0], 10);
+        $article->setAllBySlug($uri);
         $articles = $article->getAllBySlug($uri);
-        $view->assign("article", $articles[0]);
+
+        if($article->getStatus() == 'publish')
+	        $view->assign("article", $articles[0]);
+        else
+        	header("Location: /lbly-admin/articles");
+
 
     }
 

@@ -238,7 +238,7 @@ class SecurityController
 			if(password_verify($_POST['pwdConfirm'], $user->getPwd())){
 				$userDelete->addStatus(USERDELETED);
 				$userDelete->save();
-				$view->assign("infos", ["Le compte ".$userDelete->getEmail()." a bien été supprimé.</br>Vous allez être redirigé."]);
+				$view->assign("infos", ["Le compte ".$userDelete->getEmail()." a bien été supprimé."]);
 				$deleted = true;
 
 				if($self)
@@ -315,7 +315,7 @@ class SecurityController
 					$view->assign("infos", [$infos]);
 
 				}else{
-					$view->assign("infos", ["Votre compte n'a pas été validé."]);
+					$view->assign("infos", ["Votre compte n'a pas été validé.<a href=\"/lbly-admin/userconfirm?email=$email\" />"]);
 				}
 
 
@@ -554,7 +554,11 @@ class SecurityController
 
 					}else{
                         $email = $_POST['email'];
-					    $html = "Votre compte n'a pas été validé.";
+                        if($user->isSuperAdmin())
+					    	$html = "Votre compte n'a pas été validé.<a href=\"/lbly-admin/userconfirm?email=$email\"> Renvoyer mail de validation</a>";
+					    else
+					    	$html = "Votre compte n'a pas été validé.";
+
                         $view->assign("infos", [$html]);
 //					    echo "Vous devez aller <strong style='color:red'>confirmer votre compte</strong> avec le mail que vous avez reçu à cette adresse : <strong style='color:blue'>".$user->getEmail()."</strong><br/>";
 //
@@ -676,6 +680,6 @@ class SecurityController
 		$security = new Secu();
 
 		if ($security->isConnected()) session_destroy();
-		header("Location:/");
+		header("Location:/lbly-admin");
 	}
 }

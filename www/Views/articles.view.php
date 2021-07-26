@@ -1,3 +1,7 @@
+<?php
+use App\Core\Security;
+?>
+
 <section class="container-fluid">
     <div class="row">
         <div class="col-full">
@@ -29,23 +33,46 @@
                             <tr>
                                 <th>Titre</th>
                                 <th>Date de création</th>
+                                <th>Auteur</th>                                  
+
                                 <th>Status</th>
-                                <th>Status</th>
-                                <th>Status</th>
-                                <th>Status</th>
+                                <th>Voir</th>
+                                <th>Modifier</th>
+                                <?php if(!Security::isOnlyContributor()): ?>
+
+                                    <th>Publier</th>
+                                <?php endif; ?>
+                                <th>Supprimer</th>
                             </tr>
                             </thead>
                             <tbody>
                             <?php foreach ($articles as $article) { ?>
-                                <tr>
-                                    <td><?=$article["title"];?></td>
-                                    <td><?=$article["created"];?></td>
-                                    <td><?=$article["status"];?></td>
-                                    <td><a href="/articles/<?=$article["slug"]?>"><button class="btn btn-primary">Voir</button></a></td>
-                                    <td><a href="/lbly-admin/articles/edit/<?=$article["slug"]?>"><button class="btn btn-primary">Modifier</button></a></td>
-                                    <td><a href="/lbly-admin/articles/delete/<?=$article["slug"]?>"><button class="btn btn-danger">Supprimer</button></a></td>
-                                </tr>
-                                <?php
+                                <?php if(Security::hasAuthorization() || (Security::isOnlyAuthor() && $article['author'] == $_SESSION['id'])) :?>
+                                    <tr>
+                                        <td><?=$article["title"];?></td>
+                                        <td><?=$article["created"];?></td>
+                                        <td><?= Security::getName($article["author"]);?></td>
+
+                                        <td><?= $article["status"];?></td>
+                                        <td><a href="/articles/<?=$article["slug"]?>"><button class="btn btn-primary">Voir</button></a></td>
+
+                                        <td><a href="/lbly-admin/articles/edit/<?=$article["slug"]?>"><button class="btn btn-primary">Modifier</button></a></td>
+
+                                        <?php if($article["status"] == 'publish'):?>
+
+                                            <td><a href="/lbly-admin/articles?withdraw=true&articleid=<?=$article["id"]?>"><button class="btn btn-primary">Retirer</button></a></td>
+
+                                        <?php else :?>
+                                            <?php if(!Security::isOnlyContributor()): ?>
+                                                <td><a href="/lbly-admin/articles?publish=true&articleid=<?=$article["id"]?>"><button class="btn btn-primary">Publier</button></a></td>
+                                            <?php endif;?>
+                                        <?php endif; ?>
+
+                                        <td><a href="/lbly-admin/articles/delete/<?=$article["slug"]?>"><button class="btn btn-danger">Supprimer</button></a></td>
+
+                                    </tr>
+                                <?php endif; ?>
+                            <?php
                             }
                         endif; ?>
 
