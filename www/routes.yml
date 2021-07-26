@@ -6,6 +6,10 @@
   controller: Main
   action: dashboard
 
+/lbly-admin/settings:
+  controller: Settings
+  action: changeSettings
+
 /lbly-admin/s-inscrire:
   controller: Security
   action: register

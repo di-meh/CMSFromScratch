@@ -22,58 +22,6 @@ class User extends Singleton
     public function __construct()
     {
 
-        #Singleton::setPDO(); # set une unique fois !
-
-    }
-
-    /*
-    *   set all properties from database from the email
-    *   from id idealement mais flm
-    *   pcq il faut recup id a partir de email puis tout a partir de id
-    */
-    public function setAllFromEmail(string $email)
-    {
-
-        $email = htmlspecialchars($email);
-        $query = "SELECT * FROM " . $this->table . " WHERE email = '" . $email . "'";
-        $prepare = $this->getPDO()->prepare($query);
-        $prepare->execute();
-        $res = $prepare->fetch(PDO::FETCH_ASSOC);
-        $this->setId($res['id']);
-        $this->setFirstname($res['firstname']);
-        $this->setLastname($res['lastname']);
-        $this->setEmail($email);
-        $this->setCountry($res['country']??'');
-        $this->setStatus($res['status']);
-        $this->setToken($res['token'] ?? '');
-
-        $this->setPwd($res['pwd']); # un peu dangereux non ? même si hashé
-
-    }
-    
-
-    # set all properties from id
-    public function setAllFromId($id)
-    {
-
-        $query = "SELECT * FROM " . $this->table . " WHERE id = '" . $id . "'";
-        $prepare = $this->getPDO()->prepare($query);
-        $prepare->execute();
-        $res = $prepare->fetch(PDO::FETCH_ASSOC);
-        if($res){
-            $this->setId($id);
-            $this->setFirstname($res['firstname']);
-            $this->setLastname($res['lastname']);
-            $this->setEmail($res['email']);
-            $this->setCountry($res['country']);
-            $this->setStatus($res['status']);
-            $this->setToken($res['token'] ?? '');
-    
-            $this->setPwd($res['pwd']); # un peu dangereux non ? même si hashé
-
-            return true;
-        }
-        return false;
     }
 
     # cherche cet id en base
@@ -323,29 +271,42 @@ class User extends Singleton
                     "submit" => "Valider"
                 ],
             "inputs" => [
+                "user" => [
+                    "type" => "input",
+                    "label" => "Utilisateur",
+                    "id" => "username",
+                    "class" => "form_input",
+                    "disabled" => true,
+                    "value" => $this->getEmail()
+                ],
                 "admin" => [
                     "type" => "checkbox",
                     "label" => "Administrateur",
                     "id" => "admin",
-                    "class" => "form_input"
+                    "class" => "form_input",
+                    "checked" => $this->isAdmin()?true:false
                 ],
                 "contributor" => [
                     "type" => "checkbox",
                     "label" => "Contributeur",
                     "id" => "contributor",
-                    "class" => "form_input"
+                    "class" => "form_input",
+                    "checked" => $this->isContributor()?true:false
                 ],
                 "author" => [
                     "type" => "checkbox",
                     "label" => "Auteur",
                     "id" => "author",
-                    "class" => "form_input"
+                    "class" => "form_input",
+                    "checked" => $this->isAuthor()?true:false
                 ],
                 "editor" => [
                     "type" => "checkbox",
                     "label" => "Editeur",
                     "id" => "editor",
                     "class" => "form_input",
+                    "checked" => $this->isEditor()?true:false
+
 
                 ],
                 "validated" => [

@@ -9,6 +9,8 @@ use App\Core\ConstantMaker;
 use App\Core\Singleton;
 
 use App\Core\Security;
+use App\Core\Helpers;
+
 
 use App\Models\Installer;
 use App\Models\User;
@@ -54,8 +56,8 @@ class InstallerController{
                         $install->setCountry($_POST["country"]);
                         $install->addStatus(USERSUPERADMIN);
 
-                        $token = substr(md5(uniqid(true)), 0, 10); # cut length to 10, no prefix, entropy => for more unicity
-                        $install->setToken($token);
+                        $install->setToken(Helpers::createToken());
+
                         $install->dropTables();
                         $install->createTableArticle();
                         $install->createTableBooks();
