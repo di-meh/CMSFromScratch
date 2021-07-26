@@ -14,119 +14,6 @@ use App\Models\User;
 
 class SettingsController{
 
-	public function form(){
-		return [
-
-            "config" => [
-                    "method" => "POST",
-                    "action" => "",
-                    "id" => "form_settings",
-                    "class" => "form_builder",
-                    "submit" => "Valider"
-                ],
-            "inputs" => [
-                "sitename" => [
-                    "type" => "text",
-                    "label" => "Nom de votre site",
-                    "id" => "sitename",
-                    "class" => "form_input",
-                    "value" => SITENAME
-                ],
-                "mailsuperadmin" => [
-                    "type" => "text",
-                    "label" => "Destinataire des mails de validation des comptes",
-                    "id" => "mailsuperadmin",
-                    "class" => "form_input",
-                    "value" => MAILSUPERADMIN
-                ],
-                "dbdriver" => [
-                    "type" => "text",
-                    "label" => "Database Driver",
-                    "id" => "dbdriver",
-                    "class" => "form_input",
-                    "value" => DBDRIVER
-
-                ],
-                "dbhost" => [
-                    "type" => "text",
-                    "label" => "Database Host",
-                    "id" => "dbhost",
-                    "class" => "form_input",
-                    "value" => DBHOST
-
-                ],
-                "dbname" => [
-                    "type" => "text",
-                    "label" => "Nom de la base de données",
-                    "id" => "dbname",
-                    "class" => "form_input",
-                    "value" => DBNAME
-
-                ],
-                "dbuser" => [
-                    "type" => "text",
-                    "label" => "Utilisateur base de données",
-                    "id" => "dbuser",
-                    "class" => "form_input",
-                    "value" => DBUSER
-
-                ],
-                "dbpwd" => [
-                    "type" => "text",
-                    "label" => "Mot de passe de la base de données",
-                    "id" => "dbpwd",
-                    "class" => "form_input"
-
-                ],
-                "dbport" => [
-                    "type" => "text",
-                    "label" => "Port de la base de données",
-                    "id" => "dbport",
-                    "class" => "form_input",
-                    "value" => DBPORT
-
-                ],
-                "mailhost" => [
-                    "type" => "text",
-                    "label" => "Serveur SMTP",
-                    "id" => "mailhost",
-                    "class" => "form_input",
-                    "value" => MAILHOST
-
-                ],
-                "mailport" => [
-                    "type" => "text",
-                    "label" => "Port SMTP",
-                    "id" => "mailport",
-                    "class" => "form_input",
-                    "value" => MAILPORT
-
-                ],
-                "mailsender" => [
-                    "type" => "email",
-                    "label" => "Changer le mail expediteur",
-                    "id" => "mailsender",
-                    "class" => "form_input",
-                    "minLength" => 8,
-                    "maxLength" => 320,
-                    "error" => "Votre email doit faire entre 8 et 320 caractères",
-                    "placeholder" => "mailsender@mail.com",
-                    "value" => MAILSENDER
-
-                ],
-                "mailpwd" => [
-                    "type" => "password",
-                    "label" => "Changer le mot de passe de l'email expediteur",
-                    "id" => "mailpwd",
-                    "class" => "form_input",
-                    "minLength" => 8,
-                    "error" => "Le mot de passe doit faire 8 caractères minimum."
-
-                ]
-            ]
-
-    	];
-	}
 
 	public function changeSettingsAction(){
 
@@ -134,7 +21,7 @@ class SettingsController{
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
 		$view = new View("settings", "back");
-		$form = $this->form();
+		$form = $user->formSettings();
 
 		if($user->isSuperAdmin()){
 
@@ -210,13 +97,18 @@ class SettingsController{
 							$data = str_ireplace(MAILPWD, trim($_POST['mailpwd']), $data);
 
 						}
-						/* THIS ONE IS TOUCHY */
-						/*if(isset($_POST['mailsender'])){
-							$this->updateEnvFile($data, 9, "MAILSUPERADMIN", $_POST['mailsuperadmin']);
-							$infos = ["L'email d'expédition a été modifié avec succès !"];
-						}*/
-						/*                    */
+						if(!empty($_POST['stripe_public_key'])){
+							$infos .= "Clé publique Stripe".$endMessage;
+							$data = str_ireplace(STRIPE_PRIVATE_KEY, trim($_POST['stripe_public_key']), $data);
+
+						}
+  						if(!empty($_POST['stripe_private_key'])){
+							$infos .= "Clé privée Stripe".$endMessage;
+							$data = str_ireplace(VITE_STRIPE_PUBLIC_KEY, trim($_POST['stripe_private_key']), $data);
+
+						}
 		    			file_put_contents(".env",$data);
+
 		    		}else{
 						$view->assign("errors", $errors);
 
