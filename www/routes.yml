@@ -98,6 +98,10 @@
   controller: Book
   action: editBook
 
+/lbly-admin/orders:
+  controller: Order
+  action: default
+
 /forgetpwd:
   controller: Security
   action: forgetPwd
@@ -110,6 +114,23 @@
   controller: Installer
   action: default
 
+
 /comment/add:
   controller: Comment
   action: addComment
+
+/cart:
+  controller: Cart
+  action: default
+
+/cart/confirm:
+  controller: Order
+  action: confirmCart
+  
+/payment-success:
+  controller: Order
+  action: success
+
+/books:
+  controller: Book
+  action: seeAllBooks

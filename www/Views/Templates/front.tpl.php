@@ -3,24 +3,37 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title><?= SITENAME ?></title>
-	<meta name="description" content="ceci est la description de ma page">
+	<title><?= $title ?></title>
+	<meta name="description" content="<?= $metadescription ?>">
 	<link rel="stylesheet" href="/framework/dist/style.css">
 	<script src="/framework/dist/main.js"></script>
 </head>
+<?php 
+    use App\Models\CartSession;
 
+    $total = 0;
+    if (CartSession::existCartSession()) {
+        $cart = CartSession::getCartSession();
+        if($cart->books){
+            foreach ($cart->books as $book) {
+                $total += $book['qty'];
+            }
+        }
+    }
+?>
 <body>
 	<div class="page-wrapper with-navbar " id="app">
-		<!-- mettre with-sidebar si jamais -->
 		<nav class="navbar">
 			<a href="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]" ?>"><h5 class="navbar-title"><?= SITENAME ?></h5></a>
-            <?php if(isset($_SESSION['id'])) : ?>		
-			    <div class="navbar-right">
+			<div class="navbar-right">	
+                <div class="right-link"><a href="/cart"><span class="material-icons">shopping_basket</span><span class="number"><?=$total?></span></a></div>
+                <?php if(isset($_SESSION['id'])) : ?>	
+                    <div class="right-link">|</div>
                     <div class='right-link'><a id'' href='/lbly-admin'>Dashboard</a></div>
                     <div class="right-link"><a href="/lbly-admin/editprofil"><span class="material-icons">face</span></a></div>
-				    <div class="right-link"><a href="/lbly-admin/logout"><span class="material-icons">power_settings_new</span></a></div>
-			    </div>
-            <?php endif; ?>
+                    <div class="right-link"><a href="/lbly-admin/logout"><span class="material-icons">power_settings_new</span></a></div>
+                <?php endif; ?>
+			</div>
 		</nav>
 
 		<div class="content-wrapper">

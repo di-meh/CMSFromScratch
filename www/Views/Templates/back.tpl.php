@@ -26,7 +26,7 @@
 				<li class="list-item"><a href="/lbly-admin"><span class="material-icons">home</span>
 						<span class="item-title">Tableau de
 							bord</span></a></li>
-				<li class="list-item"><a href="/lbly-admin"><span class="material-icons">receipt_long</span><span class="item-title">Commandes</span></a></li>
+				<li class="list-item"><a href="/lbly-admin/orders"><span class="material-icons">receipt_long</span><span class="item-title">Commandes</span></a></li>
 				<li class="list-item"><a href="/lbly-admin/books"><span class="material-icons">menu_book</span><span class="item-title">Livres</span></a>
 				</li>
 				<li class="list-item"><a href="/lbly-admin/category"><span class="material-icons">category</span><span class="item-title">Catégorie</span></a></li>

@@ -824,6 +824,26 @@ class User extends Singleton
                     "value" => '',
                     "required" => true
                 ],
+                "stripe_public_key" =>[
+                    "type" => "text",
+                    "label" => "Clé publique Stripe : ",
+                    "minLength" => 8,
+                    "id" => "stripe_public_key",
+                    "class" => "form_input",
+                    "placeholder" => "",
+                    "value" => '',
+                    "required" => true
+                ],
+                "stripe_private_key" =>[
+                    "type" => "text",
+                    "label" => "Clé privée Stripe : ",
+                    "minLength" => 8,
+                    "id" => "stripe_private_key",
+                    "class" => "form_input",
+                    "placeholder" => "",
+                    "value" => '',
+                    "required" => true
+                ],
             ]
         ];
     }
@@ -861,6 +881,7 @@ class User extends Singleton
                   `author` int(11) NOT NULL DEFAULT '0',
                   `title` tinytext NOT NULL,
                   `slug` varchar(300) NOT NULL,
+                  `metadescription` varchar(200) NOT NULL,
                   `content` longtext NOT NULL,
                   `category` varchar(30) NOT NULL,
                   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -876,7 +897,7 @@ class User extends Singleton
         $query = "CREATE TABLE `lbly_books` (
                   `id` int(11) NOT NULL,
                   `title` tinytext COLLATE utf8_bin NOT NULL,
-                  `description` text COLLATE utf8_bin,
+                  `description` varchar(200) COLLATE utf8_bin NOT NULL,
                   `author` varchar(350) COLLATE utf8_bin NOT NULL,
                   `publication_date` date NOT NULL,
                   `image` text COLLATE utf8_bin,
@@ -905,6 +926,7 @@ class User extends Singleton
         $query = "CREATE TABLE `lbly_page` (
                   `id` int(11) NOT NULL,
                   `title` tinytext NOT NULL,
+                  `metadescription` varchar(200) NOT NULL,
                   `content` longtext NOT NULL,
                   `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                   `updatedAt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
@@ -932,6 +954,22 @@ class User extends Singleton
         $prepare->execute();
     }
 
+    public function createTableOrder(){
+        $query = "CREATE TABLE `lbly_order` (
+            `id` int(11) NOT NULL,
+            `email` varchar(320) NOT NULL,
+            `name` varchar(300) NOT NULL,
+            `cart` longtext NOT NULL,
+            `item_number` int(11) NOT NULL,
+            `amount` int(11) NOT NULL,
+            `currency` varchar(5) NOT NULL,
+            `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `payment_status` varchar(255) NOT NULL
+          ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
+        $prepare = $this->getPDO()->prepare($query);
+        $prepare->execute();
+    }
+
     public function alterTables(){
         $query1 = "ALTER TABLE `lbly_article` ADD PRIMARY KEY (`id`)";
         $query2 = "ALTER TABLE `lbly_books` ADD PRIMARY KEY (`id`)";
@@ -944,6 +982,8 @@ class User extends Singleton
         $query9 = "ALTER TABLE `lbly_page` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT";
         $query10 = "ALTER TABLE `lbly_user` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT";
         $query11 = "ALTER TABLE `lbly_page` ADD CONSTRAINT `lbly_page_ibfk_1` FOREIGN KEY (`createdBy`) REFERENCES `lbly_user` (`id`) ON DELETE CASCADE";
+        $query12 = "ALTER TABLE `lbly_order` ADD PRIMARY KEY (`id`)";
+        $query13 = "ALTER TABLE `lbly_order` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT";
 
         $prepare1 = $this->getPDO()->prepare($query1);
         $prepare2 = $this->getPDO()->prepare($query2);
@@ -956,6 +996,8 @@ class User extends Singleton
         $prepare9 = $this->getPDO()->prepare($query9);
         $prepare10 = $this->getPDO()->prepare($query10);
         $prepare11 = $this->getPDO()->prepare($query11);
+        $prepare12 = $this->getPDO()->prepare($query12);
+        $prepare13 = $this->getPDO()->prepare($query13);
 
         $prepare1->execute();
         $prepare2->execute();
@@ -968,5 +1010,7 @@ class User extends Singleton
         $prepare9->execute();
         $prepare10->execute();
         $prepare11->execute();
+        $prepare12->execute();
+        $prepare13->execute();
     }
 }

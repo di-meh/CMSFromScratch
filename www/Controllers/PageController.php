@@ -12,11 +12,10 @@ use App\Core\Security;
 use App\Models\Page;
 use App\Core\Router;
 
-class PageController
-{
-
+class PageController{
 
 	public function defaultAction(){
+        //verifie si user est connecté sinon redirigé vers login page
         $user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
@@ -28,12 +27,11 @@ class PageController
 	}
 
 	public function addPageAction(){
-
+        //verifie si user est connecté sinon redirigé vers login page
         $user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
 		$page = new Page();
-
 		$view = new View("addPage","back");
 
 		$form = $page->formAddPage();
@@ -48,6 +46,7 @@ class PageController
 		    if (empty($errors)){
 
                 $page->setTitle(htmlspecialchars($_POST['title']));
+                $page->setMetadescription(htmlspecialchars($_POST['metadescription']));
                 $page->setContent($_POST['editor']);
                 $page->setCreatedBy($user->getID());
                 if (empty($_POST['editor'])){
@@ -56,18 +55,15 @@ class PageController
                     $page->setSlug($page->title2slug($_POST['title']));
                     if (empty($page->getAllBySlug($page->getSlug()))){
                         $page->save();
-                         header("Location:/lbly-admin/pages");
+                        header("Location:/lbly-admin/pages");
                     }else{
                         echo $page->getSlug();
                         $view->assign("errors", ["Veuillez changer le titre de votre page"]);
                     }
                 }
-
             }else{
                 $view->assign("errors", $errors);
             }
-
-
 	    }
 		$view->assign("form", $form);
 	}
@@ -87,8 +83,7 @@ class PageController
 		$form = $page->formEditPage();
 
 		if(!empty($_POST)){
-			if($_POST['title'] != $page->getTitle()){ # changer le prenom
-
+			if($_POST['title'] != $page->getTitle()){
 				if (!empty($_POST['title'])){
 					$page->setTitle(htmlspecialchars($_POST['title']));
 					$page->setSlug($page->title2slug($_POST['title']));
@@ -105,7 +100,19 @@ class PageController
 				}
 			}
 
-			if($_POST['content'] != $page->getContent()){ # changer le nom
+            if($_POST['metadescription'] != $page->getMetadescription()){
+                if (!empty($_POST['metadescription'])){
+                    $page->setMetadescription(htmlspecialchars($_POST['metadescription']));
+                    $page->save();
+                    $form = $page->formEditPage();
+                    $infos[] = "La metadescription a été mis à jour !";
+                    $view->assign("infos", $infos);
+                }else{
+                    $view->assign("errors", ["Veuillez remplir tous les champs"]);
+                }
+            }
+
+			if($_POST['content'] != $page->getContent()){
 
 				if (!empty($_POST['content'])){
 					$page->setContent($_POST['content']);
@@ -127,14 +134,14 @@ class PageController
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
 		$view = new View("pages","back");
-		$page = new page();
+		$page = new Page();
 		$pages = $page->all();
 
 		$uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
         $uri = substr($uriExploded[0], 19);
 
         $page->setAllBySlug($uri);
-        $pagecontent = $page->getAllBySlug($uri)[0];
+        $pagecontent = $page->getAllBySlug($uri);
 
 		if (!empty($_POST["delete"])){
             $page->deleteBySlug($uri);
@@ -147,12 +154,9 @@ class PageController
 
         $formdelete = $page->formDeletePage();
         $view->assign("formdelete", $formdelete);
-		
-
-
 	}
-	public function seePageAction(){
 
+	public function seePageAction(){
         session_start();
 
         $page = new Page();
@@ -163,8 +167,10 @@ class PageController
 
         $uri = substr($uriExploded[0], 1);
 
-        $page = $page->getAllBySlug($uri);
-        $view->assign("page", $page[0]);
+        $pagecontent = $page->getAllBySlug($uri);
+        $view->assign("page", $pagecontent);
+        $view->assign("metadescription", $pagecontent['metadescription']);
+        $view->assign("title", $pagecontent['title']);
 
     }
 

@@ -46,16 +46,17 @@ CREATE TABLE `lbly_article` (
 --
 
 CREATE TABLE `lbly_books` (
-                              `id` int(11) NOT NULL,
-                              `title` varchar(255) COLLATE utf8_bin NOT NULL,
-                              `description` text COLLATE utf8_bin,
-                              `author` varchar(50) COLLATE utf8_bin NOT NULL,
-                              `publication_date` date NOT NULL,
-                              `image` text COLLATE utf8_bin,
-                              `publisher` varchar(255) COLLATE utf8_bin NOT NULL,
-                              `price` smallint(6) NOT NULL,
-                              `category` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-                              `stock_number` int(11) NOT NULL DEFAULT '0'
+  `id` int(11) NOT NULL,
+  `slug` varchar(70) NOT NULL,
+  `title` varchar(255) COLLATE utf8_bin NOT NULL,
+  `description` text COLLATE utf8_bin,
+  `author` varchar(50) COLLATE utf8_bin NOT NULL,
+  `publication_date` date NOT NULL,
+  `image` text COLLATE utf8_bin,
+  `publisher` varchar(255) COLLATE utf8_bin NOT NULL,
+  `price` smallint(6) NOT NULL,
+  `category` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `stock_number` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
@@ -122,6 +123,24 @@ CREATE TABLE `lbly_user` (
                              `token` text
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `lbly_order`
+--
+
+CREATE TABLE `lbly_order` (
+  `id` int(11) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `item_number` int(11) NOT NULL,
+  `amount` double(10,2) NOT NULL,
+  `currency_code` varchar(55) NOT NULL,
+  `txn_id` varchar(255) NOT NULL,
+  `payment_status` varchar(255) NOT NULL,
+  `payment_response` text NOT NULL,
+  `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 --
 -- Index pour les tables déchargées
 --
@@ -165,6 +184,12 @@ ALTER TABLE `lbly_user`
     ADD PRIMARY KEY (`id`);
 
 --
+-- Index pour la table `lbly_user`
+--
+ALTER TABLE `lbly_order`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT pour les tables déchargées
 --
 
@@ -203,6 +228,12 @@ ALTER TABLE `lbly_page`
 --
 ALTER TABLE `lbly_user`
     MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `lbly_user`
+--
+ALTER TABLE `lbly_order`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Contraintes pour les tables déchargées

@@ -13,6 +13,7 @@ class Article extends Singleton
     protected $title;
     protected $author;
     protected $slug;
+    protected $metadescription;
     protected $content;
     protected $category;
     protected $created;
@@ -126,6 +127,22 @@ class Article extends Singleton
         $this->category = $category;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getMetadescription()
+    {
+        return $this->metadescription;
+    }
+
+    /**
+     * @param mixed $metadescription
+     */
+    public function setMetadescription($metadescription)
+    {
+        $this->metadescription = $metadescription;
+    }
+
     public function formAddArticle()
     {
 
@@ -151,6 +168,7 @@ class Article extends Singleton
                     "error" => "Votre titre doit faire entre 2 et 155 caractères",
                     "required" => true
                 ],
+
                 "category[]" => [
                     "type" => "select",
                     "label" => "Catégorie",
@@ -159,6 +177,18 @@ class Article extends Singleton
                     "id" => "category",
                     "class" => "form_input",
                     "error" => "La catégorie doit faire entre 1 et 100 caractères",
+                    "required" => true
+                ],
+                "metadescription" => [
+                    "type" => "textarea",
+                    "label" => "Metadescription",
+                    "minLength" => 1,
+                    "maxLength" => 200,
+                    "id" => "metadescription",
+                    "class" => "form_input",
+                    "placeholder" => "Une desription de l'article",
+                    "value" => "",
+                    "error" => "Votre description doit faire entre 1 et 200 caractères",
                     "required" => true
                 ],
                 "content" => [
@@ -202,6 +232,18 @@ class Article extends Singleton
                     "placeholder" => "Exemple: Premier article",
                     "value" => $this->title ?? "",
                     "error" => "Votre titre doit faire entre 2 et 155 caractères",
+                    "required" => true
+                ],
+                "metadescription" => [
+                    "type" => "textarea",
+                    "label" => "Metadescription",
+                    "minLength" => 1,
+                    "maxLength" => 200,
+                    "id" => "metadescription",
+                    "class" => "form_input",
+                    "placeholder" => "Une desription de la page",
+                    "value" => $this->getMetadescription() ?? "",
+                    "error" => "Votre description doit faire entre 1 et 200 caractères",
                     "required" => true
                 ],
                 "category[]" => [
@@ -287,7 +329,7 @@ class Article extends Singleton
         $req = $this->getPDO()->prepare($query);
         $req->execute();
         $res = $req->fetchAll(PDO::FETCH_ASSOC);
-        return $res;
+        return $res ? $res[0] : null;
     }
 
     public function getAllById($id){
@@ -295,17 +337,17 @@ class Article extends Singleton
         $req = $this->getPDO()->prepare($query);
         $req->execute();
         $res = $req->fetchAll(PDO::FETCH_ASSOC);
-        return $res;
+        return $res ? $res[0] : null;
     }
 
     public function setAllById($id)
     {
         $res = $this->getAllById($id);
-        $res = $res[0];
         $this->setId($res['id']);
         $this->setAuthor($res['author']);
         $this->setTitle($res['title']);
         $this->setSlug($res['slug']);
+        $this->setMetadescription($res['metadescription']);
         $this->setContent($res['content']);
         $this->setCreated($res['created']);
         $this->setPublished($res['published']);
@@ -316,11 +358,11 @@ class Article extends Singleton
     public function setAllBySlug($slug)
     {
         $res = $this->getAllBySlug($slug);
-        $res = $res[0];
         $this->setId($res['id']);
         $this->setAuthor($res['author']);
         $this->setTitle($res['title']);
         $this->setSlug($res['slug']);
+        $this->setMetadescription($res['metadescription']);
         $this->setContent($res['content']);
         $this->setCategory($res['category']);
         $this->setCreated($res['created']);

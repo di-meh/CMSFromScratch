@@ -13,13 +13,13 @@ class MainController{
 
 		session_start();
 		$page = new Page();
-		$page = $page->getAllBySlug('home');
+		$pagecontent = $page->getAllBySlug('home');
 
-		if(isset($page) && !empty($page)){
+		if(isset($pagecontent) && !empty($pagecontent)){
 
 			$view = new View("seePage", "front");
 	
-			$view->assign("page", $page[0]);
+			$view->assign("page", $pagecontent);
 		} else {
 
 			$view = new View("home");

@@ -2,41 +2,46 @@
 
 namespace App\Controller;
 
+use App\Core\FormValidator;
 use App\Core\View;
 use App\Core\Security;
 use App\Models\Article;
 
 class ArticleController{
 
-
 	public function defaultAction(){
-
+	    //verifie si user est connecté sinon redirigé vers login page
 		$user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
-		$view = new View("articles","back");
 		$article = new Article();
+		$view = new View("articles","back");
+
 		$articles = $article->all();
         $view->assign("articles", $articles);
-
 	}
 
 	public function addArticleAction(){
+        //verifie si user est connecté sinon redirigé vers login page
 		$user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
-		// session_start();
-		// if(!isset($_SESSION['id'])) header("Location:/lbly-admin/login"); # si user non connecté => redirection
-		// $user = $_SESSION['user'];
 
-
-		$view = new View("addArticle","back");
 		$article = new Article();
+		$view = new View("addArticle","back");
 
+		$form = $article->formAddArticle();
+
+		//verifie si le form est soumis
 		if (!empty($_POST)) {
-			
+
+            $errors = FormValidator::check($form, $_POST);
+            //verifie s'il n'y a pas d'erreur lors de la validation
 		    if (empty($errors)){
+                //remplis les setters
 				$article->setTitle(htmlspecialchars($_POST['title']));
+				$article->setMetadescription(htmlspecialchars($_POST['metadescription']));
 				$article->setAuthor($user->getID());
+				//crée un string des catégories choisis
                 $categories = "";
                 foreach ($_POST['category'] as $item) {
                     $categories .= $item . ",";
@@ -44,6 +49,7 @@ class ArticleController{
                 $categories = substr($categories,0,-1);
                 $article->setCategory(htmlspecialchars($categories));
 				$article->setContent($_POST['content']);
+
 				if (empty($_POST['content'])){
 					$view->assign("errors", ["Veuillez remplir tous les champs"]);
 				}else{
@@ -60,28 +66,31 @@ class ArticleController{
             }
         }
 
-		$form = $article->formAddArticle();
 		$view->assign("form", $form);
 		
 	}
 
 	public function editArticleAction()
 	{
-		$user = Security::getConnectedUser();
+        //verifie si user est connecté sinon redirigé vers login page
+        $user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
 		$view = new View("editArticle","back"); # appelle View/editProfil.view.php
 		$article = new Article();
 
+		//récupération du slug article dans l'url
 		$uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
         $uri = substr($uriExploded[0], 26);
 
+        //set article en fonction du slug
 		$article->setAllBySlug($uri);
 		$form = $article->formEditArticle();
 
+		//si le formulaire est soumis
 		if(!empty($_POST)){
-			if($_POST['title'] != $article->getTitle()){ # changer le prenom
-
+		    //modification si différent et non vide
+			if($_POST['title'] != $article->getTitle()){
 				if (!empty($_POST['title'])){
 					$article->setTitle(htmlspecialchars($_POST['title']));
 					$article->setSlug($article->title2slug($_POST['title']));
@@ -91,19 +100,34 @@ class ArticleController{
 						$infos[] = "Le titre a été mis à jour !";
 						$view->assign("infos", $infos);
 					}else{
-						echo $article->getSlug();
 						$view->assign("errors", ["Veuillez changer le titre de votre article"]);
 					}
 				}else{
 					$view->assign("errors", ["Veuillez remplir tous les champs"]);
 				}
 			}
+
+            //modification si différent et non vide
+            if($_POST['metadescription'] != $article->getMetadescription()){
+                if (!empty($_POST['metadescription'])){
+                    $article->setMetadescription(htmlspecialchars($_POST['metadescription']));
+                    $article->save();
+                    $form = $article->formEditArticle();
+                    $infos[] = "La metadescription a été mis à jour !";
+                    $view->assign("infos", $infos);
+                }else{
+                    $view->assign("errors", ["Veuillez remplir tous les champs"]);
+                }
+            }
+
+            //transformation catégorie en string
             $categories = "";
             foreach ($_POST['category'] as $item) {
                 $categories .= $item . ",";
             }
             $categories = substr($categories,0,-1);
 
+            //modification si différent et non vide
             if (!empty($categories)){
                 if ($categories != $article->getCategory()){
                     $categories = "";
@@ -114,15 +138,15 @@ class ArticleController{
                     $article->setCategory(htmlspecialchars($categories ));
                     $article->save();
                     $form = $article->formEditArticle();
-                    $infos[] = "Le contenu a été mis à jour !";
+                    $infos[] = "La catégorie a été mis à jour !";
                     $view->assign("infos", $infos);
                 }
             }else{
                 $view->assign("errors", ["Veuillez choisir une categorie"]);
             }
 
-			if($_POST['content'] != $article->getContent()){ # changer le nom
-
+            //modification si différent et non vide
+            if($_POST['content'] != $article->getContent()){
 				if (!empty($_POST['content'])){
 					$article->setContent($_POST['content']);
 					$article->save();
@@ -150,7 +174,7 @@ class ArticleController{
         $uri = substr($uriExploded[0], 28);
 
         $article->setAllBySlug($uri);
-        $articlecontent = $article->getAllBySlug($uri)[0];
+        $articlecontent = $article->getAllBySlug($uri);
 
 		if (!empty($_POST["delete"])){
             $article->deleteBySlug($uri);
@@ -161,30 +185,34 @@ class ArticleController{
         $view->assign("article", $articlecontent);
         $view->assign("deletemodal", true);
 
-		// var_dump($article->formDeleteArticle());
         $formdelete = $article->formDeleteArticle();
         $view->assign("formdelete", $formdelete);
-		
-
-
 	}
-
 
 	public function seeArticleAction(){
 
-		session_start();
+        session_start();
 
         $article = new Article();
 
         $view = new View("seeArticle", "front");
 
+        //recupération slug dans l'url
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
 
         $uri = substr($uriExploded[0], 10);
-        $articles = $article->getAllBySlug($uri);
-        $view->assign("article", $articles[0]);
+        $articlecontent = $article->getAllBySlug($uri);
+
+        $view->assign("article", $articlecontent);
+        $view->assign("metadescription", $articlecontent['metadescription']);
+        $view->assign("title", $articlecontent['title']);
+
+		$breadcrumbs = [
+			['Articles', $_SERVER["REQUEST_URI"].'/articles'],
+			[$articlecontent['title'], $uriExploded[0]],
+		];
+        $view->assign("breadcrumbs", $breadcrumbs);
 
     }
-
 
 }
