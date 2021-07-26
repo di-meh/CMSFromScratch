@@ -74,11 +74,11 @@ class Mailing{
 	}
 
 	public function mailForgetPwd($user){
-		$this->setSubject("test");
+		$this->setSubject("Renouvellement Mot de Passe");
 		$id = $user->getId();
 		$token = $user->getToken();
 		$content = "Choisissez un nouveau mot de passe en cliquant sur ce lien : <a href='http://localhost/resetPwd?id=$id&token=$token'>Choisir un nouveau mot de passe</a>";
-		$this->setContent("test");
+		$this->setContent($content);
 
 		# set template, set subject, set content
 
