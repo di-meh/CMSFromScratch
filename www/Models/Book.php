@@ -248,7 +248,7 @@ class Book extends Singleton
                     "type" => "text",
                     "label" => "Description du livre",
                     "minLength" => 1,
-                    "maxLength" => 65535,
+                    "maxLength" => 200,
                     "id" => "description",
                     "class" => "form_input",
                     "placeholder" => "Un super livre",

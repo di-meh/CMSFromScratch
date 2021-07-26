@@ -3,15 +3,14 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title><?= SITENAME ?></title>
-	<meta name="description" content="ceci est la description de ma page">
+	<title><?= $title ?></title>
+	<meta name="description" content="<?= $metadescription ?>">
 	<link rel="stylesheet" href="/framework/dist/style.css">
 	<script src="/framework/dist/main.js"></script>
 </head>
 
 <body>
 	<div class="page-wrapper with-navbar " id="app">
-		<!-- mettre with-sidebar si jamais -->
 		<nav class="navbar">
 			<a href="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]" ?>"><h5 class="navbar-title"><?= SITENAME ?></h5></a>
             <?php if(isset($_SESSION['id'])) : ?>		

@@ -2,40 +2,42 @@
 
 namespace App\Controller;
 
+use App\Core\FormValidator;
 use App\Core\View;
 use App\Core\Security;
 use App\Models\Article;
 
 class ArticleController{
 
-
 	public function defaultAction(){
-
 		$user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
-		$view = new View("articles","back");
 		$article = new Article();
+		$view = new View("articles","back");
+
 		$articles = $article->all();
         $view->assign("articles", $articles);
-
 	}
 
 	public function addArticleAction(){
+
 		$user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
-		// session_start();
-		// if(!isset($_SESSION['id'])) header("Location:/lbly-admin/login"); # si user non connecté => redirection
-		// $user = $_SESSION['user'];
 
-
-		$view = new View("addArticle","back");
 		$article = new Article();
+		$view = new View("addArticle","back");
+
+		$form = $article->formAddArticle();
 
 		if (!empty($_POST)) {
-			
+
+            $errors = FormValidator::check($form, $_POST);
+
 		    if (empty($errors)){
+
 				$article->setTitle(htmlspecialchars($_POST['title']));
+				$article->setMetadescription(htmlspecialchars($_POST['metadescription']));
 				$article->setAuthor($user->getID());
                 $categories = "";
                 foreach ($_POST['category'] as $item) {
@@ -60,7 +62,6 @@ class ArticleController{
             }
         }
 
-		$form = $article->formAddArticle();
 		$view->assign("form", $form);
 		
 	}
@@ -80,8 +81,7 @@ class ArticleController{
 		$form = $article->formEditArticle();
 
 		if(!empty($_POST)){
-			if($_POST['title'] != $article->getTitle()){ # changer le prenom
-
+			if($_POST['title'] != $article->getTitle()){
 				if (!empty($_POST['title'])){
 					$article->setTitle(htmlspecialchars($_POST['title']));
 					$article->setSlug($article->title2slug($_POST['title']));
@@ -91,13 +91,25 @@ class ArticleController{
 						$infos[] = "Le titre a été mis à jour !";
 						$view->assign("infos", $infos);
 					}else{
-						echo $article->getSlug();
 						$view->assign("errors", ["Veuillez changer le titre de votre article"]);
 					}
 				}else{
 					$view->assign("errors", ["Veuillez remplir tous les champs"]);
 				}
 			}
+
+            if($_POST['metadescription'] != $article->getMetadescription()){
+                if (!empty($_POST['metadescription'])){
+                    $article->setMetadescription(htmlspecialchars($_POST['metadescription']));
+                    $article->save();
+                    $form = $article->formEditArticle();
+                    $infos[] = "La metadescription a été mis à jour !";
+                    $view->assign("infos", $infos);
+                }else{
+                    $view->assign("errors", ["Veuillez remplir tous les champs"]);
+                }
+            }
+
             $categories = "";
             foreach ($_POST['category'] as $item) {
                 $categories .= $item . ",";
@@ -114,14 +126,14 @@ class ArticleController{
                     $article->setCategory(htmlspecialchars($categories ));
                     $article->save();
                     $form = $article->formEditArticle();
-                    $infos[] = "Le contenu a été mis à jour !";
+                    $infos[] = "La catégorie a été mis à jour !";
                     $view->assign("infos", $infos);
                 }
             }else{
                 $view->assign("errors", ["Veuillez choisir une categorie"]);
             }
 
-			if($_POST['content'] != $article->getContent()){ # changer le nom
+			if($_POST['content'] != $article->getContent()){
 
 				if (!empty($_POST['content'])){
 					$article->setContent($_POST['content']);
@@ -161,17 +173,11 @@ class ArticleController{
         $view->assign("article", $articlecontent);
         $view->assign("deletemodal", true);
 
-		// var_dump($article->formDeleteArticle());
         $formdelete = $article->formDeleteArticle();
         $view->assign("formdelete", $formdelete);
-		
-
-
 	}
 
-
 	public function seeArticleAction(){
-
 		session_start();
 
         $article = new Article();
@@ -181,10 +187,12 @@ class ArticleController{
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
 
         $uri = substr($uriExploded[0], 10);
-        $articles = $article->getAllBySlug($uri);
-        $view->assign("article", $articles[0]);
+
+        $article = $article->getAllBySlug($uri);
+        $view->assign("article", $article[0]);
+        $view->assign("metadescription", $article[0]['metadescription']);
+        $view->assign("title", $article[0]['title']);
 
     }
-
 
 }
