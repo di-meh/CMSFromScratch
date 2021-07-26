@@ -9,6 +9,7 @@ class Page extends Singleton
 {
 	private $id = null;
     protected $title;
+    protected $metadescription;
     protected $content;
     protected $createdBy;
     protected $slug;
@@ -105,6 +106,7 @@ class Page extends Singleton
         $this->slug = $slug;
     }
 
+
     public function getStatus()
     {
         return $this->status;
@@ -125,6 +127,21 @@ class Page extends Singleton
         $this->setStatus($res['status']);
         $this->setCreatedBy($res['createdBy']);
 
+    }
+    /**
+     * @return mixed
+     */
+    public function getMetadescription()
+    {
+        return $this->metadescription;
+    }
+
+    /**
+     * @param mixed $metadescription
+     */
+    public function setMetadescription($metadescription)
+    {
+        $this->metadescription = $metadescription;
 
     }
 
@@ -178,6 +195,18 @@ class Page extends Singleton
                     "error" => "Votre titre doit faire entre 2 et 60 caractères",
                     "required" => true
                 ],
+                "metadescription" => [
+                    "type" => "textarea",
+                    "label" => "Metadescription",
+                    "minLength" => 1,
+                    "maxLength" => 200,
+                    "id" => "metadescription",
+                    "class" => "form_input",
+                    "placeholder" => "Une desription de la page",
+                    "value" => "",
+                    "error" => "Votre description doit faire entre 1 et 200 caractères",
+                    "required" => true
+                ],
                 "editor" => [
                     "type" => "textarea",
                     "label" => "Contenu de la page",
@@ -215,6 +244,18 @@ class Page extends Singleton
                     "placeholder" => "Exemple: Premier article",
                     "value" => $this->title,
                     "error" => "Votre titre doit faire entre 2 et 155 caractères",
+                    "required" => true
+                ],
+                "metadescription" => [
+                    "type" => "textarea",
+                    "label" => "Metadescription",
+                    "minLength" => 1,
+                    "maxLength" => 200,
+                    "id" => "metadescription",
+                    "class" => "form_input",
+                    "placeholder" => "Une desription de la page",
+                    "value" => $this->getMetadescription() ?? "",
+                    "error" => "Votre description doit faire entre 1 et 200 caractères",
                     "required" => true
                 ],
                 "content" => [
@@ -265,7 +306,7 @@ class Page extends Singleton
         $req = $this->getPDO()->prepare($query);
         $req->execute();
         $res = $req->fetchAll(PDO::FETCH_ASSOC);
-        return $res;
+        return $res ? $res[0] : null;
     }
 
     public function getAllById($id){
@@ -273,14 +314,14 @@ class Page extends Singleton
         $req = $this->getPDO()->prepare($query);
         $req->execute();
         $res = $req->fetchAll(PDO::FETCH_ASSOC);
-        return $res;
+        return $res ? $res[0] : null;
     }
 
     public function setAllBySlug($slug){
         $res = $this->getAllBySlug($slug);
-        $res = $res[0];
         $this->setId($res['id']);
         $this->setTitle($res['title']);
+        $this->setMetadescription($res['metadescription']);
         $this->setContent($res['content']);
         $this->setCreatedBy($res['createdBy']);
         $this->setSlug($res['slug']);

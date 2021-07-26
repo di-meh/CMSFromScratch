@@ -89,16 +89,18 @@ class Mailing{
 		try {
 		    //Server settings
 		    # $this->mail->SMTPDebug = SMTP::DEBUG_SERVER;                      
-		    $this->mail->isSMTP();                                            
-		    $this->mail->Host       = MAILHOST;
-		    $this->mail->SMTPAuth   = MAILSMTPAUTH;                                   
-		    $this->mail->Username   = MAILSENDER;                  
-		    $this->mail->Password   = MAILPWD;                               
-		    $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-		    $this->mail->Port       = MAILPORT;                                  
+			$this->mail->isSMTP();                                            
+			$this->mail->Host       = MAILHOST;
+			$this->mail->SMTPAuth   = MAILSMTPAUTH;
+			$this->mail->From       = MAILSENDER;
+			$this->mail->Username   = MAILSENDER;
+			$this->mail->Password   = MAILPWD;
+			$this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+			$this->mail->Port       = MAILPORT;
 
 		    //Recipients
-		    $this->mail->setFrom(MAILSENDER);
+
+		    $this->mail->setFrom(MAILSENDER, SITENAME);
 		    $this->mail->addAddress($this->recipient);
 
 		    $this->mail->isHTML(true);

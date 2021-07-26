@@ -12,11 +12,10 @@ use App\Core\Security;
 use App\Models\Page;
 use App\Core\Router;
 
-class PageController
-{
-
+class PageController{
 
 	public function defaultAction(){
+        //verifie si user est connecté sinon redirigé vers login page
         $user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
@@ -46,16 +45,16 @@ class PageController
 	}
 
 	public function addPageAction(){
-
+        //verifie si user est connecté sinon redirigé vers login page
         $user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
 		$page = new Page();
-
 		$view = new View("addPage","back");
 
 		$form = $page->formAddPage();
 
+		//verifie si le form est soumis
 		if(!empty($_POST)){
 
 		    $errors = FormValidator::check($form, $_POST);
@@ -63,9 +62,11 @@ class PageController
 		    $form['inputs']['title']['value'] = $_POST['title'];
 		    $form['inputs']['editor']['value'] = $_POST['editor'];
 
+		    //verifie s'il n'y a pas d'erreur
 		    if (empty($errors)){
-
+                //set les infos
                 $page->setTitle(htmlspecialchars($_POST['title']));
+                $page->setMetadescription(htmlspecialchars($_POST['metadescription']));
                 $page->setContent($_POST['editor']);
                 $page->setCreatedBy($user->getID());
                 $page->setStatus("withdraw");
@@ -74,41 +75,43 @@ class PageController
                     $view->assign("errors", ["Veuillez remplir tous les champs"]);
                 }else{
                     $page->setSlug($page->title2slug($_POST['title']));
+                    //verifie si le titre est en bdd
                     if (empty($page->getAllBySlug($page->getSlug()))){
                         $page->save();
-                         header("Location:/lbly-admin/pages");
+                        header("Location:/lbly-admin/pages");
                     }else{
                         echo $page->getSlug();
                         $view->assign("errors", ["Veuillez changer le titre de votre page"]);
                     }
                 }
-
             }else{
                 $view->assign("errors", $errors);
             }
-
-
 	    }
 		$view->assign("form", $form);
 	}
 
     public function editPageAction()
 	{
-		$user = Security::getConnectedUser();
+        //verifie si user est connecté sinon redirigé vers login page
+        $user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
 		$view = new View("editPage","back"); # appelle View/editProfil.view.php
 		$page = new page();
 
+		//recupere le slug dans l'url
 		$uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
         $uri = substr($uriExploded[0], 17);
 
+        //set la page en fonction du slug
 		$page->setAllBySlug($uri);
 		$form = $page->formEditPage();
 
+		//verifie que le form est soumis
 		if(!empty($_POST)){
-			if($_POST['title'] != $page->getTitle()){ # changer le prenom
-
+		    //modification si different et non nul
+			if($_POST['title'] != $page->getTitle()){
 				if (!empty($_POST['title'])){
 					$page->setTitle(htmlspecialchars($_POST['title']));
 					$page->setSlug($page->title2slug($_POST['title']));
@@ -125,8 +128,21 @@ class PageController
 				}
 			}
 
-			if($_POST['content'] != $page->getContent()){ # changer le nom
+            //modification si different et non nul
+            if($_POST['metadescription'] != $page->getMetadescription()){
+                if (!empty($_POST['metadescription'])){
+                    $page->setMetadescription(htmlspecialchars($_POST['metadescription']));
+                    $page->save();
+                    $form = $page->formEditPage();
+                    $infos[] = "La metadescription a été mis à jour !";
+                    $view->assign("infos", $infos);
+                }else{
+                    $view->assign("errors", ["Veuillez remplir tous les champs"]);
+                }
+            }
 
+            //modification si different et non nul
+			if($_POST['content'] != $page->getContent()){
 				if (!empty($_POST['content'])){
 					$page->setContent($_POST['content']);
 					$page->save();
@@ -142,19 +158,21 @@ class PageController
 	}
 
 	public function deletePageAction(){
-
+        //verifie si user est connecté sinon redirigé vers login page
 		$user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
 		$view = new View("pages","back");
-		$page = new page();
+		$page = new Page();
 		$pages = $page->all();
 
+		//recupère le slug dans l'url
 		$uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
         $uri = substr($uriExploded[0], 19);
 
+        //set la page en fonction du slug
         $page->setAllBySlug($uri);
-        $pagecontent = $page->getAllBySlug($uri)[0];
+        $pagecontent = $page->getAllBySlug($uri);
 
 		if (!empty($_POST["delete"])){
             $page->deleteBySlug($uri);
@@ -167,24 +185,30 @@ class PageController
 
         $formdelete = $page->formDeletePage();
         $view->assign("formdelete", $formdelete);
-		
-
-
 	}
-	public function seePageAction(){
 
+	public function seePageAction(){
         session_start();
 
         $page = new Page();
 
         $view = new View("seePage", "front");
 
+        //recupere le slug dans l'url
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
 
         $uri = substr($uriExploded[0], 1);
 
-        $page = $page->getAllBySlug($uri);
-        $view->assign("page", $page[0]);
+        $pagecontent = $page->getAllBySlug($uri);
+        $view->assign("page", $pagecontent);
+        $view->assign("metadescription", $pagecontent['metadescription']);
+        $view->assign("title", $pagecontent['title']);
+
+        $breadcrumbs = [
+			[SITENAME, $_SERVER["HTTP_HOST"]],
+			[$pagecontent['title'], $uriExploded[0]],
+		];
+        $view->assign("breadcrumbs", $breadcrumbs);
 
     }
 

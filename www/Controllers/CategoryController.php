@@ -9,6 +9,7 @@ class CategoryController {
 
 	public function defaultAction()
     {
+        //verifie si user est connecté sinon redirigé vers login page
         $user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
@@ -20,7 +21,7 @@ class CategoryController {
     }
 
     public function addCategoryAction(){
-
+        //verifie si user est connecté sinon redirigé vers login page
         $user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
@@ -30,20 +31,21 @@ class CategoryController {
 
         $form = $category->formAddCategory();
 
+        //verifie si le formulaire est soumis
 		if (!empty($_POST)) {
-            
+            //verifie s'il n'y a pas d'erreurs lors de la validation
             if (empty($errors)){
-                
                 if (empty($_POST['nameCategory'])){
                     $view->assign("errors", ["Veuillez saisir un nom de catégorie."]);
                 }else{
-                $category->setNameCategory(htmlspecialchars($_POST['nameCategory']));
-                $category->setColorCategory(htmlspecialchars($_POST['colorCategory']));
+                    $category->setNameCategory(htmlspecialchars($_POST['nameCategory']));
+                    $category->setColorCategory(htmlspecialchars($_POST['colorCategory']));
 
                     if (!empty($category->checkCategory($category->getNameCategory()))){
                         $view->assign("errors", ["La catégorie existe déjà!"]);
                     }else{
                         $category->setSlug($category->title2slug($_POST['nameCategory']));
+                        //verifie si nom est en bdd
                         if (empty($category->getAllBySlug($category->getSlug()))){
                             var_dump($category);
                             $category->save();
@@ -63,24 +65,29 @@ class CategoryController {
 
     public function editCategoryAction()
 	{
-		$user = Security::getConnectedUser();
+        //verifie si user est connecté sinon redirigé vers login page
+        $user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
 		$view = new View("editCategory","back"); # appelle View/editProfil.view.php
 		$category = new Category();
 
-		$uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
+        //récupération du slug article dans l'url
+        $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
         $uri = substr($uriExploded[0], 26);
 
-		$category->setAllBySlug($uri);
+        //set article en fonction du slug
+        $category->setAllBySlug($uri);
 		$form = $category->formEditCategory();
 
+		//si le formulaire est souumis
 		if(!empty($_POST)){
+		    //modification si différent et non vide
 			if($_POST['nameCategory'] != $category->getNameCategory()){ # changer le prenom
-
 				if (!empty($_POST['nameCategory'])){
 					$category->setNameCategory($_POST['nameCategory']);
 					$category->setSlug($category->title2slug($_POST['nameCategory']));
+					//verifie si le titre est en bdd
 					if (empty($category->getAllBySlug($category->getSlug()))){
 						$category->save();
 						$form = $category->formEditCategory();
@@ -96,8 +103,8 @@ class CategoryController {
 				}
 			}
 
-			if($_POST['colorCategory'] != $category->getColorCategory()){ # changer le nom
-
+            //modification si différent et non vide
+            if($_POST['colorCategory'] != $category->getColorCategory()){ # changer le nom
 				if (!empty($_POST['colorCategory'])){
 					$category->setColorCategory($_POST['colorCategory']);
 					$category->save();
@@ -114,23 +121,29 @@ class CategoryController {
 
 	public function deleteCategoryAction(){
 
-		$user = Security::getConnectedUser();
+        //verifie si user est connecté sinon redirigé vers login page
+        $user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
 		$view = new View("categorys","back");
 		$category = new Category();
 		$categorys = $category->all();
 
-		$uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
+        //récupération du slug article dans l'url
+        $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
         $uri = substr($uriExploded[0], 28);
 
+        //set category en fonction du slug
         $category->setAllBySlug($uri);
-        $categorycontent = $category->getAllBySlug($uri)[0];
+        $categorycontent = $category->getAllBySlug($uri);
 
+        //si le form est soumis
 		if (!empty($_POST["delete"])){
+		    //recupère les livres et articles qui ont la catégorie qui sera supprimé
 		    $to_update_book = $category->getDeletedBookCategory($category->getSlug());
             $to_update_article = $category->getDeletedArticleCategory($category->getSlug());
 
+            //pour chaque livre concerné on retire la catégorie supprimé on recrée le string des categorie
             foreach ($to_update_book as $key => $value) {
                 $new_category_book = str_replace($category->getSlug(),"",$value['category']);
                 $new_category_book = trim($new_category_book, ",");
@@ -138,6 +151,7 @@ class CategoryController {
 
                 $category->updateBookCategory($new_category_book,$value['category']);
             }
+            //pour chaque article concerné on retire la catégorie supprimé on recrée le string des categorie
             foreach ($to_update_article as $key => $value){
                 $new_category_article = str_replace($category->getSlug(),"",$value['category']);
                 $new_category_article = trim($new_category_article, ",");
@@ -155,9 +169,6 @@ class CategoryController {
 
         $formdelete = $category->formDeleteCategory();
         $view->assign("formdelete", $formdelete);
-		
-
-
 	}
 
 }

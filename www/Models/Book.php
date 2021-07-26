@@ -53,8 +53,10 @@ class Book extends Singleton
     }
 
     public function book2slug($book){
+        // remplace ce qui n'est pas lettre ou nombre par -
         $book = preg_replace('~[^\pL\d]+~u', '-', $book);
 
+        //remplace les accents par non accents
         $unwanted_array = array(    'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
             'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
             'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
@@ -65,11 +67,15 @@ class Book extends Singleton
         //retire symboles spéciaux
         $book = iconv("UTF-8", "ASCII//TRANSLIT", $book);
 
+        //retire tout ce qui n'est pas chiffre lettre ou -
         $book = preg_replace('~[^-\w]+~', '', $book);
 
+        //retire les - au debut et a la fin
         $book = trim($book, '-');
+
         //suprimme double -
         $book = preg_replace('~-+~', '-', $book);
+
         //minuscule
         $book = strtolower($book);
 
@@ -248,7 +254,7 @@ class Book extends Singleton
                     "type" => "text",
                     "label" => "Description du livre",
                     "minLength" => 1,
-                    "maxLength" => 65535,
+                    "maxLength" => 200,
                     "id" => "description",
                     "class" => "form_input",
                     "placeholder" => "Un super livre",
@@ -334,6 +340,54 @@ class Book extends Singleton
                     "error" => "Le nombre de livres doit être au moins supérieur à 1",
                     "required" => true
                 ],
+            ]
+        ];
+    }
+
+    public function formAddToCart(){
+        return [
+
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "form_addtocart",
+                "class" => "form_builder",
+                "submit" => "Ajouter au panier",
+                "btn_class" => "btn btn-primary"
+            ],
+            "inputs" => [
+                "add_book_to_cart" => [
+                    "type" => "hidden",
+                    "id" => "id",
+                    "class" => "form_input",
+                    "value" => $this->id,
+                    "error" => "id not found",
+                    "required" => true
+                ]
+            ]
+        ];
+    }
+
+    public function formRemoveFromCart(){
+        return [
+
+            "config" => [
+                "method" => "POST",
+                "action" => "",
+                "id" => "form_removefromcart",
+                "class" => "form_builder",
+                "submit" => "Retirer du panier",
+                "btn_class" => "btn btn-danger"
+            ],
+            "inputs" => [
+                "remove_book_from_cart" => [
+                    "type" => "hidden",
+                    "id" => "id",
+                    "class" => "form_input",
+                    "value" => $this->id,
+                    "error" => "id not found",
+                    "required" => true
+                ]
             ]
         ];
     }
@@ -440,17 +494,40 @@ class Book extends Singleton
         $this->slug = $slug;
     }
 
+    //recupere toute les info d'un livre en fonction du slug
     public function getAllBySlug($slug){
         $query = "SELECT * FROM " . $this->getTable() . " WHERE slug = '".$slug."'";
         $req = $this->getPDO()->prepare($query);
         $req->execute();
         $res = $req->fetchAll(PDO::FETCH_ASSOC);
-        return $res;
+        return $res ? $res[0] : null;
+    }
+
+    public function getAllById($id){
+        $query = "SELECT * FROM " . $this->getTable() . " WHERE id = '".$id."'";
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
+        $res = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $res ? $res[0] : null;
+    }
+
+    public function setAllById($id){
+        $res = $this->getAllById($id);
+        $this->setId($res['id']);
+        $this->setTitle($res['title']);
+        $this->setDescription($res['description']);
+        $this->setAuthor($res['author']);
+        $this->setImage($res['image']);
+        $this->setPublicationDate($res['publication_date']);
+        $this->setPublisher($res['publisher']);
+        $this->setPrice($res['price']);
+        $this->setCategory($res['category']);
+        $this->setStockNumber($res['stock_number']);
+        $this->setSlug($res['slug']);
     }
 
     public function setAllBySlug($slug){
         $res = $this->getAllBySlug($slug);
-        $res = $res[0];
         $this->setId($res['id']);
         $this->setTitle($res['title']);
         $this->setDescription($res['description']);
