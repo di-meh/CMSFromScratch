@@ -364,5 +364,12 @@ class BookController
         $view->assign("book", $bookcontent);
         $view->assign("metadescription", $bookcontent['description']);
         $view->assign("title", $bookcontent['title']);
+
+        $breadcrumbs = [
+			[SITENAME, $_SERVER["HTTP_HOST"]],
+			['Livres', $_SERVER["HTTP_HOST"].'/books'],
+			[$bookcontent['title'], $uriExploded[0]],
+		];
+        $view->assign("breadcrumbs", $breadcrumbs);
     }
 }

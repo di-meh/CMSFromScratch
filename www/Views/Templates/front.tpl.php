@@ -7,6 +7,27 @@
 	<meta name="description" content="<?= $metadescription ?>">
 	<link rel="stylesheet" href="/framework/dist/style.css">
 	<script src="/framework/dist/main.js"></script>
+    <?php if(isset($breadcrumbs)) { ?>
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+            <?php
+            foreach($breadcrumbs as $key=>$item){
+            echo "{
+            \"@type\": \"ListItem\",
+            \"position\": ".($key+1).",
+            \"name\": \"$item[0]\",
+            \"item\": \"$item[1]\"
+            }";
+            if($key+1 < count($breadcrumbs)) echo ",";
+            }
+            ?>
+            ]
+        }
+        </script>
+    <?php } ?>
 </head>
 <?php 
     use App\Models\CartSession;

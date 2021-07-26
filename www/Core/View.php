@@ -14,7 +14,7 @@ class View
 	{
 
 		$this->setTemplate($template);
-		$this->setView($view);
+		$this->setView($view, $template);
 	}
 
 	public function setTemplate($template)
@@ -26,10 +26,10 @@ class View
 		}
 	}
 
-	public function setView($view)
+	public function setView($view, $template)
 	{
-		if (file_exists("Views/" . $view . ".view.php")) {
-			$this->view = "Views/" . $view . ".view.php";
+		if (file_exists("Views/" . $template . "/" . $view . ".view.php")) {
+			$this->view = "Views/". $template . "/" . $view . ".view.php";
 		} else {
 			die("Erreur de vue");
 		}

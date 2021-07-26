@@ -206,10 +206,17 @@ class ArticleController{
 
         //recupere l'article en fonction du slug
         $articlecontent = $article->getAllBySlug($uri);
-		
+
         $view->assign("article", $articlecontent);
         $view->assign("metadescription", $articlecontent['metadescription']);
         $view->assign("title", $articlecontent['title']);
+
+		$breadcrumbs = [
+			[SITENAME, $_SERVER["HTTP_HOST"]],
+			['Articles', $_SERVER["HTTP_HOST"].'/articles'],
+			[$articlecontent['title'], $uriExploded[0]],
+		];
+        $view->assign("breadcrumbs", $breadcrumbs);
 
     }
 
