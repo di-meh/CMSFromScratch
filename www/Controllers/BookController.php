@@ -310,5 +310,8 @@ class BookController
 
         $book = $book->getAllBySlug($uri);
         $view->assign("book", $book[0]);
+        $view->assign("metadescription", $book[0]['description']);
+        $view->assign("title", $book[0]['title']);
+
     }
 }
