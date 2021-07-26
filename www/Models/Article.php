@@ -17,8 +17,6 @@ class Article extends Singleton
     protected $content;
     protected $category;
     protected $created;
-    protected $published;
-    protected $modified;
     protected $status;
 
     
@@ -86,23 +84,6 @@ class Article extends Singleton
         $this->created = $created;
     }
 
-    public function getModified()
-    {
-        return $this->modified;
-    }
-    public function setModified($modified)
-    {
-        $this->modified = $modified;
-    }
-
-    public function getPublished()
-    {
-        return $this->published;
-    }
-    public function setPublished($published)
-    {
-        $this->published = $published;
-    }
 
     public function getStatus()
     {
@@ -363,8 +344,6 @@ class Article extends Singleton
         $this->setContent($res['content']);
         $this->setCategory($res['category']);
         $this->setCreated($res['created']);
-        $this->setPublished($res['published']);
-        $this->setModified($res['modified']);
         $this->setStatus($res['status']);
     }
 
@@ -380,8 +359,6 @@ class Article extends Singleton
         $this->setContent($res['content']);
         $this->setCategory($res['category']);
         $this->setCreated($res['created']);
-        $this->setPublished($res['published']);
-        $this->setModified($res['modified']);
         $this->setStatus($res['status']);
     }
 

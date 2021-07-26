@@ -20,6 +20,24 @@ class BookController
         $book = new Book();
         $view = new View("book","back");
 
+        if(isset($_GET['bookid'])){
+            $book->setAllById(htmlspecialchars($_GET['bookid']));
+
+            if(isset($_GET['publish'])){
+                $book->setStatus("publish");
+                $book->save();
+                $view->assign("infos", ["Livre publié."]);
+
+            }
+
+            if(isset($_GET['withdraw'])){
+                $book->setStatus("withdraw");
+                $book->save();
+                $view->assign("infos", ["Livre retiré."]);
+
+            }
+        }
+
         $books = $book->all();
         $view->assign("books", $books);
 
@@ -62,6 +80,7 @@ class BookController
                 $categories = substr($categories,0,-1);
                 $book->setCategory(htmlspecialchars($categories ));
                 $book->setStockNumber(htmlspecialchars($_POST['stock_number']));
+                $book->setStatus("withdraw");
                 $book->setSlug($book->book2slug($_POST['title'] . "-" . $_POST['author'] . "-" . $_POST['publisher']));
 
                 $maxsize = 2097152; #2MB
@@ -300,7 +319,6 @@ class BookController
             $categories = substr($categories,0,-1);
             //modification si différent et non vide
             if ($categories != $book->getCategory()){
-                var_dump($_POST['category']);
                 echo $book->getCategory();
                 if (!empty($_POST['category'])){
                     $categories = "";

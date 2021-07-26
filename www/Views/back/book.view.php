@@ -10,7 +10,7 @@
                         <?php endif; ?>
                         <!-- <a id="" href=""><button class="btn btn-primary">Supprimer</button></a> -->
                         <br/>
-                        <a id="" href="/lbly-admin/pages"><button class="btn btn-danger">Annuler</button></a>
+                        <a id="" href="/lbly-admin/books"><button class="btn btn-danger">Annuler</button></a>
                     </div>
                 </div>
                 <br/>
@@ -32,9 +32,10 @@
                                 <th>Auteur</th>
                                 <th>Stock</th>
                                 <th>Status</th>
-                                <th> </th>
-                                <th> </th>
-                                <th> </th>
+                                <th>Voir</th>
+                                <th>Modifier</th>
+                                <th>État de publication</th>
+                                <th>Supprimer</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -53,11 +54,11 @@
                                     <td><a href="/lbly-admin/books/edit/<?=$book["slug"]?>"><button class="btn btn-primary">Modifier</button></a></td>
                                     <?php if($book["status"] == 'publish'):?>
 
-                                        <td><a href="/lbly-admin/pages?withdraw=true&pageid=<?=$book["id"]?>"><button class="btn btn-primary">Retirer</button></a></td>
+                                        <td><a href="/lbly-admin/books?withdraw=true&bookid=<?=$book["id"]?>"><button class="btn btn-primary">Retirer</button></a></td>
 
                                     <?php else :?>
 
-                                        <td><a href="/lbly-admin/pages?publish=true&pageid=<?=$book["id"]?>"><button class="btn btn-primary">Publier</button></a></td>
+                                        <td><a href="/lbly-admin/books?publish=true&bookid=<?=$book["id"]?>"><button class="btn btn-primary">Publier</button></a></td>
 
                                     <?php endif; ?>
                                     <td><a href="/lbly-admin/books/delete/<?=$book["slug"]?>"><button class="btn btn-danger">Supprimer</button></a></td>
