@@ -208,7 +208,8 @@ class ArticleController{
         $view->assign("title", $articlecontent['title']);
 
 		$breadcrumbs = [
-			['Articles', $_SERVER["REQUEST_URI"].'/articles'],
+			[SITENAME, $_SERVER["HTTP_HOST"]],
+			['Articles', $_SERVER["HTTP_HOST"].'/articles'],
 			[$articlecontent['title'], $uriExploded[0]],
 		];
         $view->assign("breadcrumbs", $breadcrumbs);

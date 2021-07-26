@@ -172,6 +172,12 @@ class PageController{
         $view->assign("metadescription", $pagecontent['metadescription']);
         $view->assign("title", $pagecontent['title']);
 
+        $breadcrumbs = [
+			[SITENAME, $_SERVER["HTTP_HOST"]],
+			[$pagecontent['title'], $uriExploded[0]],
+		];
+        $view->assign("breadcrumbs", $breadcrumbs);
+
     }
 
 }
