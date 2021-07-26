@@ -53,8 +53,10 @@ class Book extends Singleton
     }
 
     public function book2slug($book){
+        // remplace ce qui n'est pas lettre ou nombre par -
         $book = preg_replace('~[^\pL\d]+~u', '-', $book);
 
+        //remplace les accents par non accents
         $unwanted_array = array(    'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
             'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
             'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
@@ -65,11 +67,15 @@ class Book extends Singleton
         //retire symboles spéciaux
         $book = iconv("UTF-8", "ASCII//TRANSLIT", $book);
 
+        //retire tout ce qui n'est pas chiffre lettre ou -
         $book = preg_replace('~[^-\w]+~', '', $book);
 
+        //retire les - au debut et a la fin
         $book = trim($book, '-');
+
         //suprimme double -
         $book = preg_replace('~-+~', '-', $book);
+
         //minuscule
         $book = strtolower($book);
 
@@ -488,6 +494,7 @@ class Book extends Singleton
         $this->slug = $slug;
     }
 
+    //recupere toute les info d'un livre en fonction du slug
     public function getAllBySlug($slug){
         $query = "SELECT * FROM " . $this->getTable() . " WHERE slug = '".$slug."'";
         $req = $this->getPDO()->prepare($query);

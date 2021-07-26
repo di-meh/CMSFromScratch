@@ -337,7 +337,6 @@ class BookController
 
         // Ajout au panier
         if (!empty($_POST)) {
-
             $id = $_POST['add_book_to_cart'];
             $book = new Book();
             $cart = new Cart();
@@ -346,7 +345,6 @@ class BookController
             header('location:/books');
             die();
         }
-        // var_dump($_SESSION);
     }
     
     public function seeBookAction(){
@@ -360,7 +358,9 @@ class BookController
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
         $uri = substr($uriExploded[0], 7);
 
+        //recupere le livre en foction du slug
         $bookcontent = $book->getAllBySlug($uri);
+
         $view->assign("book", $bookcontent);
         $view->assign("metadescription", $bookcontent['description']);
         $view->assign("title", $bookcontent['title']);

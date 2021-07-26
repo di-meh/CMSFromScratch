@@ -45,6 +45,7 @@ class CategoryController {
                         $view->assign("errors", ["La catégorie existe déjà!"]);
                     }else{
                         $category->setSlug($category->title2slug($_POST['nameCategory']));
+                        //verifie si nom est en bdd
                         if (empty($category->getAllBySlug($category->getSlug()))){
                             var_dump($category);
                             $category->save();
@@ -86,6 +87,7 @@ class CategoryController {
 				if (!empty($_POST['nameCategory'])){
 					$category->setNameCategory($_POST['nameCategory']);
 					$category->setSlug($category->title2slug($_POST['nameCategory']));
+					//verifie si le titre est en bdd
 					if (empty($category->getAllBySlug($category->getSlug()))){
 						$category->save();
 						$form = $category->formEditCategory();

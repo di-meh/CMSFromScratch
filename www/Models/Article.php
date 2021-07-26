@@ -143,6 +143,7 @@ class Article extends Singleton
         $this->metadescription = $metadescription;
     }
 
+    //formulaire ajouter article
     public function formAddArticle()
     {
 
@@ -209,6 +210,7 @@ class Article extends Singleton
         ];
     }
 
+    //formulaire modifier article
     public function formEditArticle()
     {
 
@@ -275,6 +277,7 @@ class Article extends Singleton
         ];
     }
 
+    //formulaire supprimer article
     public function formDeleteArticle(){
         return [
             "config" => [
@@ -300,9 +303,12 @@ class Article extends Singleton
         ];
     }
 
+    //transoforme le titre de l'article en slug
     public function title2slug($title){
+        // remplace ce qui n'est pas lettre ou nombre par -
         $title = preg_replace('~[^\pL\d]+~u', '-', $title);
 
+        //remplace les accents par non accents
         $unwanted_array = array(    'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
             'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
             'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
@@ -313,8 +319,10 @@ class Article extends Singleton
         //retire symboles spéciaux
         $title = iconv("UTF-8", "ASCII//TRANSLIT", $title);
 
+        //retire tout ce qui n'est pas chiffre lettre ou -
         $title = preg_replace('~[^-\w]+~', '', $title);
 
+        //retire les - au debut et a la fin
         $title = trim($title, '-');
         //suprimme double -
         $title = preg_replace('~-+~', '-', $title);
@@ -323,7 +331,8 @@ class Article extends Singleton
 
         return $title;
     }
-    
+
+    //recupere toute les info d'un article en fonction du slug
     public function getAllBySlug($slug){
         $query = "SELECT * FROM " . $this->getTable() . " WHERE slug = '".$slug."'";
         $req = $this->getPDO()->prepare($query);
@@ -332,6 +341,7 @@ class Article extends Singleton
         return $res ? $res[0] : null;
     }
 
+    //recupere toute les info d'un article en fonction de l'id
     public function getAllById($id){
         $query = "SELECT * FROM " . $this->getTable() . " WHERE id = '".$id."'";
         $req = $this->getPDO()->prepare($query);
@@ -340,21 +350,7 @@ class Article extends Singleton
         return $res ? $res[0] : null;
     }
 
-    public function setAllById($id)
-    {
-        $res = $this->getAllById($id);
-        $this->setId($res['id']);
-        $this->setAuthor($res['author']);
-        $this->setTitle($res['title']);
-        $this->setSlug($res['slug']);
-        $this->setMetadescription($res['metadescription']);
-        $this->setContent($res['content']);
-        $this->setCreated($res['created']);
-        $this->setPublished($res['published']);
-        $this->setModified($res['modified']);
-        $this->setStatus($res['status']);
-    }
-
+    //set toute les info d'un article en fonction du slug
     public function setAllBySlug($slug)
     {
         $res = $this->getAllBySlug($slug);
@@ -371,12 +367,14 @@ class Article extends Singleton
         $this->setStatus($res['status']);
     }
 
+    //supprime en fonction du slug
     public function deleteBySlug($slug){
         $query = "DELETE FROM " . $this->getTable() . " WHERE slug  = '" . $slug ."'";
         $req = $this->getPDO()->prepare($query);
         $req->execute();
     }
 
+    //recupere toute les categorie créer
     public function getCreatedCategory(){
         $array = [];
         $query = "SELECT nameCategory FROM lbly_category ORDER BY nameCategory ASC";

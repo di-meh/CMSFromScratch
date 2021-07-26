@@ -54,6 +54,7 @@ class ArticleController{
 					$view->assign("errors", ["Veuillez remplir tous les champs"]);
 				}else{
 					$article->setSlug($article->title2slug($_POST['title']));
+					//verifie si le titre est présent en bdd
 					if (empty($article->getAllBySlug($article->getSlug()))){
 						$article->save();
 						header("Location:/lbly-admin/articles");
@@ -162,7 +163,7 @@ class ArticleController{
 	}
 
 	public function deleteArticleAction(){
-
+        //verifie si user est connecté sinon redirigé vers login page
 		$user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
@@ -170,9 +171,11 @@ class ArticleController{
 		$article = new Article();
 		$articles = $article->all();
 
+		//recupere le slug via l'url
 		$uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
         $uri = substr($uriExploded[0], 28);
 
+        //set article en fonction du slug
         $article->setAllBySlug($uri);
         $articlecontent = $article->getAllBySlug($uri);
 
@@ -199,8 +202,9 @@ class ArticleController{
 
         //recupération slug dans l'url
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
-
         $uri = substr($uriExploded[0], 10);
+
+        //recupere l'article en fonction du slug
         $articlecontent = $article->getAllBySlug($uri);
 		
         $view->assign("article", $articlecontent);

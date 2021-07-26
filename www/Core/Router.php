@@ -36,6 +36,7 @@ class Router
 
             //[/] => Array ( [controller] => Global [action] => default )
 			$this->routes = yaml_parse_file($this->routesPath);
+			//appele les différent controller et action en fonction des conditions
 			if( !empty($this->routes[$this->uri]) && $this->routes[$this->uri]["controller"] && $this->routes[$this->uri]["action"]){
 
 				$this->setController($this->routes[$this->uri]["controller"]);

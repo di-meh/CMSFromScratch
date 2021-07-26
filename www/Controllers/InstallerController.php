@@ -32,6 +32,7 @@ class InstallerController{
             //verifie s'il n'y a pas d'erreur à la validation
                 if (empty($errors)){
                     if ($_POST['pwd'] == $_POST['pwdConfirm']) {
+                        //creation contenu .env
                         $content ="SITENAME=" . htmlspecialchars($_POST["site"]) . "\n"
                             ."DBDRIVER=mysql\n" ."DBPREFIX=lbly_\n" 
                             ."DBHOST=" . htmlspecialchars($_POST["dbhost"]) . "\n"
@@ -54,6 +55,7 @@ class InstallerController{
 
                             $pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
 
+                            //set l'user avec les info del'installer
                             $install->setFirstname(htmlspecialchars($_POST["firstname"]));
                             $install->setLastname(htmlspecialchars($_POST["lastname"]));
                             $install->setEmail(htmlspecialchars($_POST["email"]));
