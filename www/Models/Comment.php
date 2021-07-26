@@ -11,12 +11,36 @@ class Comment extends Singleton
     private $id = null;
     protected $user_email;
     protected $title;
-    protected $book;
+    protected $book_id;
     protected $text;
     private $table = "lbly_comment";
 
     public function __construct()
     {
+    }
+
+    public function getAll($id) {
+        $query = "SELECT * FROM " . $this->table . "WHERE id = '" . $id . "'" ;
+        $prepare = $this->getPDO()->prepare($query);
+        $prepare->execute();
+        $res = $prepare->fetch(PDO::FETCH_ASSOC);
+        return $res;
+    }
+
+    public function setAll($id) {
+        $query = "SELECT * FROM " . $this->table . "WHERE id = '" . $id . "'" ;
+        $prepare = $this->getPDO()->prepare($query);
+        $prepare->execute();
+        $res = $prepare->fetch(PDO::FETCH_ASSOC);
+        if($res){
+            $this->setId($id);
+            $this->setUserEmail($res['user_email']);
+            $this->setBookId($res['book_id']);
+            $this->setText($res['text']);
+
+            return true;
+        }
+        return false;
     }
 
     public function formAddComment() {
@@ -103,17 +127,17 @@ class Comment extends Singleton
     /**
      * @return mixed
      */
-    public function getBook()
+    public function getBookId()
     {
-        return $this->book;
+        return $this->book_id;
     }
 
     /**
-     * @param mixed $book
+     * @param mixed $book_id
      */
-    public function setBook($book)
+    public function setBookId($book_id)
     {
-        $this->book = $book;
+        $this->book_id = $book_id;
     }
 
     /**
