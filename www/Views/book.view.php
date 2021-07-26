@@ -3,7 +3,7 @@
         <div class="col-full">
             <?php if (isset($deletemodal)) :?>
                 <div class="card">
-                    <h6 class="card-title">Delete Modal</h6>
+                    <h6 class="card-title">Supprimer</h6>
                     <div class="card-content">
                         <?php if (isset($formdelete)) : ?>
                             <?php App\Core\FormBuilder::render($formdelete); ?>
@@ -27,14 +27,23 @@
                             <table class="table">
                             <thead>
                             <tr>
+                                <th>Image</th>
                                 <th>titre</th>
                                 <th>Auteur</th>
                                 <th>Stock</th>
+                                <th> </th>
+                                <th> </th>
+                                <th> </th>
                             </tr>
                             </thead>
                             <tbody>
                             <?php foreach ($books as $book) { ?>
                                 <tr>
+                                    <?php if (isset($book["image"])) :?>
+                                    <td><img src="../<?=$book["image"]?>" height="28px"></td>
+                                    <?php else:?>
+                                    <td><img src="/img/defaultImage.jpg" height="28px"></td>
+                                    <?php endif;?>
                                     <td><?php echo $book["title"];?></td>
                                     <td><?php echo $book["author"];?></td>
                                     <td><?php echo $book["stock_number"];?></td>

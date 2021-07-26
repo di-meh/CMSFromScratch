@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Core\View;
 use App\Core\Security;
+use App\Models\Page;
 
 class MainController{
 
@@ -11,8 +12,20 @@ class MainController{
 	public function defaultAction(){
 
 		session_start();
+		$page = new Page();
+		$page = $page->getAllBySlug('home');
 
-		$view = new View("home");
+		if(isset($page) && !empty($page)){
+
+			$view = new View("seePage", "front");
+	
+			$view->assign("page", $page[0]);
+		} else {
+
+			$view = new View("home");
+		}
+
+
 
 
 	}
