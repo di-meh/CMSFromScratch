@@ -81,6 +81,7 @@ CREATE TABLE `lbly_comment` (
                                 `id` int(11) NOT NULL,
                                 `user_email` varchar(320) NOT NULL,
                                 `book_id` int(11) NOT NULL,
+                                `title`varchar(60) NOT NULL,
                                 `text` text NOT NULL,
                                 `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                 `updatedAt` timestamp NULL DEFAULT NULL

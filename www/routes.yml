@@ -109,3 +109,7 @@
 /installer:
   controller: Installer
   action: default
+
+/comment/add:
+  controller: Comment
+  action: addComment

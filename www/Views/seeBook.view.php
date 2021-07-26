@@ -14,5 +14,10 @@
     <h3>En stock : <?php  echo $string = ($book["stock_number"] != 0) ? "OUI": "NON";?></h3>
     <!--<img src="/img/uno-uno-uno.png">-->
 
+    <?php if (isset($comments)): ?>
+        <?php foreach ($comments as $comment): ?>
+            <?php var_dump($comment); ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
 
 </section>

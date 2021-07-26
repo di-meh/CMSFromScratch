@@ -6,6 +6,7 @@ use App\Core\FormValidator;
 use App\Core\View;
 use App\Core\Security;
 use App\Models\Book;
+use App\Models\Comment;
 
 class BookController
 {
@@ -308,6 +309,9 @@ class BookController
         $uri = substr($uriExploded[0], 7);
 
         $book = $book->getAllBySlug($uri);
+        $comment = new Comment();
+        $comments = $comment->getAllByBookId($book[0]['id']);
         $view->assign("book", $book[0]);
+        $view->assign("comments", $comments);
     }
 }

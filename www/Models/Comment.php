@@ -26,6 +26,13 @@ class Comment extends Singleton
         $res = $prepare->fetch(PDO::FETCH_ASSOC);
         return $res;
     }
+    public function getAllByBookId($id) {
+        $query = "SELECT * FROM " . $this->table . "WHERE book_id = '" . $id . "'" ;
+        $prepare = $this->getPDO()->prepare($query);
+        $prepare->execute();
+        $res = $prepare->fetch(PDO::FETCH_ASSOC);
+        return $res;
+    }
 
     public function setAll($id) {
         $query = "SELECT * FROM " . $this->table . "WHERE id = '" . $id . "'" ;
@@ -35,9 +42,9 @@ class Comment extends Singleton
         if($res){
             $this->setId($id);
             $this->setUserEmail($res['user_email']);
+            $this->setTitle($res['title']);
             $this->setBookId($res['book_id']);
             $this->setText($res['text']);
-
             return true;
         }
         return false;
@@ -53,12 +60,12 @@ class Comment extends Singleton
                 "submit" => "Ajouter"
             ],
             "inputs" => [
-                "email" => [
+                "user_email" => [
                     "type" => "email",
                     "label" => "Votre email",
                     "minLength" => 8,
                     "maxLength" => 320,
-                    "id" => "email",
+                    "id" => "user_email",
                     "class" => "form_input",
                     "placeholder" => "Exemple: nom@gmail.com",
                     "value" => '',
@@ -69,7 +76,7 @@ class Comment extends Singleton
                     "type" => "text",
                     "label" => "Titre de votre commentaire",
                     "minLength" => 1,
-                    "maxLength" => 50,
+                    "maxLength" => 60,
                     "id" => "title",
                     "class" => "form_input",
                     "placeholder" => "Exemple: Un super livre",

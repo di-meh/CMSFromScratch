@@ -10,8 +10,8 @@
 </head>
 
 <body>
-	<div class="page-wrapper with-navbar " id="app">
-		<div class="content-wrapper" style="top: 0 !important;">
+	<div class="page-wrapper " id="app">
+		<div class="content-wrapper">
 
             <?php if (isset($errors)) : ?>
                 <?php foreach ($errors as $error) : ?>
