@@ -45,31 +45,34 @@ class InstallerController{
                             ."VITE_STRIPE_PUBLIC_KEY=" . htmlspecialchars($_POST["stripe_private_key"]) . "\n";
                         $handle = fopen("./.env", "w+");
                         fwrite($handle, $content);
-                        new ConstantMaker();
+                        if (file_exists("./.env")){
+                            new ConstantMaker();
 
-                        $pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
+                            $pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
 
-                        $install->setFirstname(htmlspecialchars($_POST["firstname"]));
-                        $install->setLastname(htmlspecialchars($_POST["lastname"]));
-                        $install->setEmail(htmlspecialchars($_POST["email"]));
-                        $install->setPwd($pwd);
-                        $install->setCountry($_POST["country"]);
-                        $install->addStatus(USERSUPERADMIN);
+                            $install->setFirstname(htmlspecialchars($_POST["firstname"]));
+                            $install->setLastname(htmlspecialchars($_POST["lastname"]));
+                            $install->setEmail(htmlspecialchars($_POST["email"]));
+                            $install->setPwd($pwd);
+                            $install->setCountry($_POST["country"]);
+                            $install->addStatus(USERSUPERADMIN);
 
-                        $token = substr(md5(uniqid(true)), 0, 10); # cut length to 10, no prefix, entropy => for more unicity
-                        $install->setToken($token);
-                        $install->dropTables();
-                        $install->createTableArticle();
-                        $install->createTableBooks();
-                        $install->createTableCategory();
-                        $install->createTablePages();
-                        $install->createTableUser();
-                        $install->alterTables();
+                            $token = substr(md5(uniqid(true)), 0, 10); # cut length to 10, no prefix, entropy => for more unicity
+                            $install->setToken($token);
+                            $install->dropTables();
+                            $install->createTableArticle();
+                            $install->createTableBooks();
+                            $install->createTableCategory();
+                            $install->createTablePages();
+                            $install->createTableUser();
+                            $install->createTableOrder();
+                            $install->alterTables();
 
-                        $install->save();
+                            $install->save();
 
-                        $email = $_POST['email'];
-                        header("Location: lbly-admin/userconfirm?email=$email");
+                            $email = $_POST['email'];
+                            header("Location: lbly-admin/userconfirm?email=$email");
+                        }
                     }else{
                         $view->assign("errors", ["Vos mots de passe sont différents."]);
                     }

@@ -22,7 +22,7 @@ class Singleton
 		if (is_null(self::$pdo)) {
 			#self::$instance = new Singleton();
 			try {
-				self::$pdo = new PDO(DBDRIVER . ":dbname=" . DBNAME . ";host=" . DBHOST . ";port=" . DBPORT, DBUSER, DBPWD);
+				self::$pdo = new PDO(DBDRIVER . ":host=" . DBHOST . ";dbname=" . DBNAME . ";port=" . DBPORT, DBUSER, DBPWD);
 
 				self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				self::$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
