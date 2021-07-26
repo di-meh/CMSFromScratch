@@ -133,7 +133,7 @@ class CategoryController {
 
         //set category en fonction du slug
         $category->setAllBySlug($uri);
-        $categorycontent = $category->getAllBySlug($uri)[0];
+        $categorycontent = $category->getAllBySlug($uri);
 
         //si le form est soumis
 		if (!empty($_POST["delete"])){

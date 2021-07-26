@@ -240,7 +240,7 @@ class Category extends Singleton
         $prepare = $this->getPDO()->prepare($query);
         $prepare->execute();
         $check = $prepare->fetchAll(PDO::FETCH_ASSOC);
-        return $check;
+        return $check ? $check[0] : null;
     }
 
     public function getAllBySlug($slug){
@@ -248,7 +248,7 @@ class Category extends Singleton
         $req = $this->getPDO()->prepare($query);
         $req->execute();
         $res = $req->fetchAll(PDO::FETCH_ASSOC);
-        return $res;
+        return $res ? $res[0] : null;
     }
 
     public function getAllById($id){
@@ -256,12 +256,11 @@ class Category extends Singleton
         $req = $this->getPDO()->prepare($query);
         $req->execute();
         $res = $req->fetchAll(PDO::FETCH_ASSOC);
-        return $res;
+        return $res ? $res[0] : null;
     }
 
     public function setAllBySlug($slug){
         $res = $this->getAllBySlug($slug);
-        $res = $res[0];
         $this->setId($res['id']);
         $this->setNameCategory($res['nameCategory']);
         $this->setColorCategory($res['colorCategory']);

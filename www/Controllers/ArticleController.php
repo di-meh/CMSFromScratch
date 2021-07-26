@@ -174,7 +174,7 @@ class ArticleController{
         $uri = substr($uriExploded[0], 28);
 
         $article->setAllBySlug($uri);
-        $articlecontent = $article->getAllBySlug($uri)[0];
+        $articlecontent = $article->getAllBySlug($uri);
 
 		if (!empty($_POST["delete"])){
             $article->deleteBySlug($uri);
@@ -201,12 +201,11 @@ class ArticleController{
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
 
         $uri = substr($uriExploded[0], 10);
-
-        //get artcile en fonction du slug
-        $article = $article->getAllBySlug($uri);
-        $view->assign("article", $article[0]);
-        $view->assign("metadescription", $article[0]['metadescription']);
-        $view->assign("title", $article[0]['title']);
+        $articlecontent = $article->getAllBySlug($uri);
+		
+        $view->assign("article", $articlecontent);
+        $view->assign("metadescription", $articlecontent['metadescription']);
+        $view->assign("title", $articlecontent['title']);
 
     }
 

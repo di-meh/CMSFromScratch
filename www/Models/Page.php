@@ -281,7 +281,7 @@ class Page extends Singleton
         $req = $this->getPDO()->prepare($query);
         $req->execute();
         $res = $req->fetchAll(PDO::FETCH_ASSOC);
-        return $res;
+        return $res ? $res[0] : null;
     }
 
     public function getAllById($id){
@@ -289,12 +289,11 @@ class Page extends Singleton
         $req = $this->getPDO()->prepare($query);
         $req->execute();
         $res = $req->fetchAll(PDO::FETCH_ASSOC);
-        return $res;
+        return $res ? $res[0] : null;
     }
 
     public function setAllBySlug($slug){
         $res = $this->getAllBySlug($slug);
-        $res = $res[0];
         $this->setId($res['id']);
         $this->setTitle($res['title']);
         $this->setMetadescription($res['metadescription']);

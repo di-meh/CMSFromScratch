@@ -6,6 +6,8 @@ use App\Core\FormValidator;
 use App\Core\View;
 use App\Core\Security;
 use App\Models\Book;
+use App\Models\Cart;
+use App\Models\CartSession;
 
 class BookController
 {
@@ -120,7 +122,7 @@ class BookController
 
         //get artcile en fonction du slug
         $book->setAllBySlug($uri);
-        $bookcontent = $book->getAllBySlug($uri)[0];
+        $bookcontent = $book->getAllBySlug($uri);
 
         if (!empty($_POST["delete"])){
             unlink($book->getImage());
@@ -319,6 +321,34 @@ class BookController
         $view->assign("form", $form);
     }
 
+    public function seeAllBooksAction(){
+
+        $book = new Book();
+        $view = new View("seeAllBooks","front");
+        $books = $book->all();
+        $view->assign("books", $books);
+        $forms = null;
+        foreach ($books as $book) {
+            $bookObject = new Book();
+            $bookObject->setAllById($book["id"]);
+            $forms[$bookObject->getId()] = $bookObject->formAddToCart();
+        }
+        $view->assign("forms", $forms);
+
+        // Ajout au panier
+        if (!empty($_POST)) {
+
+            $id = $_POST['add_book_to_cart'];
+            $book = new Book();
+            $cart = new Cart();
+            $book = $book->getAllById($id);
+            $cart->addToCart($book);
+            header('location:/books');
+            die();
+        }
+        // var_dump($_SESSION);
+    }
+    
     public function seeBookAction(){
         session_start();
 
@@ -330,11 +360,9 @@ class BookController
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
         $uri = substr($uriExploded[0], 7);
 
-        //get artcile en fonction du slug
-        $book = $book->getAllBySlug($uri);
-
-        $view->assign("book", $book[0]);
-        $view->assign("metadescription", $book[0]['description']);
-        $view->assign("title", $book[0]['title']);
+        $bookcontent = $book->getAllBySlug($uri);
+        $view->assign("book", $bookcontent);
+        $view->assign("metadescription", $bookcontent['description']);
+        $view->assign("title", $bookcontent['title']);
     }
 }
