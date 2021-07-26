@@ -10,6 +10,7 @@ use App\Models\Article;
 class ArticleController{
 
 	public function defaultAction(){
+	    //verifie si user est connecté sinon redirigé vers login page
 		$user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
@@ -21,7 +22,7 @@ class ArticleController{
 	}
 
 	public function addArticleAction(){
-
+        //verifie si user est connecté sinon redirigé vers login page
 		$user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
@@ -30,15 +31,17 @@ class ArticleController{
 
 		$form = $article->formAddArticle();
 
+		//verifie si le form est soumis
 		if (!empty($_POST)) {
 
             $errors = FormValidator::check($form, $_POST);
-
+            //verifie s'il n'y a pas d'erreur lors de la validation
 		    if (empty($errors)){
-
+                //remplis les setters
 				$article->setTitle(htmlspecialchars($_POST['title']));
 				$article->setMetadescription(htmlspecialchars($_POST['metadescription']));
 				$article->setAuthor($user->getID());
+				//crée un string des catégories choisis
                 $categories = "";
                 foreach ($_POST['category'] as $item) {
                     $categories .= $item . ",";
@@ -46,6 +49,7 @@ class ArticleController{
                 $categories = substr($categories,0,-1);
                 $article->setCategory(htmlspecialchars($categories));
 				$article->setContent($_POST['content']);
+
 				if (empty($_POST['content'])){
 					$view->assign("errors", ["Veuillez remplir tous les champs"]);
 				}else{
@@ -68,19 +72,24 @@ class ArticleController{
 
 	public function editArticleAction()
 	{
-		$user = Security::getConnectedUser();
+        //verifie si user est connecté sinon redirigé vers login page
+        $user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
 		$view = new View("editArticle","back"); # appelle View/editProfil.view.php
 		$article = new Article();
 
+		//récupération du slug article dans l'url
 		$uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
         $uri = substr($uriExploded[0], 26);
 
+        //set article en fonction du slug
 		$article->setAllBySlug($uri);
 		$form = $article->formEditArticle();
 
+		//si le formulaire est soumis
 		if(!empty($_POST)){
+		    //modification si différent et non vide
 			if($_POST['title'] != $article->getTitle()){
 				if (!empty($_POST['title'])){
 					$article->setTitle(htmlspecialchars($_POST['title']));
@@ -98,6 +107,7 @@ class ArticleController{
 				}
 			}
 
+            //modification si différent et non vide
             if($_POST['metadescription'] != $article->getMetadescription()){
                 if (!empty($_POST['metadescription'])){
                     $article->setMetadescription(htmlspecialchars($_POST['metadescription']));
@@ -110,12 +120,14 @@ class ArticleController{
                 }
             }
 
+            //transformation catégorie en string
             $categories = "";
             foreach ($_POST['category'] as $item) {
                 $categories .= $item . ",";
             }
             $categories = substr($categories,0,-1);
 
+            //modification si différent et non vide
             if (!empty($categories)){
                 if ($categories != $article->getCategory()){
                     $categories = "";
@@ -133,8 +145,8 @@ class ArticleController{
                 $view->assign("errors", ["Veuillez choisir une categorie"]);
             }
 
-			if($_POST['content'] != $article->getContent()){
-
+            //modification si différent et non vide
+            if($_POST['content'] != $article->getContent()){
 				if (!empty($_POST['content'])){
 					$article->setContent($_POST['content']);
 					$article->save();
@@ -178,16 +190,19 @@ class ArticleController{
 	}
 
 	public function seeArticleAction(){
-		session_start();
+
+        session_start();
 
         $article = new Article();
 
         $view = new View("seeArticle", "front");
 
+        //recupération slug dans l'url
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
 
         $uri = substr($uriExploded[0], 10);
 
+        //get artcile en fonction du slug
         $article = $article->getAllBySlug($uri);
         $view->assign("article", $article[0]);
         $view->assign("metadescription", $article[0]['metadescription']);

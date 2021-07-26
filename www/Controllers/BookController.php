@@ -11,18 +11,20 @@ class BookController
 {
     public function defaultAction()
     {
+        //verifie si user est connecté sinon redirigé vers login page
         $user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
         $book = new Book();
         $view = new View("book","back");
+
         $books = $book->all();
         $view->assign("books", $books);
 
     }
 
     public function addBookAction(){
-
+        //verifie si user est connecté sinon redirigé vers login page
         $user = Security::getConnectedUser();
         if(is_null($user)) header("Location:/lbly-admin/login");
 
@@ -32,14 +34,19 @@ class BookController
 
         $form = $book->formAddBook();
 
+        //verifie si le form est soumis
         if(!empty($_POST)) {
             if (isset($_FILES) && !empty($_FILES["image"]["name"])) {
                 $_POST["image"] = $_FILES["image"]["name"];
             }else{
                 $_POST["image"] = "no image";
             }
-                $errors = FormValidator::check($form, $_POST);
+            $_POST["image"] = (isset($_FILES) && !empty($_FILES["image"]["name"])) ? $_FILES["image"]["name"] : "no image";
+
+            $errors = FormValidator::check($form, $_POST);
+            //verifie s'il n'y a pas d'erreur lors de la validation
             if (empty($errors)) {
+                //remplis les setters
                 $book->setTitle(htmlspecialchars($_POST['title']));
                 $book->setDescription(htmlspecialchars($_POST['description']));
                 $book->setAuthor(htmlspecialchars($_POST['author']));
@@ -54,18 +61,18 @@ class BookController
                 $book->setCategory(htmlspecialchars($categories ));
                 $book->setStockNumber(htmlspecialchars($_POST['stock_number']));
                 $book->setSlug($book->book2slug($_POST['title'] . "-" . $_POST['author'] . "-" . $_POST['publisher']));
-                $maxsize = 2097152;
+
+                $maxsize = 2097152; #2MB
+                //verifie si image est choisis et si elle a un nom et si la taille est acceptable
                 if (isset($_FILES) && !empty($_FILES["image"]["name"])) {
                     if ($_FILES["image"]["size"] < $maxsize && $_FILES["image"]["size"] != 0){
                         $acceptable = array('application/pdf','image/jpeg','image/jpg','image/png', 'image/JPG', 'image/JPEG', 'image/PNG');
-                        if (in_array($_FILES["image"]["type"],$acceptable)){
+                        if (in_array($_FILES["image"]["type"],$acceptable)){ #verifie si l'exention est accepté
+                            //create path for downloaded file
                             $target_dir = "img/";
-                            $oldfile = $target_dir . basename($_FILES["image"]["name"]);
-                            $imageFileType = $_FILES["image"]["type"];
                             $imageFileType = explode("/", $_FILES["image"]["type"]);
-                            #$imageFileType = pathinfo($oldfile, PATHINFO_EXTENSION);
                             $target_file = $target_dir . basename($book->getSlug()) .".". $imageFileType[1];
-                            $uploadOk = 1;
+
                             if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
                                 echo "Le fichier " . basename($_FILES["image"]["name"]) . " a été téléchargé.";
                             } else {
@@ -88,7 +95,7 @@ class BookController
                     }
                 }elseif (empty($book->getAllBySlug($book->getSlug()))) {
                     $book->save();
-                     header("Location:/lbly-admin/books");
+                    header("Location:/lbly-admin/books");
                 } else {
                     $view->assign("errors", ["Veuillez changer le titre de votre page"]);
                 }
@@ -100,7 +107,7 @@ class BookController
     }
 
     public function deleteBookAction(){
-
+        //verifie si user est connecté sinon redirigé vers login page
         $user = Security::getConnectedUser();
         if(is_null($user)) header("Location:/lbly-admin/login");
 
@@ -111,6 +118,7 @@ class BookController
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
         $uri = substr($uriExploded[0], 25);
 
+        //get artcile en fonction du slug
         $book->setAllBySlug($uri);
         $bookcontent = $book->getAllBySlug($uri)[0];
 
@@ -129,6 +137,7 @@ class BookController
     }
 
     public function editBookAction(){
+        //verifie si user est connecté sinon redirigé vers login page
         session_start();
         if (!isset($_SESSION['id'])) header("Location:/"); # si user non connecté => redirection
 
@@ -138,10 +147,15 @@ class BookController
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
         $uri = substr($uriExploded[0], 23);
 
+        //recupere le book en fonction du slug
         $book->setAllBySlug($uri);
         $form = $book->formEditBook();
+
+        //si le formulaire est soumis
         if (!empty($_POST)){
             $oldimage = $book->getImage();
+
+            //modification si différent et non vide
             if (!empty($_POST['title'])){
                 if ($_POST['title'] != $book->getTitle()){
                     $book->setTitle(htmlspecialchars($_POST['title']));
@@ -159,6 +173,7 @@ class BookController
                 $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
+            //modification si différent et non vide
             if (!empty($_POST['description'])){
                 if ($_POST['description'] != $book->getDescription()){
                     $book->setDescription(htmlspecialchars($_POST['description']));
@@ -171,6 +186,7 @@ class BookController
                 $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
+            //modification si différent et non vide
             if (!empty($_POST['author'])){
                 if ($_POST['author'] != $book->getAuthor()){
                     $book->setAuthor(htmlspecialchars($_POST['author']));
@@ -188,6 +204,7 @@ class BookController
                 $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
+            //modification si différent et non vide
             if (!empty($_POST['publication_date'])){
                 if ($_POST['publication_date'] != $book->getPublicationDate()){
                     $book->setPublicationDate($_POST['publication_date']);
@@ -200,6 +217,7 @@ class BookController
                 $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
+            //modification si différent et non vide
             if (!empty($_POST['publisher'])){
                 if ($_POST['publisher'] != $book->getPublisher()){
                     $book->setPublisher(htmlspecialchars($_POST['publisher']));
@@ -217,6 +235,7 @@ class BookController
                     $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
+            //modification si différent et non vide
             if (isset($_FILES) && !empty($_FILES["image"]["name"])) {
                 $maxsize = 2097152;
                 if ($_FILES["image"]["size"] < $maxsize && $_FILES["image"]["size"] != 0) {
@@ -253,6 +272,7 @@ class BookController
 
             }
 
+            //modification si différent et non vide
             if (!empty($_POST['price'])){
                 if ($_POST['price'] != $book->getPrice()){
                     $book->setPrice(htmlspecialchars($_POST['price']));
@@ -265,6 +285,7 @@ class BookController
                 $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
+            //modification si différent et non vide
             if (!empty($_POST['category'])){
                 if ($_POST['category'] != $book->getCategory()){
                     $categories = "";
@@ -282,6 +303,7 @@ class BookController
                 $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
+            //modification si différent et non vide
             if (!empty($_POST['stock_number'])){
                 if ($_POST['stock_number'] != $book->getStockNumber()){
                     $book->setStockNumber(htmlspecialchars($_POST['stock_number']));
@@ -304,14 +326,15 @@ class BookController
 
         $view = new View("seeBook", "front");
 
+        //recupération slug dans l'url
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
-
         $uri = substr($uriExploded[0], 7);
 
+        //get artcile en fonction du slug
         $book = $book->getAllBySlug($uri);
+
         $view->assign("book", $book[0]);
         $view->assign("metadescription", $book[0]['description']);
         $view->assign("title", $book[0]['title']);
-
     }
 }

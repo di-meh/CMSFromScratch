@@ -15,6 +15,7 @@ use App\Core\Router;
 class PageController{
 
 	public function defaultAction(){
+        //verifie si user est connecté sinon redirigé vers login page
         $user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
@@ -26,7 +27,7 @@ class PageController{
 	}
 
 	public function addPageAction(){
-
+        //verifie si user est connecté sinon redirigé vers login page
         $user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
