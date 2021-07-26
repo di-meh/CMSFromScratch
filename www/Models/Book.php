@@ -18,6 +18,7 @@ class Book extends Singleton
     protected $category;
     protected $stock_number = 0;
     protected $slug;
+    protected $status;
 
     private $table = "lbly_books";
     public function __construct()
@@ -378,6 +379,22 @@ class Book extends Singleton
     {
         return $this->table;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param mixed $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
     public function getId()
     {
         return $this->id;
@@ -520,6 +537,7 @@ class Book extends Singleton
         $this->setCategory($res['category']);
         $this->setStockNumber($res['stock_number']);
         $this->setSlug($res['slug']);
+        $this->setStatus($res['status']);
     }
 
     public function deleteBySlug($slug){

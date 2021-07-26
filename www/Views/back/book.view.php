@@ -31,6 +31,7 @@
                                 <th>titre</th>
                                 <th>Auteur</th>
                                 <th>Stock</th>
+                                <th>Status</th>
                                 <th> </th>
                                 <th> </th>
                                 <th> </th>
@@ -47,8 +48,18 @@
                                     <td><?php echo $book["title"];?></td>
                                     <td><?php echo $book["author"];?></td>
                                     <td><?php echo $book["stock_number"];?></td>
+                                    <td><?php echo $book["status"];?></td>
                                     <td><a href="/books/<?=$book["slug"]?>"><button class="btn btn-primary">Voir</button></a></td>
                                     <td><a href="/lbly-admin/books/edit/<?=$book["slug"]?>"><button class="btn btn-primary">Modifier</button></a></td>
+                                    <?php if($book["status"] == 'publish'):?>
+
+                                        <td><a href="/lbly-admin/pages?withdraw=true&pageid=<?=$book["id"]?>"><button class="btn btn-primary">Retirer</button></a></td>
+
+                                    <?php else :?>
+
+                                        <td><a href="/lbly-admin/pages?publish=true&pageid=<?=$book["id"]?>"><button class="btn btn-primary">Publier</button></a></td>
+
+                                    <?php endif; ?>
                                     <td><a href="/lbly-admin/books/delete/<?=$book["slug"]?>"><button class="btn btn-danger">Supprimer</button></a></td>
                                 </tr>
                                 <?php
