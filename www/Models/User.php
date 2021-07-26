@@ -915,8 +915,6 @@ class User extends Singleton
                   `content` longtext NOT NULL,
                   `category` varchar(30) NOT NULL,
                   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                  `published` datetime DEFAULT NULL,
-                  `modified` datetime DEFAULT NULL,
                   `status` varchar(20) NOT NULL DEFAULT 'publish'
                 ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
         $prepare = $this->getPDO()->prepare($query);
@@ -961,7 +959,8 @@ class User extends Singleton
                   `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                   `updatedAt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
                   `createdBy` int(11) NOT NULL,
-                  `slug` tinytext NOT NULL
+                  `slug` tinytext NOT NULL,
+                  `status` varchar(20) NOT NULL DEFAULT 'publish'
                 ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
         $prepare = $this->getPDO()->prepare($query);
         $prepare->execute();
