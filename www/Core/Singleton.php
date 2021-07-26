@@ -34,6 +34,35 @@ class Singleton
 		return self::$pdo;
 	}
 
+    /*
+    *   set all properties from database from data
+    *   from id idealement mais flm
+    *   pcq il faut recup id a partir de email puis tout a partir de id
+    */
+    public function setAllFromData($data)
+    {
+    	$value = $data[key($data)];
+        $email = htmlspecialchars($value);
+        $query = "SELECT * FROM " . $this->getTable() . " WHERE ".key($data)." = '" . $value . "'";
+        $prepare = $this->getPDO()->prepare($query);
+        $prepare->execute();
+        $res = $prepare->fetch(PDO::FETCH_ASSOC);
+        if(!empty($res) && !is_null($res)){
+	        $this->setId($res['id']);
+	        $this->setFirstname($res['firstname']);
+	        $this->setLastname($res['lastname']);
+	        $this->setEmail($res['email']);
+	        $this->setCountry($res['country']??'');
+	        $this->setStatus($res['status']);
+	        $this->setToken($res['token'] ?? '');
+
+	        $this->setPwd($res['pwd']); # un peu dangereux non ? même si hashé
+	        return true;
+
+	    }
+	    return false;
+
+    }
 
 	# DELETE ALL DATA IN CHILD TABLE !
 	public function deleteAll()
