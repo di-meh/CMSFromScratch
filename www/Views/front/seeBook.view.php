@@ -6,7 +6,11 @@
     <img src="/img/defaultImage.jpg" height=400 width=300>
     <?php endif;?>
     <h3>Prix : <?php echo $book["price"];?> € </h3>
+    <?php if (preg_match("/[a-z]/i",$book["category"])) :?>
     <h4>Catégorie : <?php echo $book["category"];?></h4>
+    <?php else:?>
+    <p>La catégorie de ce livre n'a pas encore été attribué</p>
+    <?php endif;?>
     <p>Date de publication : <?php echo $book["publication_date"];?></p>
     <p>Description : <?php echo $book["description"];?></p>
     <h3>Auteur : <?php echo $book["author"];?></h3>
