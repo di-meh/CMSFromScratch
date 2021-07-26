@@ -620,7 +620,7 @@ class SecurityController
 						$pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
 
 						$userRegister->setFirstname(htmlspecialchars($_POST["firstname"]));
-						$userRegister->setLastname(htmlspecialchars($_POST["lastname"]));
+						$userRegister->setLastname(Helpers::clearLastname($_POST["lastname"]));
 						$userRegister->setEmail(htmlspecialchars($_POST["email"]));
 						$userRegister->setPwd($pwd);
 						$userRegister->setCountry($_POST["country"]);
