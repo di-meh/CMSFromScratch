@@ -40,15 +40,15 @@ class Router
 
 				$this->setController($this->routes[$this->uri]["controller"]);
 				$this->setAction($this->routes[$this->uri]["action"]);
-			}elseif (!empty($page->getAllBySlug(substr($this->uri, 1)))){
+			}elseif (!empty($page->getAllBySlug(substr($this->uri, 1))) && ($page->getStatus() == "publish")){
                 $this->setController("Page");
                 $this->setAction("seePage");
 				
-			}elseif (substr($this->uri, 0, 10) == "/articles/" && !empty($article->getAllBySlug(substr($this->uri, 10)))){
+			}elseif (substr($this->uri, 0, 10) == "/articles/" && !empty($article->getAllBySlug(substr($this->uri, 10))) && ($article->getStatus() == "publish")){
                 $this->setController("Article");
                 $this->setAction("seeArticle");
 
-            }elseif (substr($this->uri, 0, 7) == "/books/" && !empty($book->getAllBySlug(substr($this->uri, 7)))){
+            }elseif (substr($this->uri, 0, 7) == "/books/" && !empty($book->getAllBySlug(substr($this->uri, 7))) && ($book->getStatus() == "publish")){
                 $this->setController("Book");
                 $this->setAction("seeBook");
 

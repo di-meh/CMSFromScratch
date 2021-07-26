@@ -202,10 +202,16 @@ class ArticleController{
 
         $uri = substr($uriExploded[0], 10);
         $articlecontent = $article->getAllBySlug($uri);
-		
+
         $view->assign("article", $articlecontent);
         $view->assign("metadescription", $articlecontent['metadescription']);
         $view->assign("title", $articlecontent['title']);
+
+		$breadcrumbs = [
+			['Articles', $_SERVER["REQUEST_URI"].'/articles'],
+			[$articlecontent['title'], $uriExploded[0]],
+		];
+        $view->assign("breadcrumbs", $breadcrumbs);
 
     }
 
