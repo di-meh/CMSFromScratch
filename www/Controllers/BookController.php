@@ -287,9 +287,16 @@ class BookController
                 $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
+            $categories = "";
+            foreach ($_POST['category'] as $item) {
+                $categories .= $item . ",";
+            }
+            $categories = substr($categories,0,-1);
             //modification si différent et non vide
-            if (!empty($_POST['category'])){
-                if ($_POST['category'] != $book->getCategory()){
+            if ($categories != $book->getCategory()){
+                var_dump($_POST['category']);
+                echo $book->getCategory();
+                if (!empty($_POST['category'])){
                     $categories = "";
                     foreach ($_POST['category'] as $item) {
                         $categories .= $item . ",";
@@ -300,9 +307,9 @@ class BookController
                     $infos[] = "La catgeorie a été mis a jour";
                     $view->assign("infos", $infos);
                     }
+                }else{
+                    $view->assign("errors", ["Veuillez remplir tous les champs"]);
                 }
-            }else{
-                $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
             //modification si différent et non vide
@@ -317,7 +324,10 @@ class BookController
             }else{
                 $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
+            $infos[] = "Vous n'avez modifier aucune données";
+            $view->assign("infos", $infos);
         }
+
         $view->assign("form", $form);
     }
 
