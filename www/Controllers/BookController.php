@@ -263,9 +263,6 @@ class BookController
     }
 
     public function seeAllBooksAction(){
-        
-        $user = Security::getConnectedUser();
-		if(is_null($user)) header("Location:/lbly-admin/login");
 
         $book = new Book();
         $view = new View("seeAllBooks","front");
