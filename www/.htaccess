@@ -4,11 +4,33 @@ RewriteRule ^sitemap.xml/?$ sitemap.php [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-RewriteRule . /index.php [L,QSA]
+RewriteRule . /index.php [QSA]
 RewriteCond %{REQUEST_URI} (.+)/$
 RewriteRule ^ %1 [R=301,L]
 
-<Files .env>
-    Order allow,deny
-    Deny from all
+# Disable directory browsing
+Options -Indexes
+
+# Deny access to files with extensions .json, .lock, .ico, .yml
+<FilesMatch "\.(json|lock|ico|yml)$">
+Order allow,deny
+Deny from all
+
+</FilesMatch>
+
+# Deny access to filenames starting with dot(.)
+<FilesMatch "^\.">
+Order allow,deny
+Deny from all
+</FilesMatch>
+
+# Deny access to autoload
+<Files "Autoload.php">
+Order allow,deny
+Deny from all
+</Files>
+
+<Files "autoload.php">
+Order allow,deny
+Deny from all
 </Files>

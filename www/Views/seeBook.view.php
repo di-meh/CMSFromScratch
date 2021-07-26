@@ -1,6 +1,10 @@
 <section>
     <h2>Titre : <?php echo $book["title"];?></h2>
-    <img src="<?php echo "/". $book["image"];?>" height=200 width=300>
+    <?php if (isset($book["image"])) :?>
+    <img src="<?php echo "/". $book["image"];?>" height=400 width=300>
+    <?php else:?>
+    <img src="/img/defaultImage.jpg" height=400 width=300>
+    <?php endif;?>
     <h3>Prix : <?php echo $book["price"];?> € </h3>
     <h4>Catégorie : <?php echo $book["category"];?></h4>
     <p>Date de publication : <?php echo $book["publication_date"];?></p>

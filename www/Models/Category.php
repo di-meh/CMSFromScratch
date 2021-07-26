@@ -273,4 +273,36 @@ class Category extends Singleton
         $req = $this->getPDO()->prepare($query);
         $req->execute();
     }
+
+    public function getDeletedArticleCategory($deleted_category){
+        $query = "SELECT category FROM lbly_article WHERE category LIKE '%".$deleted_category."%'";
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
+        $res = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $res;
+    }
+
+    public function updateArticleCategory($new_category, $old_category){
+        $query = "UPDATE lbly_article SET category='".$new_category."' WHERE category='".$old_category."'";
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
+        $res = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $res;
+    }
+
+    public function getDeletedBookCategory($deleted_category){
+        $query = "SELECT category FROM lbly_books WHERE category LIKE '%".$deleted_category."%'";
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
+        $res = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $res;
+    }
+
+    public function updateBookCategory($new_category, $old_category){
+        $query = "UPDATE lbly_books SET category='".$new_category."' WHERE category='".$old_category."'";
+        $req = $this->getPDO()->prepare($query);
+        $req->execute();
+        $res = $req->fetchAll(PDO::FETCH_ASSOC);
+        return $res;
+    }
 }
