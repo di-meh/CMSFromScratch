@@ -15,6 +15,7 @@ class ArticleController{
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
 		$article = new Article();
+		$view = new View("articles","back");
 
         if(isset($_GET['articleid'])){
         	$article->setAllById(htmlspecialchars($_GET['articleid']));
@@ -33,9 +34,6 @@ class ArticleController{
         		
         	}
         }
-
-        $articles = $article->all();
-		$view = new View("articles","back");
 
 		$articles = $article->all();
 
@@ -228,14 +226,6 @@ class ArticleController{
         $uri = substr($uriExploded[0], 10);
 
         $article->setAllBySlug($uri);
-        $articles = $article->getAllBySlug($uri);
-
-        if($article->getStatus() == 'publish')
-	        $view->assign("article", $articles[0]);
-        else
-        	header("Location: /lbly-admin/articles");
-
-
         //recupere l'article en fonction du slug
         $articlecontent = $article->getAllBySlug($uri);
 

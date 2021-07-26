@@ -41,18 +41,33 @@ class Router
 
 				$this->setController($this->routes[$this->uri]["controller"]);
 				$this->setAction($this->routes[$this->uri]["action"]);
-			}elseif (!empty($page->getAllBySlug(substr($this->uri, 1))) && ($page->getStatus() == "publish")){
-                $this->setController("Page");
-                $this->setAction("seePage");
-				
-			}elseif (substr($this->uri, 0, 10) == "/articles/" && !empty($article->getAllBySlug(substr($this->uri, 10))) && ($article->getStatus() == "publish")){
-                $this->setController("Article");
-                $this->setAction("seeArticle");
-
-            }elseif (substr($this->uri, 0, 7) == "/books/" && !empty($book->getAllBySlug(substr($this->uri, 7))) && ($book->getStatus() == "publish")){
-                $this->setController("Book");
-                $this->setAction("seeBook");
-
+			}elseif (!empty($page->getAllBySlug(substr($this->uri, 1)))){
+                $page->setAllBySlug(substr($this->uri, 1));
+                if($page->getStatus() == "publish"){
+                    $this->setController("Page");
+                    $this->setAction("seePage");
+                } else {
+                    header("HTTP/1.0 404 Not Found");
+                    $view = new View('404');
+                }
+			}elseif (substr($this->uri, 0, 10) == "/articles/" && !empty($article->getAllBySlug(substr($this->uri, 10)))){
+                $article->setAllBySlug(substr($this->uri, 10));
+                if($article->getStatus() == "publish"){
+                    $this->setController("Article");
+                    $this->setAction("seeArticle");
+                } else {
+                    header("HTTP/1.0 404 Not Found");
+                    $view = new View('404');
+                }
+            }elseif (substr($this->uri, 0, 7) == "/books/" && !empty($book->getAllBySlug(substr($this->uri, 7)))){
+                $book->setAllBySlug(substr($this->uri, 7));
+                if($book->getStatus() == "publish"){
+                    $this->setController("Book");
+                    $this->setAction("seeBook");
+                } else {
+                    header("HTTP/1.0 404 Not Found");
+                    $view = new View('404');
+                }
             }elseif (substr($this->uri, 0, 26) === "/lbly-admin/articles/edit/" && !empty($article->getAllBySlug(substr($this->uri, 26)))){
                 $this->setController("Article");
                 $this->setAction("editArticle");

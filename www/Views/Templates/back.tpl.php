@@ -30,7 +30,7 @@ use App\Core\Security;
 						<span class="item-title">Tableau de
 							bord</span></a></li>
 				<?php if(Security::isSuperAdmin() || Security::isAdmin()): ?>		
-					<li class="list-item"><a href="/lbly-admin"><span class="material-icons">receipt_long</span><span class="item-title">Commandes</span></a></li>
+					<li class="list-item"><a href="/lbly-admin/orders"><span class="material-icons">receipt_long</span><span class="item-title">Commandes</span></a></li>
 				<?php endif; ?>
 
 				<?php if(Security::canCreate()): ?>

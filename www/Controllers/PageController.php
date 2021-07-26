@@ -23,7 +23,7 @@ class PageController{
         $view = new View("pages","back");
 
         if(isset($_GET['pageid'])){
-        	$page->setAll($_GET['pageid']);
+        	$page->setAllById($_GET['pageid']);
 
         	if(isset($_GET['publish'])){
         		$page->setStatus("publish");

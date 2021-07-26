@@ -349,28 +349,23 @@ class Article extends Singleton
         $req = $this->getPDO()->prepare($query);
         $req->execute();
         $res = $req->fetchAll(PDO::FETCH_ASSOC);
-
-        return $res;
+        return $res ? $res[0] : null;
     }
 
     public function setAllById($id)
     {
         $res = $this->getAllById($id);
-        $res = $res[0];
         $this->setId($res['id']);
         $this->setAuthor($res['author']);
         $this->setTitle($res['title']);
         $this->setSlug($res['slug']);
+        $this->setMetadescription($res['metadescription']);
         $this->setContent($res['content']);
+        $this->setCategory($res['category']);
         $this->setCreated($res['created']);
         $this->setPublished($res['published']);
         $this->setModified($res['modified']);
         $this->setStatus($res['status']);
-        $this->setCategory($res['category']);
-
-
-        return $res ? $res[0] : null;
-
     }
 
     //set toute les info d'un article en fonction du slug

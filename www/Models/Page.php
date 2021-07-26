@@ -116,18 +116,6 @@ class Page extends Singleton
         $this->status = $status;
     }
 
-    public function setAll($id)
-    {
-        $res = $this->getAllById($id);
-        $res = $res[0];
-        $this->setId($res['id']);
-        $this->setTitle($res['title']);
-        $this->setSlug($res['slug']);
-        $this->setContent($res['content']);
-        $this->setStatus($res['status']);
-        $this->setCreatedBy($res['createdBy']);
-
-    }
     /**
      * @return mixed
      */
@@ -322,11 +310,25 @@ class Page extends Singleton
         $this->setId($res['id']);
         $this->setTitle($res['title']);
         $this->setMetadescription($res['metadescription']);
-        $this->setContent($res['content']);
-        $this->setCreatedBy($res['createdBy']);
         $this->setSlug($res['slug']);
+        $this->setContent($res['content']);
+        $this->setStatus($res['status']);
+        $this->setCreatedBy($res['createdBy']);
     }
 
+    public function setAllById($id)
+    {
+        $res = $this->getAllById($id);
+        $this->setId($res['id']);
+        $this->setTitle($res['title']);
+        $this->setMetadescription($res['metadescription']);
+        $this->setSlug($res['slug']);
+        $this->setContent($res['content']);
+        $this->setStatus($res['status']);
+        $this->setCreatedBy($res['createdBy']);
+
+    }
+    
     public function deleteBySlug($slug){
         $query = "DELETE FROM " . $this->getTable() . " WHERE slug = '" . $slug ."'";
         $req = $this->getPDO()->prepare($query);

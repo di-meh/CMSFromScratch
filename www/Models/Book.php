@@ -23,25 +23,6 @@ class Book extends Singleton
     public function __construct()
     {
     }
-    # set all properties from database from the email
-    public function setAll($id)
-    {
-        $this->id = $id;
-        $query = "SELECT * FROM " . $this->table . " WHERE id = '" . $id . "'";
-        $prepare = $this->getPDO()->prepare($query);
-        $prepare->execute();
-        $res = $prepare->fetch(PDO::FETCH_ASSOC);
-        $this->setId($id);
-        $this->setTitle($res["title"]);
-        $this->setDescription($res["description"]);
-        $this->setAuthor($res["author"]);
-        $this->setPublicationDate($res["publication_date"]);
-        $this->setImage($res["image"]);
-        $this->setPublisher($res["publisher"]);
-        $this->setPrice($res["price"]);
-        $this->setCategory($res["category"]);
-        $this->setStockNumber($res["stock_number"]);
-    }
 
     public function stockUp($number = 1)
     {

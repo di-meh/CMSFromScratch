@@ -42,24 +42,25 @@ $c = $router->getController();
 $a = $router->getAction();
 
 
+if($c && $a){
+	if (file_exists("./Controllers/" . $c . ".php")) {
+		include "./Controllers/" . $c . ".php";
+		// SecurityController =>  App\Controller\SecurityController
 
-if (file_exists("./Controllers/" . $c . ".php")) {
-	include "./Controllers/" . $c . ".php";
-	// SecurityController =>  App\Controller\SecurityController
-
-	$c = "App\\Controller\\" . $c;
-	if (class_exists($c)) {
-		// $controller ====> SecurityController
-		$cObjet = new $c();
-		if (method_exists($cObjet, $a)) {
-			$cObjet->$a();
+		$c = "App\\Controller\\" . $c;
+		if (class_exists($c)) {
+			// $controller ====> SecurityController
+			$cObjet = new $c();
+			if (method_exists($cObjet, $a)) {
+				$cObjet->$a();
+			} else {
+				die("L'action' : " . $a . " n'existe pas");
+			}
 		} else {
-			die("L'action' : " . $a . " n'existe pas");
+
+			die("La classe controller : " . $c . " n'existe pas");
 		}
 	} else {
-
-		die("La classe controller : " . $c . " n'existe pas");
+		die("Le fichier controller : " . $c . " n'existe pas");
 	}
-} else {
-	die("Le fichier controller : " . $c . " n'existe pas");
 }

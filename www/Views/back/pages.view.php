@@ -47,7 +47,7 @@ use App\Core\Security;
                                     <td><?php echo $page["title"];?></td>
                                     <td><?php echo $page["createdAt"];?></td>
                                     <td><?php echo $page["status"];?></td>
-                                    <td><a href="/pages/<?=$page["slug"]?>"><button class="btn btn-primary">Voir</button></a></td>
+                                    <td><a href="/<?=$page["slug"]?>"><button class="btn btn-primary">Voir</button></a></td>
                                     <td><a href="/lbly-admin/edit/<?=$page["slug"]?>"><button class="btn btn-primary">Modifier</button></a></td>
                                     <?php if($page["status"] == 'publish'):?>
 
