@@ -6,8 +6,8 @@ use App\Core\Security;
 
 <head>
 	<meta charset="UTF-8">
-	<title>Template de BACK</title>
-	<meta name="description" content="ceci est la description de ma page">
+	<title><?=SITENAME?> - Libly</title>
+	<meta name="description" content="<?=SITENAME?> - Libly">
 	<link rel="stylesheet" href="/framework/dist/style.css">
 	<script src="/framework/dist/main.js"></script>
 </head>
