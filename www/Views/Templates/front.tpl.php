@@ -46,7 +46,12 @@
 	<div class="page-wrapper with-navbar " id="app">
 		<nav class="navbar">
 			<a href="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]" ?>"><h5 class="navbar-title"><?= SITENAME ?></h5></a>
-			<div class="navbar-right">	
+			<div class="navbar-left">	
+                <div class="left-link">|</div>
+                <div class="left-link"><a href="/">Accueil</a></div>
+                <div class="left-link"><a href="/books">Livres</a></div>
+			</div>
+            <div class="navbar-right">	
                 <div class="right-link"><a href="/cart"><span class="material-icons">shopping_basket</span><span class="number"><?=$total?></span></a></div>
                 <?php if(isset($_SESSION['id'])) : ?>	
                     <div class="right-link">|</div>
