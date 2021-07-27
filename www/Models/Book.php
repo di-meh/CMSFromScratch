@@ -522,6 +522,7 @@ class Book extends Singleton
         $this->setCategory($res['category']);
         $this->setStockNumber($res['stock_number']);
         $this->setSlug($res['slug']);
+        $this->setStatus($res['status']);
     }
 
     public function setAllBySlug($slug){

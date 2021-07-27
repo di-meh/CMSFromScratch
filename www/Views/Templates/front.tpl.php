@@ -32,12 +32,12 @@
 <?php 
     use App\Models\CartSession;
 
-    $total = 0;
+    $totalbookincart = 0;
     if (CartSession::existCartSession()) {
         $cart = CartSession::getCartSession();
         if($cart->books){
-            foreach ($cart->books as $book) {
-                $total += $book['qty'];
+            foreach ($cart->books as $bookincart) {
+                $totalbookincart += $bookincart['qty'];
             }
         }
     }
@@ -50,9 +50,10 @@
                 <div class="left-link">|</div>
                 <div class="left-link"><a href="/">Accueil</a></div>
                 <div class="left-link"><a href="/books">Livres</a></div>
+                <div class="left-link"><a href="/articles">Articles</a></div>
 			</div>
             <div class="navbar-right">	
-                <div class="right-link"><a href="/cart"><span class="material-icons">shopping_basket</span><span class="number"><?=$total?></span></a></div>
+                <div class="right-link"><a href="/cart"><span class="material-icons">shopping_basket</span><span class="number"><?=$totalbookincart?></span></a></div>
                 <?php if(isset($_SESSION['id'])) : ?>	
                     <div class="right-link">|</div>
                     <div class='right-link'><a id'' href='/lbly-admin'>Dashboard</a></div>

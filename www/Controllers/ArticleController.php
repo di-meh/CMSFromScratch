@@ -213,6 +213,23 @@ class ArticleController{
         $view->assign("formdelete", $formdelete);
 	}
 
+    public function seeAllArticlesAction(){
+
+        $article = new Article();
+        $view = new View("seeAllArticles","front");
+        $articles = $article->all();
+		$array = [];
+        foreach ($articles as $article) {
+            $articleObject = new Article();
+            $articleObject->setAllById($article["id"]);
+			if($articleObject->getStatus() == "publish"){
+				array_push($array, $article);
+			}
+				
+        }
+        $view->assign("articles", $array);
+    }
+
 	public function seeArticleAction(){
 
         session_start();

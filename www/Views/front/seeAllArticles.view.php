@@ -2,29 +2,23 @@
     <div class="row">
         <div class="col-full">
             <div class="card">
-                <h6 class="card-title">Tous les livres</h6>
+                <h6 class="card-title">Tous les articles</h6>
                 <div class="card-content">
-                        <?php if (empty($books)) :?>
-                            <p>Il n'y a aucun livre</p>
+                        <?php if (empty($articles)) :?>
+                            <p>Il n'y a aucun article</p>
                         <?php else: ?>
                             <table class="table">
                             <thead>
                             <tr>
                                 <th>titre</th>
-                                <th>Auteur</th>
-                                <th>Prix</th>
                                 <th>Voir</th>
-                                <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($books as $book) { ?>
+                                <?php foreach ($articles as $article) { ?>
                                     <tr>
-                                        <td><?php echo $book["title"];?></td>
-                                        <td><?php echo $book["author"];?></td>
-                                        <td><?php echo $book["price"];?> €</td>
-                                        <td><a href="/books/<?=$book["slug"]?>"><button class="btn btn-primary">Voir</button></a></td>
-                                        <td><?php App\Core\FormBuilder::render($forms[$book["id"]]); ?></td>
+                                        <td><?php echo $article["title"];?></td>
+                                        <td><a href="/articles/<?=$article["slug"]?>"><button class="btn btn-primary">Voir</button></a></td>
                                     </tr>
                                     <?php
                                 }

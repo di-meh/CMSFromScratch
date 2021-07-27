@@ -364,17 +364,21 @@ class BookController
         $book = new Book();
         $view = new View("seeAllBooks","front");
         $books = $book->all();
-        $view->assign("books", $books);
         $forms = null;
+		$array = [];
         foreach ($books as $book) {
             $bookObject = new Book();
             $bookObject->setAllById($book["id"]);
+			if($bookObject->getStatus() == "publish"){
+				array_push($array, $book);
+			}
             $forms[$bookObject->getId()] = $bookObject->formAddToCart();
         }
+        $view->assign("books", $array);
         $view->assign("forms", $forms);
 
         // Ajout au panier
-        if (!empty($_POST)) {
+        if (!empty($_POST['add_book_to_cart'])) {
             $id = $_POST['add_book_to_cart'];
             $book = new Book();
             $cart = new Cart();
@@ -386,6 +390,7 @@ class BookController
     }
     
     public function seeBookAction(){
+
         session_start();
 
         $book = new Book();
@@ -396,9 +401,9 @@ class BookController
         $uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
         $uri = substr($uriExploded[0], 7);
 
+        $book->setAllBySlug($uri);
         //recupere le livre en foction du slug
         $bookcontent = $book->getAllBySlug($uri);
-
         $view->assign("book", $bookcontent);
         $view->assign("metadescription", $bookcontent['description']);
         $view->assign("title", $bookcontent['title']);
@@ -409,5 +414,17 @@ class BookController
 			[$bookcontent['title'], $uriExploded[0]],
 		];
         $view->assign("breadcrumbs", $breadcrumbs);
+
+        
+        $form = $book->formAddToCart();
+        $view->assign("form", $form);
+
+        // Ajout au panier
+        if (!empty($_POST['add_book_to_cart']) && $_POST['add_book_to_cart'] == $book->getId()) {
+            $cart = new Cart();
+            $cart->addToCart($bookcontent);
+            header('location:'.$uriExploded[0]);
+            die();
+        }
     }
 }
