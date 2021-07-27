@@ -19,11 +19,12 @@ use App\Core\Security;
                 <br/>
             <?php endif; ?>
             <div class="card">
+            <?php if (isset($articles)) :?>
+
                 <h6 class="card-title">Vos articles</h6>
                 <div class="card-content">
                     <a id="" href="articles/add"><button class="btn btn-primary">Ajouter un article</button></a>
                     <br/><br/>
-                    <?php if (isset($articles)) :?>
                         <?php if (empty($articles)) :?>
                             <p>Vous n'avez pas créé d'article.</p>
                         <?php else: ?>
@@ -47,7 +48,7 @@ use App\Core\Security;
                             </thead>
                             <tbody>
                             <?php foreach ($articles as $article) { ?>
-                                <?php if(Security::hasAuthorization() || (Security::isOnlyAuthor() && $article['author'] == $_SESSION['id'])) :?>
+                                <?php if(Security::hasAuthorization() || (Security::isOnlyAuthor() && $article['author'] == $_SESSION['id']) || (Security::isOnlyContributor() && $article['author'] == $_SESSION['id'])) :?>
                                     <tr>
                                         <td><?=$article["title"];?></td>
                                         <td><?=$article["created"];?></td>
@@ -78,7 +79,7 @@ use App\Core\Security;
 
                         </tbody>
                         </table>
-                    <?php endif; ?>
+            <?php endif; ?>
                      </div>
             </div>
         </div>

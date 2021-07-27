@@ -19,29 +19,35 @@ class PageController{
         $user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
-        $page = new Page();
-        $view = new View("pages","back");
+      	$view = new View("pages","back");
 
-        if(isset($_GET['pageid'])){
-        	$page->setAllById($_GET['pageid']);
+		if(Security::canCreate()){
+	        $page = new Page();
 
-        	if(isset($_GET['publish'])){
-        		$page->setStatus("publish");
-        		$page->save();
-        		$view->assign("infos", ["Page publiée."]);
+	        if(isset($_GET['pageid'])){
+	        	$page->setAllById($_GET['pageid']);
 
-        	}
+	        	if(isset($_GET['publish'])){
+	        		$page->setStatus("publish");
+	        		$page->save();
+	        		$view->assign("infos", ["Page publiée."]);
 
-        	if(isset($_GET['withdraw'])){
-        		$page->setStatus("withdraw");
-        		$page->save();
-        		$view->assign("infos", ["Page retirée."]);
-        		
-        	}
-        }
+	        	}
 
-        $pages = $page->all();
-        $view->assign("pages", $pages);
+	        	if(isset($_GET['withdraw'])){
+	        		$page->setStatus("withdraw");
+	        		$page->save();
+	        		$view->assign("infos", ["Page retirée."]);
+	        		
+	        	}
+	        }
+
+	        $pages = $page->all();
+	        $view->assign("pages", $pages);
+	    }else{
+	    	$view->assign("errors", ["Vous n'avez pas accès à cette page."]);
+
+	    }
 	}
 
 	public function addPageAction(){

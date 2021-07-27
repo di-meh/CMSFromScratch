@@ -19,11 +19,12 @@ use App\Core\Security;
                 <br/>
             <?php endif; ?>
             <div class="card">
+            <?php if (isset($pages)) :?>
+
                 <h6 class="card-title">Vos pages</h6>
                 <div class="card-content">
                     <a id="" href="/lbly-admin/pages/add"><button class="btn btn-primary">Ajouter une page</button></a>
                     <br/><br/>
-                    <?php if (isset($pages)) :?>
                         <?php if (empty($pages)) :?>
                             <p>Vous n'avez pas crée de page.</p>
                         <?php else: ?>
@@ -67,7 +68,7 @@ use App\Core\Security;
 
                         </tbody>
                         </table>
-                    <?php endif; ?>
+            <?php endif; ?>
                 </div>
             </div>
         </div>

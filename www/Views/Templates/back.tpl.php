@@ -64,7 +64,7 @@ use App\Core\Security;
 				<?php endif; ?>
 
 				<?php if(Security::isAdmin()): ?>
-					<li class="list-item"><a href="/lbly-admin/adminview"><span class="material-icons">people</span><span class="item-title">Utilisateurs</span></a></li>
+					<li class="list-item"><a href="/lbly-admin/admin"><span class="material-icons">people</span><span class="item-title">Utilisateurs</span></a></li>
 				<?php endif; ?>
 
 				<?php if(Security::isSuperAdmin()): ?>

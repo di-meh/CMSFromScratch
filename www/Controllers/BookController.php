@@ -17,29 +17,34 @@ class BookController
         $user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
-        $book = new Book();
         $view = new View("book","back");
+        if(Security::canCreate()){
+            $book = new Book();
 
-        if(isset($_GET['bookid'])){
-            $book->setAllById(htmlspecialchars($_GET['bookid']));
+            if(isset($_GET['bookid'])){
+                $book->setAllById(htmlspecialchars($_GET['bookid']));
 
-            if(isset($_GET['publish'])){
-                $book->setStatus("publish");
-                $book->save();
-                $view->assign("infos", ["Livre publié."]);
+                if(isset($_GET['publish'])){
+                    $book->setStatus("publish");
+                    $book->save();
+                    $view->assign("infos", ["Livre publié."]);
 
+                }
+
+                if(isset($_GET['withdraw'])){
+                    $book->setStatus("withdraw");
+                    $book->save();
+                    $view->assign("infos", ["Livre retiré."]);
+
+                }
             }
 
-            if(isset($_GET['withdraw'])){
-                $book->setStatus("withdraw");
-                $book->save();
-                $view->assign("infos", ["Livre retiré."]);
+            $books = $book->all();
+            $view->assign("books", $books);
+        }else{
+            $view->assign("errors", ["Vous n'avez pas accès à cette page."]);
 
-            }
         }
-
-        $books = $book->all();
-        $view->assign("books", $books);
 
     }
 

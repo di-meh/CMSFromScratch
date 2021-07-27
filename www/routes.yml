@@ -38,7 +38,7 @@
   controller: Security
   action: editProfil
 
-/lbly-admin/adminview:
+/lbly-admin/admin:
   controller: Security
   action: getAllUsers
 

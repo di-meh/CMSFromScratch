@@ -21,18 +21,15 @@ class SecurityController
         $user = Secu::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
-
+		$view = new View("admin","back");
 
 		if($user->isAdmin()){
-			$view = new View("admin","back");
 
 			$users = $user->all();
 			$view->assign("users", $users);
 
 		}else{
-			header("HTTP/1.0 403 Forbidden");
-		 	$view = new View('403');
-		 	#$view->assign("errors", ["Vous n'avez pas accès à cette page."]);
+		 	$view->assign("errors", ["Vous n'avez pas accès à cette page."]);
 		}
 
 
@@ -163,7 +160,7 @@ class SecurityController
 					if(!empty($infos)){
 
 						$view->assign("infos", [$infos]);
-						#header("Refresh:5; url=/lbly-admin/adminview", true, 303);
+						#header("Refresh:5; url=/lbly-admin/admin", true, 303);
 
 					}
 
@@ -244,7 +241,7 @@ class SecurityController
 				if($self)
 					header("Refresh:4; url=/lbly-admin/logout", true, 303); 
 				else
-					header("Refresh:4; url=/lbly-admin/adminview", true, 303);
+					header("Refresh:4; url=/lbly-admin/admin", true, 303);
 
 
 			}else{
@@ -630,7 +627,7 @@ class SecurityController
 						if(isset($user) && $user->isAdmin()){
 							$userRegister->addStatus(USERVALIDATED);
 							# envoi de mail au nouvel user créé pour quil change son pwd
-							header("Location: /lbly-admin/adminview");
+							header("Location: /lbly-admin/admin");
 
 
 						}else{

@@ -9,7 +9,7 @@
                             <?php App\Core\FormBuilder::render($formDelete); ?>
                         <?php endif; ?>
                         <br/>
-                        <a id="" href="/lbly-admin/adminview"><button class="btn btn-danger">Annuler</button></a>
+                        <a id="" href="/lbly-admin/admin"><button class="btn btn-danger">Annuler</button></a>
                     </div>
                 </div>
                 <br/>
@@ -22,17 +22,18 @@
                             <?php App\Core\FormBuilder::render($formRoles); ?>
                         <?php endif; ?>
                         <br/>
-                        <a id="" href="/lbly-admin/adminview"><button class="btn btn-danger">Annuler</button></a>
+                        <a id="" href="/lbly-admin/admin"><button class="btn btn-danger">Annuler</button></a>
                     </div>
                 </div>
                 <br/>
             <?php endif; ?>
             <div class="card">
+                <?php if (isset($users)) :?>
+
                 <h6 class="card-title">Les Utilisateurs</h6>
                 <div class="card-content">
                     <a id="" href="/lbly-admin/register"><button class="btn btn-primary">Ajouter un Utilisateur</button></a>
                     </br></br>
-                    <?php if (isset($users)) :?>
                         <?php if (empty($users)) :?>
                             <p>Il n'y a aucun utilisateur en base.</p>
                         <?php else: ?>
@@ -72,7 +73,7 @@
 
                         </tbody>
                         </table>
-                    <?php endif; ?>
+                <?php endif; ?>
                 </div>
             </div>
         </div>

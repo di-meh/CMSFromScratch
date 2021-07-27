@@ -16,11 +16,12 @@
                 <br/>
             <?php endif; ?>
             <div class="card">
+                <?php if (isset($books)) :?>
+
                 <h6 class="card-title">Vos livres</h6>
                 <div class="card-content">
                     <a id="" href="/lbly-admin/books/add"><button class="btn btn-primary">Ajouter un livre</button></a>
                     <br/><br/>
-                    <?php if (isset($books)) :?>
                         <?php if (empty($books)) :?>
                             <p>Vous n'avez pas crée de livre.</p>
                         <?php else: ?>
@@ -69,7 +70,7 @@
 
                         </tbody>
                         </table>
-                    <?php endif; ?>
+                <?php endif; ?>
                 </div>
             </div>
         </div>

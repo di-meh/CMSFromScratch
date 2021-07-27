@@ -42,7 +42,7 @@ class Security
 		$user = new User();
 		if(isset($_SESSION['id'])){
 			if($user->setAllFromData(["id" => $_SESSION['id']])){
-				return ($user->isSuperAdmin() || $user->isAdmin() || $user->isEditor());
+				return ($user->isSuperAdmin() || $user->isAdmin());
 			}
 
 		}
@@ -85,7 +85,7 @@ class Security
 		$user = new User();
 		if(isset($_SESSION['id'])){
 			if($user->setAllFromData(["id" => $_SESSION['id']]))
-			return ($user->isSuperAdmin() || $user->isAdmin() || $user->isEditor() || $user->isContributor());
+			return ($user->isSuperAdmin() || $user->isAdmin() || $user->isEditor());
 		}
 		return false;
 	}
@@ -105,6 +105,26 @@ class Security
 		if(isset($_SESSION['id'])){
 			if($user->setAllFromData(["id" => $_SESSION['id']]))
 				return $user->isSuperAdmin();
+		}
+		
+		return false;
+	}
+
+	public static function isAuthor(){
+		$user = new User();
+		if(isset($_SESSION['id'])){
+			if($user->setAllFromData(["id" => $_SESSION['id']]))
+				return $user->isAuthor();
+		}
+		
+		return false;
+	}
+
+	public static function isContributor(){
+		$user = new User();
+		if(isset($_SESSION['id'])){
+			if($user->setAllFromData(["id" => $_SESSION['id']]))
+				return $user->isContributor();
 		}
 		
 		return false;

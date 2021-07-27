@@ -14,30 +14,37 @@ class ArticleController{
 		$user = Security::getConnectedUser();
 		if(is_null($user)) header("Location:/lbly-admin/login");
 
-		$article = new Article();
 		$view = new View("articles","back");
 
-        if(isset($_GET['articleid'])){
-        	$article->setAllById(htmlspecialchars($_GET['articleid']));
+		if(Security::hasAuthorization() || Security::isAuthor() || Security::isContributor()){
 
-        	if(isset($_GET['publish'])){
-        		$article->setStatus("publish");
-        		$article->save();
-        		$view->assign("infos", ["Article publié."]);
+			$article = new Article();
 
-        	}
+	        if(isset($_GET['articleid'])){
+	        	$article->setAllById(htmlspecialchars($_GET['articleid']));
 
-        	if(isset($_GET['withdraw'])){
-        		$article->setStatus("withdraw");
-        		$article->save();
-        		$view->assign("infos", ["Article retiré."]);
-        		
-        	}
-        }
+	        	if(isset($_GET['publish'])){
+	        		$article->setStatus("publish");
+	        		$article->save();
+	        		$view->assign("infos", ["Article publié."]);
 
-		$articles = $article->all();
+	        	}
 
-        $view->assign("articles", $articles);
+	        	if(isset($_GET['withdraw'])){
+	        		$article->setStatus("withdraw");
+	        		$article->save();
+	        		$view->assign("infos", ["Article retiré."]);
+	        		
+	        	}
+	        }
+
+			$articles = $article->all();
+
+	        $view->assign("articles", $articles);
+	    }else{
+
+	    	$view->assign("errors", ["Vous n'avez pas accès à cette page."]);
+	    }
 	}
 
 
