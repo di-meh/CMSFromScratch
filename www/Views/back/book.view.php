@@ -10,7 +10,7 @@
                         <?php endif; ?>
                         <!-- <a id="" href=""><button class="btn btn-primary">Supprimer</button></a> -->
                         <br/>
-                        <a id="" href="/lbly-admin/books"><button class="btn btn-danger">Annuler</button></a>
+                        <a id="" href="/lbly-admin/books"><button class="btn btn-primary">Annuler</button></a>
                     </div>
                 </div>
                 <br/>

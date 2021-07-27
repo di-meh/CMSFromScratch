@@ -9,7 +9,7 @@
                             <?php App\Core\FormBuilder::render($formdelete); ?>
                         <?php endif; ?>
                         <br/>
-                        <a id="" href="/lbly-admin/category"><button class="btn btn-danger">Annuler</button></a>
+                        <a id="" href="/lbly-admin/category"><button class="btn btn-primary">Annuler</button></a>
                     </div>
                 </div>
                 <br/>

@@ -15,12 +15,11 @@ class MainController{
 		$page = new Page();
 		$pagecontent = $page->getAllBySlug('home');
 
-		$uriExploded = explode("?", $_SERVER["REQUEST_URI"]);
-		$uri = substr($uriExploded[0], 1);
+
 
 		if(isset($pagecontent) && !empty($pagecontent)){
 
-			$page->setAllBySlug($uri);
+			$page->setAllBySlug("home");
 			if($page->getStatus() == "publish"){
 				$view = new View("seePage", "front");
 
