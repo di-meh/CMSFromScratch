@@ -16,14 +16,14 @@ class Article extends Singleton
     protected $metadescription;
     protected $content;
     protected $category;
-    protected $created;
+    protected $createdAt;
     protected $status;
 
     
     public function __construct()
     {
         $date = new \DateTime(date('Y-m-d H:i:s'));
-        $this->created = $date->format('Y-m-d H:i:s');
+        $this->createdAt = $date->format('Y-m-d H:i:s');
         
     }
 
@@ -75,13 +75,13 @@ class Article extends Singleton
         $this->content = $content;
     }
     
-    public function getCreated()
+    public function getCreatedAt()
     {
-        return $this->created;
+        return $this->createdAt;
     }
-    public function setCreated($created)
+    public function setCreatedAt($createdAt)
     {
-        $this->created = $created;
+        $this->createdAt = $createdAt;
     }
 
 
@@ -343,7 +343,7 @@ class Article extends Singleton
         $this->setMetadescription($res['metadescription']);
         $this->setContent($res['content']);
         $this->setCategory($res['category']);
-        $this->setCreated($res['created']);
+        $this->setCreatedAt($res['createdAt']);
         $this->setStatus($res['status']);
     }
 
@@ -358,7 +358,7 @@ class Article extends Singleton
         $this->setMetadescription($res['metadescription']);
         $this->setContent($res['content']);
         $this->setCategory($res['category']);
-        $this->setCreated($res['created']);
+        $this->setCreatedAt($res['createdAt']);
         $this->setStatus($res['status']);
     }
 

@@ -112,9 +112,9 @@ class BookController
                             $target_file = $target_dir . basename($book->getSlug()) .".". $imageFileType[1];
 
                             if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                                echo "Le fichier " . basename($_FILES["image"]["name"]) . " a été téléchargé.";
+                                $infos[] = "Le fichier " . basename($_FILES["image"]["name"]) . " a été téléchargé.";
                             } else {
-                                echo "Désolé, une erreur s'est produite lors du téléchargement de votre fichier.";
+                                $infos[] = "Désolé, une erreur s'est produite lors du téléchargement de votre fichier.";
                             }
                             $image = basename($book->getSlug().".".$imageFileType[1]);
                             $book->setImage($target_dir.$image);
@@ -373,23 +373,25 @@ class BookController
 
             //modification si différent et non vide
             if (!empty($_POST['stock_number'])){
-                if ($_POST['stock_number'] != $book->getStockNumber() && $_POST['stock_number'] < 2147483648){
-                    $book->setStockNumber(htmlspecialchars($_POST['stock_number']));
-                    $book->save();
-                    $updated = true;
-                    $form = $book->formEditBook();
-                    $infos[] = "Le nombre de stock a été mis a jour";
-                    $view->assign("infos", $infos);
-                }else{
-                    $updated = true;
-                    $view->assign("errors", ["Le stock est trop élevé"]);
+                if((int)$_POST['stock_number'] != $book->getStockNumber()){
+                    if ((int)$_POST['stock_number'] < 2147483648){
+                        $book->setStockNumber(htmlspecialchars($_POST['stock_number']));
+                        $book->save();
+                        $updated = true;
+                        $form = $book->formEditBook();
+                        $infos[] = "Le nombre de stock a été mis a jour";
+                        $view->assign("infos", $infos);
+                    }else{
+                        $updated = true;
+                        $view->assign("errors", ["Le stock est trop élevé"]);
+                    }
                 }
             }else{
                 $updated = true;
                 $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
             if (!$updated){
-                $infos[] = "Vous n'avez modifier aucune données";
+                $infos[] = "Vous n'avez modifié aucune données";
                 $view->assign("infos", $infos);
             }
         }
