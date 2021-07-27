@@ -111,8 +111,10 @@ class Category extends Singleton
     }
 
     public function title2slug($title){
+        // remplace ce qui n'est pas lettre ou nombre par -
         $title = preg_replace('~[^\pL\d]+~u', '-', $title);
 
+        //remplace les accents par non accents
         $unwanted_array = array(    'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
             'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
             'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
@@ -123,17 +125,22 @@ class Category extends Singleton
         //retire symboles spéciaux
         $title = iconv("UTF-8", "ASCII//TRANSLIT", $title);
 
+        //retire tout ce qui n'est pas chiffre lettre ou -
         $title = preg_replace('~[^-\w]+~', '', $title);
 
+        //retire - en debut et fin de title
         $title = trim($title, '-');
+
         //suprimme double -
         $title = preg_replace('~-+~', '-', $title);
+
         //minuscule
         $title = strtolower($title);
 
         return $title;
     }
-        
+
+    //forms
     public function formAddCategory()
     {
     return[
@@ -234,6 +241,7 @@ class Category extends Singleton
         ];
     }
 
+    //recupere la catégorie en parametre
     public function checkCategory($nameCategory)
     {
         $query = "SELECT * FROM " . $this->getTable() . " WHERE nameCategory = '".$nameCategory."'";
@@ -243,6 +251,7 @@ class Category extends Singleton
         return $check ? $check[0] : null;
     }
 
+    //recupere la categorie en fonction du slug
     public function getAllBySlug($slug){
         $query = "SELECT * FROM " . $this->getTable() . " WHERE slug = '".$slug."'";
         $req = $this->getPDO()->prepare($query);
@@ -251,6 +260,7 @@ class Category extends Singleton
         return $res ? $res[0] : null;
     }
 
+    //recupere la categorie en fonction de l'id
     public function getAllById($id){
         $query = "SELECT * FROM " . $this->getTable() . " WHERE id = '".$id."'";
         $req = $this->getPDO()->prepare($query);
@@ -259,6 +269,7 @@ class Category extends Singleton
         return $res ? $res[0] : null;
     }
 
+    //set la categorie en fonction du slug
     public function setAllBySlug($slug){
         $res = $this->getAllBySlug($slug);
         $this->setId($res['id']);
@@ -267,12 +278,14 @@ class Category extends Singleton
         $this->setSlug($res['slug']);
     }
 
+    //supprime la categorie en fonction du slug
     public function deleteBySlug($slug){
         $query = "DELETE FROM " . $this->getTable() . " WHERE slug = '" . $slug ."'";
         $req = $this->getPDO()->prepare($query);
         $req->execute();
     }
 
+    //recupere les articles dont la categorie est supprimer
     public function getDeletedArticleCategory($deleted_category){
         $query = "SELECT category FROM lbly_article WHERE category LIKE '%".$deleted_category."%'";
         $req = $this->getPDO()->prepare($query);
@@ -281,6 +294,7 @@ class Category extends Singleton
         return $res;
     }
 
+    //update la categorie d'un article
     public function updateArticleCategory($new_category, $old_category){
         $query = "UPDATE lbly_article SET category='".$new_category."' WHERE category='".$old_category."'";
         $req = $this->getPDO()->prepare($query);
@@ -289,6 +303,7 @@ class Category extends Singleton
         return $res;
     }
 
+    //recupere les livres dont la categorie est supprimer
     public function getDeletedBookCategory($deleted_category){
         $query = "SELECT category FROM lbly_books WHERE category LIKE '%".$deleted_category."%'";
         $req = $this->getPDO()->prepare($query);
@@ -297,6 +312,7 @@ class Category extends Singleton
         return $res;
     }
 
+    //update la categorie d'un livre
     public function updateBookCategory($new_category, $old_category){
         $query = "UPDATE lbly_books SET category='".$new_category."' WHERE category='".$old_category."'";
         $req = $this->getPDO()->prepare($query);

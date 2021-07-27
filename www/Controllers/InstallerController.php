@@ -65,6 +65,7 @@ class InstallerController{
 
                         $install->setToken(Helpers::createToken());
 
+                        //fonction création bdd
                         $install->dropTables();
                         $install->createTableArticle();
                         $install->createTableBooks();

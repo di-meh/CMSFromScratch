@@ -501,6 +501,7 @@ class Book extends Singleton
         return $res ? $res[0] : null;
     }
 
+    //recupere toute les info d'un livre en fonction de l'id
     public function getAllById($id){
         $query = "SELECT * FROM " . $this->getTable() . " WHERE id = '".$id."'";
         $req = $this->getPDO()->prepare($query);
@@ -509,6 +510,7 @@ class Book extends Singleton
         return $res ? $res[0] : null;
     }
 
+    //set le livre en fonction de l'id
     public function setAllById($id){
         $res = $this->getAllById($id);
         $this->setId($res['id']);
@@ -524,6 +526,7 @@ class Book extends Singleton
         $this->setSlug($res['slug']);
     }
 
+    //set le livre en fonction du slug
     public function setAllBySlug($slug){
         $res = $this->getAllBySlug($slug);
         $this->setId($res['id']);
@@ -540,12 +543,14 @@ class Book extends Singleton
         $this->setStatus($res['status']);
     }
 
+    //supprime en fonction du slug
     public function deleteBySlug($slug){
         $query = "DELETE FROM " . $this->getTable() . " WHERE slug = '" . $slug ."'";
         $req = $this->getPDO()->prepare($query);
         $req->execute();
     }
 
+    //recuprere les categorie créer
     public function getCreatedCategory(){
         $array = [];
         $query = "SELECT nameCategory FROM lbly_category ORDER BY nameCategory ASC";

@@ -135,8 +135,10 @@ class Page extends Singleton
 
 
     public function title2slug($title){
+        // remplace ce qui n'est pas lettre ou nombre par -
         $title = preg_replace('~[^\pL\d]+~u', '-', $title);
 
+        //remplace les accents par non accents
         $unwanted_array = array(    'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
             'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
             'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
@@ -147,17 +149,22 @@ class Page extends Singleton
         //retire symboles spéciaux
         $title = iconv("UTF-8", "ASCII//TRANSLIT", $title);
 
+        //retire tout ce qui n'est pas chiffre lettre ou -
         $title = preg_replace('~[^-\w]+~', '', $title);
 
+        //retire - en debut et fin de title
         $title = trim($title, '-');
+
         //suprimme double -
         $title = preg_replace('~-+~', '-', $title);
+
         //minuscule
         $title = strtolower($title);
 
         return $title;
     }
 
+    //forms
 	public function formAddPage()
 	{
 
@@ -289,6 +296,7 @@ class Page extends Singleton
         ];
     }
 
+    //recupere la page en fonction du slug
     public function getAllBySlug($slug){
         $query = "SELECT * FROM " . $this->getTable() . " WHERE slug = '".$slug."'";
         $req = $this->getPDO()->prepare($query);
@@ -297,6 +305,8 @@ class Page extends Singleton
         return $res ? $res[0] : null;
     }
 
+
+    //recupere la page en fonction de l'id
     public function getAllById($id){
         $query = "SELECT * FROM " . $this->getTable() . " WHERE id = '".$id."'";
         $req = $this->getPDO()->prepare($query);
@@ -305,6 +315,7 @@ class Page extends Singleton
         return $res ? $res[0] : null;
     }
 
+    //recupere les info en fonction du slug
     public function setAllBySlug($slug){
         $res = $this->getAllBySlug($slug);
         $this->setId($res['id']);
@@ -316,6 +327,7 @@ class Page extends Singleton
         $this->setCreatedBy($res['createdBy']);
     }
 
+    //recupere les info en fonction de l'id
     public function setAllById($id)
     {
         $res = $this->getAllById($id);
@@ -328,7 +340,8 @@ class Page extends Singleton
         $this->setCreatedBy($res['createdBy']);
 
     }
-    
+
+    //supprime en fonction du slug
     public function deleteBySlug($slug){
         $query = "DELETE FROM " . $this->getTable() . " WHERE slug = '" . $slug ."'";
         $req = $this->getPDO()->prepare($query);

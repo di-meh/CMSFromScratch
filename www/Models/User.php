@@ -1019,6 +1019,7 @@ class User extends Singleton
         $res = $prepare->fetch(PDO::FETCH_ASSOC);
     }
 
+    //requete pour drop les tables si elles existent
     public function dropTables(){
         $query1 = "DROP TABLE IF EXISTS `lbly_article`";
         $query2 = "DROP TABLE IF EXISTS `lbly_books`";
@@ -1042,6 +1043,7 @@ class User extends Singleton
         $prepare6->execute();
     }
 
+    //requete pour créer les tables
     public function createTableArticle(){
         $query = "CREATE TABLE `lbly_article` (
                   `id` int(11) NOT NULL,
@@ -1137,6 +1139,7 @@ class User extends Singleton
         $prepare->execute();
     }
 
+    //requete pour modifier les tables
     public function alterTables(){
         $query1 = "ALTER TABLE `lbly_article` ADD PRIMARY KEY (`id`)";
         $query2 = "ALTER TABLE `lbly_books` ADD PRIMARY KEY (`id`)";
