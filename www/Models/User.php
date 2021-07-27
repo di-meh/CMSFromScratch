@@ -1069,7 +1069,7 @@ class User extends Singleton
                   `publication_date` date NOT NULL,
                   `image` text COLLATE utf8_bin,
                   `publisher` varchar(55) COLLATE utf8_bin NOT NULL,
-                  `price` unsigned smallint(6) NOT NULL,
+                  `price` smallint(6) unsigned NOT NULL,
                   `category` text COLLATE utf8_bin DEFAULT NULL,
                   `stock_number` int(11) NOT NULL,
                   `slug` text NOT NULL,
