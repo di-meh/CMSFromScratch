@@ -10,7 +10,7 @@
                         <?php else: ?>
                                 <?php foreach ($books as $book) { ?>
                                     <div class="card col-3 p-position-relative" style="min-height:35rem">
-                                        <h6 class="card-title"><?php echo $book["title"];?></h6>
+                                        <h5 class="card-title"><?php echo $book["title"];?></h5>
                                         <div class="card-content">
                                             <?php if (isset($book["image"])) :?>
                                                 <img class="img-fluid" src="<?="/". $book["image"];?>" >
