@@ -4,6 +4,11 @@ RewriteRule ^sitemap.xml/?$ sitemap.php [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    Redirect 301 /lbly /lbly-admin
+</IfModule>
+
 RewriteRule . /index.php [QSA]
 RewriteCond %{REQUEST_URI} (.+)/$
 RewriteRule ^ %1 [R=301,L]
