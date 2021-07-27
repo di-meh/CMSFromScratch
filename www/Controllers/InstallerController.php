@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use PDO;
 use App\Core\View;
 use App\Core\FormValidator;
 use App\Core\ConstantMaker;
@@ -32,58 +33,70 @@ class InstallerController{
             $errors = FormValidator::check($form, $_POST);
             if (empty($errors)){
                 if ($_POST['pwd'] == $_POST['pwdConfirm']) {
-                    //creation contenu .env
-                    $content ="SITENAME=" . htmlspecialchars($_POST["site"]) . "\n"
-                        ."DBDRIVER=mysql\n" ."DBPREFIX=lbly_\n" 
-                        ."DBHOST=" . htmlspecialchars($_POST["dbhost"]) . "\n"
-                        ."DBNAME=" . htmlspecialchars($_POST["dbname"]) . "\n"
-                        ."DBUSER=" . htmlspecialchars($_POST["dbusername"]) . "\n"
-                        ."DBPWD=" . $_POST["dbpwd"] . "\n"
-                        ."DBPORT=" . htmlspecialchars($_POST["dbport"]) . "\n"
-                        ."MAILHOST=" . htmlspecialchars($_POST["mailhost"]) . "\n"
-                        ."MAILSENDER=" . htmlspecialchars($_POST["mailexp"]) . "\n"
-                        ."MAILSUPERADMIN=" . htmlspecialchars($_POST["email"]) . "\n"
-                        ."MAILPWD=" . $_POST["mailpwd"] . "\n"
-                        ."MAILPORT=" . htmlspecialchars($_POST["mailport"]) . "\n"
-                        ."MAILSMTPAUTH=true\n"
-                        ."STRIPE_PRIVATE_KEY=" . htmlspecialchars($_POST["stripe_public_key"]) . "\n"
-                        ."VITE_STRIPE_PUBLIC_KEY=" . htmlspecialchars($_POST["stripe_private_key"]) . "\n";
-                    $handle = fopen("./.env", "w+");
-                    fwrite($handle, $content);
-                    if (file_exists("./.env")){
-                        new ConstantMaker();
+                    try {
+                        $test = new PDO("mysql:host=".$_POST['dbhost'].";dbname=".$_POST['dbname'].";port=".$_POST['dbport']."",$_POST['dbusername'],$_POST['dbpwd']);
+                        $proceed = true;
+                    } catch (\Exception $e) {
+                        $bddmsg = $e->getMessage();
+                        $proceed = false;
+                    }
+                    if ($proceed){
+                        //creation contenu .env
+                        $content ="SITENAME=" . htmlspecialchars($_POST["site"]) . "\n"
+                            ."DBDRIVER=mysql\n" ."DBPREFIX=lbly_\n"
+                            ."DBHOST=" . htmlspecialchars($_POST["dbhost"]) . "\n"
+                            ."DBNAME=" . htmlspecialchars($_POST["dbname"]) . "\n"
+                            ."DBUSER=" . htmlspecialchars($_POST["dbusername"]) . "\n"
+                            ."DBPWD=" . $_POST["dbpwd"] . "\n"
+                            ."DBPORT=" . htmlspecialchars($_POST["dbport"]) . "\n"
+                            ."MAILHOST=" . htmlspecialchars($_POST["mailhost"]) . "\n"
+                            ."MAILSENDER=" . htmlspecialchars($_POST["mailexp"]) . "\n"
+                            ."MAILSUPERADMIN=" . htmlspecialchars($_POST["email"]) . "\n"
+                            ."MAILPWD=" . $_POST["mailpwd"] . "\n"
+                            ."MAILPORT=" . htmlspecialchars($_POST["mailport"]) . "\n"
+                            ."MAILSMTPAUTH=true\n"
+                            ."STRIPE_PRIVATE_KEY=" . htmlspecialchars($_POST["stripe_public_key"]) . "\n"
+                            ."VITE_STRIPE_PUBLIC_KEY=" . htmlspecialchars($_POST["stripe_private_key"]) . "\n";
+                        $handle = fopen("./.env", "w+");
+                        fwrite($handle, $content);
+                        if (file_exists("./.env")){
+                            new ConstantMaker();
 
-                        $pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
+                            $pwd = password_hash($_POST['pwd'], PASSWORD_DEFAULT);
 
-                        //set l'user avec les info del'installer
-                        $install->setFirstname(htmlspecialchars($_POST["firstname"]));
-                        $install->setLastname(htmlspecialchars($_POST["lastname"]));
-                        $install->setEmail(htmlspecialchars($_POST["email"]));
-                        $install->setPwd($pwd);
-                        $install->setCountry($_POST["country"]);
-                        $install->addStatus(USERSUPERADMIN);
+                            //set l'user avec les info del'installer
+                            $install->setFirstname(htmlspecialchars($_POST["firstname"]));
+                            $install->setLastname(htmlspecialchars($_POST["lastname"]));
+                            $install->setEmail(htmlspecialchars($_POST["email"]));
+                            $install->setPwd($pwd);
+                            $install->setCountry($_POST["country"]);
+                            $install->addStatus(USERSUPERADMIN);
 
-                        $install->setToken(Helpers::createToken());
+                            $install->setToken(Helpers::createToken());
 
-                        //fonction création bdd
-                        $install->dropTables();
-                        $install->createTableArticle();
-                        $install->createTableBooks();
-                        $install->createTableCategory();
-                        $install->createTablePages();
-                        $install->createTableUser();
-                        $install->createTableOrder();
-                        $install->alterTables();
+                            //fonction création bdd
+                            $install->dropTables();
+                            $install->createTableArticle();
+                            $install->createTableBooks();
+                            $install->createTableCategory();
+                            $install->createTablePages();
+                            $install->createTableUser();
+                            $install->createTableOrder();
+                            $install->alterTables();
 
-                        $install->save();
+                            $install->save();
 
-                        $install->insertFirstPage();
-                        $install->insertFirstCategory();
-                        $install->insertFirstArticle();
-                        $install->insertFirstBook();
+                            $install->insertFirstPage();
+                            $install->insertFirstCategory();
+                            $install->insertFirstArticle();
+                            $install->insertFirstBook();
 
-                        $email = $_POST['email'];
-                        header("Location: lbly-admin/userconfirm?email=$email");
+                            $email = $_POST['email'];
+                            header("Location: lbly-admin/userconfirm?email=$email");
+                        }
+
+                    }else{
+                        $view->assign("errors", ["Il y a eu un problème de connexion à la bdd - ".$bddmsg]);
                     }
                 }else{
                     $view->assign("errors", ["Vos mots de passe sont différents."]);
