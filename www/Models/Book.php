@@ -524,6 +524,7 @@ class Book extends Singleton
         $this->setCategory($res['category']);
         $this->setStockNumber($res['stock_number']);
         $this->setSlug($res['slug']);
+        $this->setStatus($res['status']);
     }
 
     //set le livre en fonction du slug
