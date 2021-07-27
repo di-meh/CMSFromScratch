@@ -72,6 +72,13 @@ class BookController
                 $book->setAuthor(htmlspecialchars($_POST['author']));
                 $book->setPublicationDate($_POST['publication_date']);
                 $book->setPublisher(htmlspecialchars($_POST['publisher']));
+                if ($_POST['price'] < 65535){
+                    $book->setPrice(htmlspecialchars($_POST['price']));
+                }else{
+                    $view->assign("errors", ["Votre prix doit être en 1€ et 65535€"]);
+                    header("Location:/lbly-admin/books/add");
+
+                }
                 $book->setPrice(htmlspecialchars($_POST['price']));
                 $categories = "";
                 foreach ($_POST['category'] as $item) {
@@ -79,7 +86,12 @@ class BookController
                 }
                 $categories = substr($categories,0,-1);
                 $book->setCategory(htmlspecialchars($categories ));
-                $book->setStockNumber(htmlspecialchars($_POST['stock_number']));
+                if ($_POST['stock_number'] < 2147483648){
+                    $book->setStockNumber(htmlspecialchars($_POST['stock_number']));
+                }else{
+                    $view->assign("errors", ["Votre stock est trop élevé"]);
+                    header("Location:/lbly-admin/books/add");
+                }
                 $book->setStatus("withdraw");
                 $book->setSlug($book->book2slug($_POST['title'] . "-" . $_POST['author'] . "-" . $_POST['publisher']));
 
@@ -188,10 +200,12 @@ class BookController
                         $form = $book->formEditBook();
                         header("Location:/lbly-admin/books");
                     }else{
+                        $updated = true;
                         $view->assign("errors", ["Veuillez changer le titre de votre livre"]);
                     }
                 }
             }else{
+                $updated = true;
                 $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
@@ -206,6 +220,7 @@ class BookController
                     $view->assign("infos", $infos);
                 }
             }else{
+                $updated = true;
                 $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
@@ -220,10 +235,12 @@ class BookController
                         $form = $book->formEditBook();
                         header("Location:/lbly-admin/books");
                     }else{
+                        $updated = true;
                         $view->assign("errors", ["Veuillez changer le titre de l'auteur"]);
                     }
                 }
             }else{
+                $updated = true;
                 $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
@@ -238,6 +255,7 @@ class BookController
                     $view->assign("infos", $infos);
                 }
             }else{
+                $updated = true;
                 $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
@@ -252,11 +270,13 @@ class BookController
                         $form = $book->formEditBook();
                         header("Location:/lbly-admin/books");
                     }else{
+                        $updated = true;
                         $view->assign("errors", ["Veuillez changer le titre de l'auteur"]);
                     }
                 }
             }else{
-                    $view->assign("errors", ["Veuillez remplir tous les champs"]);
+                $updated = true;
+                $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
             //modification si différent et non vide
@@ -280,9 +300,11 @@ class BookController
                         $updated = true;
                         $view->assign("infos",$infos);
                     }else{
+                        $updated = true;
                         $view->assign("errors", ["Veuillez changer le format de votre image"]);
                     }
                 }else{
+                    $updated = true;
                     $view->assign("errors", ["Votre fichier est trop lourd. Il doit faire moins de 2MB."]);
                 }
             }elseif (substr($book->getImage(),-1) == ".") {
@@ -300,15 +322,21 @@ class BookController
 
             //modification si différent et non vide
             if (!empty($_POST['price'])){
-                if ($_POST['price'] != $book->getPrice()){
-                    $book->setPrice(htmlspecialchars($_POST['price']));
-                    $book->save();
+                if ($_POST['price'] < 65535 && $_POST['price'] > 1){
+                    if ($_POST['price'] != $book->getPrice()){
+                        $book->setPrice(htmlspecialchars($_POST['price']));
+                        $book->save();
+                        $updated = true;
+                        $form = $book->formEditBook();
+                        $infos[] = "La prix a été mis a jour";
+                        $view->assign("infos", $infos);
+                    }
+                }else {
                     $updated = true;
-                    $form = $book->formEditBook();
-                    $infos[] = "La prix a été mis a jour";
-                    $view->assign("infos", $infos);
+                    $view->assign("errors", ["Votre prix doit être entre 1€ et 65535€"]);
                 }
             }else{
+                $updated = true;
                 $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
 
@@ -333,21 +361,26 @@ class BookController
                     $view->assign("infos", $infos);
                     }
                 }else{
+                    $updated = true;
                     $view->assign("errors", ["Veuillez remplir tous les champs"]);
                 }
             }
 
             //modification si différent et non vide
             if (!empty($_POST['stock_number'])){
-                if ($_POST['stock_number'] != $book->getStockNumber()){
+                if ($_POST['stock_number'] != $book->getStockNumber() && $_POST['stock_number'] < 2147483648){
                     $book->setStockNumber(htmlspecialchars($_POST['stock_number']));
                     $book->save();
                     $updated = true;
                     $form = $book->formEditBook();
                     $infos[] = "Le nombre de stock a été mis a jour";
                     $view->assign("infos", $infos);
+                }else{
+                    $updated = true;
+                    $view->assign("errors", ["Le stock est trop élevé"]);
                 }
             }else{
+                $updated = true;
                 $view->assign("errors", ["Veuillez remplir tous les champs"]);
             }
             if (!$updated){

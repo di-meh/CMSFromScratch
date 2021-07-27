@@ -1052,7 +1052,7 @@ class User extends Singleton
                   `slug` varchar(300) NOT NULL,
                   `metadescription` varchar(200) NOT NULL,
                   `content` longtext NOT NULL,
-                  `category` varchar(30) NOT NULL,
+                  `category` text NOT NULL,
                   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
                   `status` varchar(20) NOT NULL DEFAULT 'publish'
                 ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
@@ -1065,13 +1065,13 @@ class User extends Singleton
                   `id` int(11) NOT NULL,
                   `title` tinytext COLLATE utf8_bin NOT NULL,
                   `description` varchar(200) COLLATE utf8_bin NOT NULL,
-                  `author` varchar(350) COLLATE utf8_bin NOT NULL,
+                  `author` varchar(320) COLLATE utf8_bin NOT NULL,
                   `publication_date` date NOT NULL,
                   `image` text COLLATE utf8_bin,
                   `publisher` varchar(55) COLLATE utf8_bin NOT NULL,
-                  `price` smallint(6) NOT NULL,
-                  `category` varchar(30) COLLATE utf8_bin DEFAULT NULL,
-                  `stock_number` int(11) NOT NULL DEFAULT '0',
+                  `price` unsigned smallint(6) NOT NULL,
+                  `category` text COLLATE utf8_bin DEFAULT NULL,
+                  `stock_number` int(11) NOT NULL,
                   `slug` text NOT NULL,
                   `status` varchar(20) NOT NULL DEFAULT 'publish'
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin";

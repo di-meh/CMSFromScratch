@@ -94,12 +94,12 @@ class Book extends Singleton
                     "type" => "text",
                     "label" => "Description du livre",
                     "minLength" => 1,
-                    "maxLength" => 65535,
+                    "maxLength" => 200,
                     "id" => "description",
                     "class" => "form_input",
                     "placeholder" => "Un super livre",
                     "value" => "",
-                    "error" => "Votre description doit faire entre 1 et 255 caractères",
+                    "error" => "Votre description doit faire entre 1 et 200 caractères",
                     "required" => true
                 ],
                 "author" => [
@@ -146,13 +146,14 @@ class Book extends Singleton
                 ],
                 "price" => [
                     "type" => "number",
-                    "label" => "Prix de vente",
+                    "label" => "Prix de vente (entre 1 et 65355€)",
                     "min" => 1,
+                    "max" => "65535",
                     "step" => "any",
                     "id" => "price",
                     "class" => "form_input",
                     "placeholder" => "200",
-                    "error" => "Le prix doit être au moins supérieur à 1€",
+                    "error" => "Le prix doit être au moins supérieur à 1€ et inferieur à 65 535€",
                     "required" => true
                 ],
 
@@ -170,6 +171,7 @@ class Book extends Singleton
                     "type" => "number",
                     "label" => "Nombre de livres en stock",
                     "min" => 1,
+                    "max" => 2147483648,
                     "id" => "stock_number",
                     "class" => "form_input",
                     "placeholder" => "200",
@@ -315,6 +317,7 @@ class Book extends Singleton
                     "type" => "number",
                     "label" => "Nombre de livres en stock",
                     "min" => 1,
+                    "max" => 2147483648,
                     "id" => "stock_number",
                     "class" => "form_input",
                     "placeholder" => "200",
