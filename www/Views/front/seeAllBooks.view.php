@@ -4,34 +4,33 @@
             <div class="card">
                 <h6 class="card-title">Tous les livres</h6>
                 <div class="card-content">
+                    <div class="row">
                         <?php if (empty($books)) :?>
                             <p>Il n'y a aucun livre</p>
                         <?php else: ?>
-                            <table class="table">
-                            <thead>
-                            <tr>
-                                <th>titre</th>
-                                <th>Auteur</th>
-                                <th>Prix</th>
-                                <th>Voir</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
                                 <?php foreach ($books as $book) { ?>
-                                    <tr>
-                                        <td><?php echo $book["title"];?></td>
-                                        <td><?php echo $book["author"];?></td>
-                                        <td><?php echo $book["price"];?> €</td>
-                                        <td><a href="/books/<?=$book["slug"]?>"><button class="btn btn-primary">Voir</button></a></td>
-                                        <td><?php App\Core\FormBuilder::render($forms[$book["id"]]); ?></td>
-                                    </tr>
+                                    <div class="card col-3 p-position-relative" style="min-height:35rem">
+                                        <h6 class="card-title"><?php echo $book["title"];?></h6>
+                                        <div class="card-content">
+                                            <?php if (isset($book["image"])) :?>
+                                                <img class="img-fluid" src="<?="/". $book["image"];?>" >
+                                            <?php else:?>
+                                                <img class="img-fluid" src="/img/defaultImage.jpg" height="18rem">
+                                            <?php endif;?>
+                                            <h5>Auteur : <?=$book["author"];?></h5>
+                                            <h5>Maison d'édition : <?=$book["publisher"];?></h5>
+                                            <h5>Prix : <?=$book["price"];?> € </h5>
+                                        </div>
+                                        <div class="card-footer d-flex flex-justify-content-space-between p-position-absolute s-w-full p-b-0">
+                                            <a href="/books/<?=$book["slug"]?>"><button class="btn btn-primary">Voir</button></a>
+                                            <?php App\Core\FormBuilder::render($forms[$book["id"]]); ?>
+                                        </div>
+                                    </div>
                                     <?php
                                 }
                                 ?>
-                            </tbody>
-                        </table>
-                    <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </div>
