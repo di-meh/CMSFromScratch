@@ -1053,7 +1053,7 @@ class User extends Singleton
                   `metadescription` varchar(200) NOT NULL,
                   `content` longtext NOT NULL,
                   `category` text NOT NULL,
-                  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
                   `status` varchar(20) NOT NULL DEFAULT 'publish'
                 ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
         $prepare = $this->getPDO()->prepare($query);
@@ -1182,5 +1182,32 @@ class User extends Singleton
         $prepare11->execute();
         $prepare12->execute();
         $prepare13->execute();
+    }
+
+    public function insertFirstPage(){
+        $query = "INSERT INTO lbly_page (title, metadescription, content, createdAt, createdBy, slug, status)
+                    VALUES ('home', 'My home page', '<p>This is my home page</p>', CURRENT_TIMESTAMP, '1', 'home', 'publish')";
+        $prepare = $this->getPDO()->prepare($query);
+        $prepare->execute();
+    }
+
+    public function insertFirstCategory(){
+        $query = "INSERT INTO lbly_category (nameCategory, colorCategory, slug) VALUES ('libly', '#5897E9', 'libly')";
+        $prepare = $this->getPDO()->prepare($query);
+        $prepare->execute();
+    }
+
+    public function insertFirstArticle(){
+        $query = "INSERT INTO lbly_article (author, title, slug, metadescription, content, category, createdAt, status)
+                    VALUES ('1', 'My frist article', 'my-first-article', 'My first article', '<p>This is my first article</p>', 'libly', CURRENT_TIMESTAMP, 'publish')";
+        $prepare = $this->getPDO()->prepare($query);
+        $prepare->execute();
+    }
+
+    public function insertFirstBook(){
+        $query = "INSERT INTO lbly_books (title, description, author, publication_date, publisher, price, category, stock_number, slug, status)
+                    VALUES ('My libly book', 'my libly book', 'libly', CURRENT_DATE, 'libly', '1', 'libly', '1', 'my-libly-book-libly-libly', 'withdraw')";
+        $prepare = $this->getPDO()->prepare($query);
+        $prepare->execute();
     }
 }

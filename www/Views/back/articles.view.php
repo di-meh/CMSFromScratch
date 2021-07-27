@@ -51,7 +51,7 @@ use App\Core\Security;
                                 <?php if(Security::hasAuthorization() || (Security::isOnlyAuthor() && $article['author'] == $_SESSION['id']) || (Security::isOnlyContributor() && $article['author'] == $_SESSION['id'])) :?>
                                     <tr>
                                         <td><?=$article["title"];?></td>
-                                        <td><?=$article["created"];?></td>
+                                        <td><?=$article["createdAt"];?></td>
                                         <td><?= Security::getName($article["author"]);?></td>
 
                                         <td><?= $article["status"];?></td>

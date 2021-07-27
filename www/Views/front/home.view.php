@@ -22,5 +22,5 @@
 
 <div class="d-flex flex-direction-column flex-align-items-center flex-justify-content-center s-w-full s-h-full">
 	<h1 class="sp-mb-2">Bienvenue chez <?= SITENAME ?></h1>
-	<p>Description de votre site </p>
+	<p>Retrouvez vos livres préférés</p>
 </div>

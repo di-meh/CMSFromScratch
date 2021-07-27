@@ -77,6 +77,11 @@ class InstallerController{
 
                         $install->save();
 
+                        $install->insertFirstPage();
+                        $install->insertFirstCategory();
+                        $install->insertFirstArticle();
+                        $install->insertFirstBook();
+
                         $email = $_POST['email'];
                         header("Location: lbly-admin/userconfirm?email=$email");
                     }
