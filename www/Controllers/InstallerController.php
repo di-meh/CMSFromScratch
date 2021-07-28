@@ -55,8 +55,8 @@ class InstallerController{
                             ."MAILPWD=" . $_POST["mailpwd"] . "\n"
                             ."MAILPORT=" . htmlspecialchars($_POST["mailport"]) . "\n"
                             ."MAILSMTPAUTH=true\n"
-                            ."STRIPE_PRIVATE_KEY=" . htmlspecialchars($_POST["stripe_public_key"]) . "\n"
-                            ."VITE_STRIPE_PUBLIC_KEY=" . htmlspecialchars($_POST["stripe_private_key"]) . "\n";
+                            ."STRIPE_PRIVATE_KEY=" . htmlspecialchars($_POST["stripe_private_key"]) . "\n"
+                            ."VITE_STRIPE_PUBLIC_KEY=" . htmlspecialchars($_POST["stripe_public_key"]) . "\n";
                         $handle = fopen("./.env", "w+");
                         fwrite($handle, $content);
                         if (file_exists("./.env")){
