@@ -66,7 +66,7 @@ class Mailing{
 		$id = $user->getId();
 		$token = $user->getToken();
 		$content = utf8_decode("Un compte avec le mail ". $user->getEmail()." a été créé. ");
-		$content .= "Validez le en cliquant sur ce lien : <a href='http://localhost/lbly-admin/uservalidated?id=$id&token=$token'>Confirmer le compte</a>";
+		$content .= "Validez le en cliquant sur ce lien : <a href='http://dev.libly.xyz/lbly-admin/uservalidated?id=$id&token=$token'>Confirmer le compte</a>";
 		$this->setContent($content);
 								
 		# set template, set subject, set content
@@ -77,7 +77,7 @@ class Mailing{
 		$this->setSubject("Renouvellement Mot de Passe");
 		$id = $user->getId();
 		$token = $user->getToken();
-		$content = "Choisissez un nouveau mot de passe en cliquant sur ce lien : <a href='http://localhost/resetPwd?id=$id&token=$token'>Choisir un nouveau mot de passe</a>";
+		$content = "Choisissez un nouveau mot de passe en cliquant sur ce lien : <a href='http://dev.libly.xyz/resetPwd?id=$id&token=$token'>Choisir un nouveau mot de passe</a>";
 		$this->setContent($content);
 
 		# set template, set subject, set content
